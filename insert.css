@@ -7,38 +7,59 @@ body {
 }
 .container {
   display: flex;
-  width: auto;
+  justify-content: center;
+  width: 100%;
   max-width: 100%;
-  margin: 0 auto;
 }
 .playback {
   border: 1px solid black;
   width:18%;
-  position: relative;
   min-height: 100vh;
+  margin: 0 auto;
+  box-sizing: border-box;
   /*background-color:#1f1f1f;*/
   background: linear-gradient(to bottom, rgb(21,21,21),rgb(15,15,15));
 }
   .record{
+    display: flex;
+    justify-content: center;
+    align-items: center;
     margin-left:15px;
     border-radius: 50%;
     height:100%;
     width:190%;
     background-color:rgb( 29, 29, 29);
   }
-    .record .i1{
-      height:100%;
-      width:100%;
-      border: 1px solid black;
-      border-radius: 50%;
-    }
-    /*.i2{*/
-    /*  justify-content: center;*/
-    /*  height: 90%;*/
-    /*  width: 90%;*/
-    /*  border: 2px solid black;*/
-    /*  border-radius: 50%;*/
-    /*}*/
+  .record .i1 {
+    height: 100%;
+    width: 100%;
+    border: 2px solid black;
+    border-radius: 50%;
+  }
+  .i2 {
+    margin-top: 30px;
+    margin-left: 10%;
+    height: 90%;
+    width: 95%;
+    border: 1px solid black;
+    border-radius: 50%;
+  }
+.i3 {
+  margin-top: 30px;
+  margin-left: 10%;
+  height: 90%;
+  width: 95%;
+  border: 1px solid black;
+  border-radius: 50%;
+}
+.i4 {
+  margin-top: 30px;
+  margin-left: 10%;
+  height: 90%;
+  width: 95%;
+  border: 1px solid black;
+  border-radius: 50%;
+}
 .header{
   border: 1px solid black;
   margin-top:0;
@@ -55,13 +76,13 @@ body {
   position: relative;
   min-height: 100vh;
   background-color: #1f1f1f;
+  box-sizing: border-box;
   /*background: linear-gradient(to bottom, #1f1f1f,black);/* add this if you want or do it however you want just keep
   up with theme*/
 }
   .explore,h2{color:white;}
 .menu{
   border: 1px solid black;
-  position: relative;
   min-height: 100vh;
   min-width:22%;
   background-color: #262626;
