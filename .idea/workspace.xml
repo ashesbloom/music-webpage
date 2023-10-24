@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="CMakeSettings">
+    <configurations>
+      <configuration PROFILE_NAME="Debug" ENABLED="true" CONFIG_NAME="Debug" />
+    </configurations>
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="ebebbdde-3997-422c-8189-3e6c3b1f4c13" name="Changes" comment="Changes made in playback and css (added record class as a record disk,change colour of panels)&#10; #do make sure to read comments -mayank">
+      <change afterPath="$PROJECT_DIR$/playback_tree/disk_texture.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/insert.css" beforeDir="false" afterPath="$PROJECT_DIR$/insert.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/music.html" beforeDir="false" afterPath="$PROJECT_DIR$/music.html" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ClangdSettings">
+    <option name="formatViaClangd" value="false" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="kashish" />
+      </map>
+    </option>
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;customColor&quot;: &quot;&quot;,
+  &quot;associatedIndex&quot;: 8
+}</component>
+  <component name="ProjectId" id="2XAjxgBE0v6OXdE82Sghma9p6t5" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
+    &quot;ASKED_SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.cidr.known.project.marker&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;cf.first.check.clang-format&quot;: &quot;false&quot;,
+    &quot;cidr.known.project.marker&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/mayan/OneDrive/Desktop/clion&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  }
+}</component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="ebebbdde-3997-422c-8189-3e6c3b1f4c13" name="Changes" comment="" />
+      <created>1698079028629</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1698079028629</updated>
+      <workItem from="1698079032294" duration="610000" />
+      <workItem from="1698081983832" duration="4943000" />
+      <workItem from="1698090089444" duration="6606000" />
+      <workItem from="1698096788029" duration="9000" />
+      <workItem from="1698149139131" duration="8052000" />
+    </task>
+    <task id="LOCAL-00001" summary="Changes made in (body overflow and &lt;h2&gt; music text , colour correction of h2 tag in css) -mayank">
+      <option name="closed" value="true" />
+      <created>1698084026038</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1698084026038</updated>
+    </task>
+    <task id="LOCAL-00002" summary="Changes made in (body overflow and &lt;h2&gt; music text , colour correction of h2 tag in css) -mayank">
+      <option name="closed" value="true" />
+      <created>1698084083789</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1698084083789</updated>
+    </task>
+    <task id="LOCAL-00003" summary="Changes made in playback and css (added record class as a record disk,change colour of panels)&#10; #do make sure to read comments -mayank">
+      <option name="closed" value="true" />
+      <created>1698094821942</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1698094821942</updated>
+    </task>
+    <task id="LOCAL-00004" summary="Changes made in playback and css (added record class as a record disk,change colour of panels)&#10; #do make sure to read comments -mayank">
+      <option name="closed" value="true" />
+      <created>1698096659045</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1698096659045</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
+    <MESSAGE value="Changes made in (body overflow and &lt;h2&gt; music text , colour correction of h2 tag in css) -mayank" />
+    <MESSAGE value="Changes made in playback and css (added record class as a record disk,change colour of panels)&#10; #do make sure to read comments -mayank" />
+    <option name="LAST_COMMIT_MESSAGE" value="Changes made in playback and css (added record class as a record disk,change colour of panels)&#10; #do make sure to read comments -mayank" />
+  </component>
+</project>
