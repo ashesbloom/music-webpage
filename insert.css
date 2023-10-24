@@ -4,68 +4,91 @@ body {
   padding: 0;
   overflow-x: hidden;
   background-color:black;
+
 }
 .container {
   display: flex;
   justify-content: center;
-  width: 100%;
-  max-width: 100%;
+  min-height: 89vh;
+  max-width:100%;
 }
 .playback {
   border: 1px solid black;
   width:18%;
-  min-height: 100vh;
+  max-height:100vh;
   margin: 0 auto;
   box-sizing: border-box;
   /*background-color:#1f1f1f;*/
   background: linear-gradient(to bottom, rgb(21,21,21),rgb(15,15,15));
 }
-  .record{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-left:15px;
-    border-radius: 50%;
-    height:100%;
-    width:190%;
-    background-color:rgb( 29, 29, 29);
-  }
+.record{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-left:15px;
+  height:90vh;
+  width:80vh;
+  background: #1d1d1d;
+  /*background: linear-gradient(225deg, #1f1f1f, #1a1a1a);*/
+  /*box-shadow:  -25px 25px 50px #121212,*/
+  /*25px -25px 50px #282828;*/
+  border-radius: 50%;
+  background: linear-gradient(225deg,#1f1f1f, #1a1a1a);
+  box-shadow:  -1px 1px 10px #111010,
+  1px -1px 10px #111111;
+}
   .record .i1 {
-    height: 100%;
-    width: 100%;
-    border: 2px solid black;
+    margin-left: 50px;
+    height: 70vh;
+    width: 70vh;
+    border: 1px solid rgb(22, 22, 22);
     border-radius: 50%;
+    background: #1d1d1d;
+    box-shadow:  -3px 5px 20px #0c0c0c,
+    1px -2px 20px #2e2e2e;
+    /*animation: rotateRecord 4s linear infinite;*/
   }
+  /*@keyframes rotateRecord {*/
+  /*  0% {*/
+  /*    transform: rotate(0deg);*/
+  /*  }*/
+  /*  100% {*/
+  /*    transform: rotate(360deg);*/
+  /*  }*/
+  /*}*/
   .i2 {
-    margin-top: 30px;
-    margin-left: 10%;
-    height: 90%;
-    width: 95%;
-    border: 1px solid black;
+    margin-top: 14%;
+    margin-left: 50px;
+    height: 50vh;
+    width: 50vh;
+    border: 1px solid rgb(22, 22, 22);
     border-radius: 50%;
+    background: #1d1d1d;
+    box-shadow:  -3px 5px 20px #0c0c0c,
+    1px -2px 20px #2e2e2e;
   }
-.i3 {
-  margin-top: 30px;
-  margin-left: 10%;
-  height: 90%;
-  width: 95%;
-  border: 1px solid black;
-  border-radius: 50%;
-}
-.i4 {
-  margin-top: 30px;
-  margin-left: 10%;
-  height: 90%;
-  width: 95%;
-  border: 1px solid black;
-  border-radius: 50%;
-}
+/*.i3 {*/
+/*  margin-top: 30px;*/
+/*  margin-left: 10%;*/
+/*  height: 90%;*/
+/*  width: 95%;*/
+/*  border: 1px solid black;*/
+/*  border-radius: 50%;*/
+/*}*/
+/*.i4 {*/
+/*  margin-top: 30px;*/
+/*  margin-left: 10%;*/
+/*  height: 90%;*/
+/*  width: 95%;*/
+/*  border: 1px solid black;*/
+/*  border-radius: 50%;*/
+/*}*/
 .header{
   border: 1px solid black;
   margin-top:0;
   height:70px;
   position: relative;
-  min-width: 100%;
+  min-width:100vh;
   padding-left: 15px;
   padding-top: 8px;
   background-color: #2b2b2b;
@@ -74,7 +97,7 @@ body {
   border: 1px solid black;
   width:60%;
   position: relative;
-  min-height: 100vh;
+  max-height: 90%;
   background-color: #1f1f1f;
   box-sizing: border-box;
   /*background: linear-gradient(to bottom, #1f1f1f,black);/* add this if you want or do it however you want just keep
@@ -83,7 +106,7 @@ body {
   .explore,h2{color:white;}
 .menu{
   border: 1px solid black;
-  min-height: 100vh;
+  max-height:100vh;
   min-width:22%;
   background-color: #262626;
 }
