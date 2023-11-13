@@ -9,8 +9,9 @@ body {
 .container {
   display: flex;
   justify-content: center;
-  min-height: 89vh;
+  min-height: 87.5vh;
   max-width:100%;
+  overflow: hidden;
 }
 .playback {
   border: 1px solid black;
@@ -26,7 +27,6 @@ body {
   justify-content: center;
   align-items: center;
   margin-left:15px;
-  margin-top: 10px;
   height:86vh;
   width:80vh;
   background: #1d1d1d;
@@ -35,19 +35,22 @@ body {
   /*25px -25px 50px #282828;*/
   border-radius: 50%;
   background: linear-gradient(225deg,#1f1f1f, #1a1a1a);
-  box-shadow:  -1px 1px 10px #111010,
-  1px -1px 10px #111111;
+  box-shadow:  -10px 3px 15px #111010,
+  10px -5px 15px #111111;
 }
-  .record .i1 {
+.record{
+  margin-top:6px;
+}
+.record .i1 {
     /*margin-left: 50px;*/
     height: 70vh;
     width: 70vh;
     border: 2px solid rgb(15, 15, 15);
     border-radius: 50%;
     background: #1d1d1d;
-    box-shadow: -3px 5px 20px #0c0c0c,
-    1px -2px 20px #2e2e2e;
-    animation: rotatei1 4s linear infinite;
+    box-shadow: -3px 6px 20px #0a0a0a,
+    1px -2px 20px #232323;
+    animation: rotatei1 3.7s linear infinite;
   }
   @keyframes rotatei1{
     0% {
@@ -66,35 +69,88 @@ body {
     border-radius: 50%;
     background: #1d1d1d;
     box-shadow:  -3px 5px 20px #0c0c0c,
-    1px -2px 20px #2e2e2e;
+    1px -2px 20px #1f1f1f;
   }
   .i3 {
     margin-top: 14.5%;
     margin-left:14.5%;
     height: 39vh;
     width: 39vh;
-    border: 2px ridge rgb(15, 15, 15);
-    border-radius: 50%
+    border: 3.2px ridge rgb(15, 15, 15);
+    border-radius: 50%;
   }
   .inner{ /*album profile goes here*/
+    justify-content: center;
     margin-top: 7%;
     margin-left:7%;
     height: 33vh;
     width: 33vh;
-    border: 2px solid black;
+    border: 3px #a21e1e groove;
     border-radius: 50%;
-    background-color: maroon;
+    box-shadow:  -3px 5px 20px #0c0c0c,
+    1px -2px 20px #0c0c0c;
+
+    .album{
+      justify-content: center;
+      border-radius: 50%;
+      width: 33vh;
+      height: 33vh;
+    }
   }
+
 .header{
-  border: 1px solid black;
+  overflow: hidden;
+  display: grid;
   margin-top:0;
-  height:70px;
-  position: relative;
+  max-height:10vh;
+  /*position: relative;*/
   min-width:100vh;
   padding-left: 15px;
   padding-top: 8px;
   background-color: #2b2b2b;
+  grid-template-columns: 0.9fr 2.5fr 0.5fr 0.7fr;
+  padding-bottom: 10px
 }
+  .logo{
+    /*border: 1px solid black;*/
+    align-self: center;
+    padding-left: 10px;
+  }
+  .playbackarea{
+    border-radius:5px;
+    background-color: #4d4d4d;
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    max-height: 10vh;
+    .albumname{
+      /*border:1px solid black;*/
+      justify-self: start;
+      display: grid;
+      grid-template-columns:1fr 6fr;
+      max-height: 10vh;
+      .cover{
+        border-radius: 5px;
+        box-shadow: 10px -5px 20px #232323;
+      }
+      .albumtext p{
+        /*border:1px solid black;*/
+      }
+    }
+    .playbutton{
+      border:1px solid black;
+      padding-left: 10px;
+      justify-self: start; /* controls margin can be changed by using end instead of start*/
+    }
+  }
+  .volumecontrol{
+    border: 1px solid black;
+    padding-left: 10px;
+  }
+  .sidecontrols{
+    border: 1px solid black;
+    padding-left: 10px;
+  }
+
 .explore{
   border: 1px solid black;
   width:60%;
