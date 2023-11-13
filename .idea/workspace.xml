@@ -9,7 +9,17 @@
     </configurations>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ebebbdde-3997-422c-8189-3e6c3b1f4c13" name="Changes" comment="-merged menu to main branch&#10;-fixed all margins&#10;-changes playback width!" />
+    <list default="true" id="ebebbdde-3997-422c-8189-3e6c3b1f4c13" name="Changes" comment="-merged main branch to menu&#10;-fixed all margins&#10;-changes in layout">
+      <change afterPath="$PROJECT_DIR$/playback_tree/album cover.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/playback_tree/radiohead album.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/playback_tree/transparent album.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_13-11-2023_12_04_PM__Changes_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_13-11-2023_12_04_PM__Changes_.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_13-11-2023_12_05_PM__Changes_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_13-11-2023_12_05_PM__Changes_.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_24-10-2023_01_06_AM__Changes_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_24-10-2023_01_06_AM__Changes_.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/insert.css" beforeDir="false" afterPath="$PROJECT_DIR$/insert.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/music.html" beforeDir="false" afterPath="$PROJECT_DIR$/music.html" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -178,6 +188,7 @@
     <MESSAGE value="Changes made in playback and css (added record class as a record disk,change colour of panels)&#10; #do make sure to read comments -mayank" />
     <MESSAGE value="Changes made in record on css branch completed all inner divisions and given some finishing touch on record disk -mayank" />
     <MESSAGE value="-merged menu to main branch&#10;-fixed all margins&#10;-changes playback width!" />
-    <option name="LAST_COMMIT_MESSAGE" value="-merged menu to main branch&#10;-fixed all margins&#10;-changes playback width!" />
+    <MESSAGE value="-merged main branch to menu&#10;-fixed all margins&#10;-changes in layout" />
+    <option name="LAST_COMMIT_MESSAGE" value="-merged main branch to menu&#10;-fixed all margins&#10;-changes in layout" />
   </component>
 </project>
