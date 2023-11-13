@@ -16,6 +16,7 @@ body {
   border: 1px solid black;
   width:18%;
   max-height:100vh;
+  width:20%;
   margin: 0 auto;
   box-sizing: border-box;
   /*background-color:#1f1f1f;*/
@@ -108,9 +109,50 @@ body {
   .explore,h2{color:white;}
 .menu{
   border: 1px solid black;
-  max-height:100vh;
-  min-width:22%;
-  background-color: #262626;
+  position: relative;
+  max-height: 100vh;
+  min-width:42vh;
+  background-color: #161819;
 }
+
+h5{
+  text-align: left;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  color: grey;
+  margin-left: 10px;
+
+}
+
+.menu h2{
+  text-align: center;
+  color: #d8e2e3;
+}
+
+  form{
+    text-align: center;
+    color: grey;
+  }
+
+  input{
+    background-color: black;
+    height: 25px;
+    width: 200px;
+  }
+
+  h4{
+    margin-left: 15px;
+  }
+
+  a{
+    text-decoration: none;
+    color:#d8e2e3;
+    line-height: 1.5;
+    margin-top: 3%;
+  }
+
+  .Recently_Added,.Albums,.Artists,.Songs{
+    width: 5%;
+    height: 5%;
+  }
 
 
