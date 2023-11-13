@@ -14,7 +14,6 @@ body {
 }
 .playback {
   border: 1px solid black;
-  width:18%;
   max-height:100vh;
   width:20%;
   margin: 0 auto;
