@@ -108,7 +108,7 @@ body {
   padding-left: 15px;
   padding-top: 8px;
   background-color: #2b2b2b;
-  grid-template-columns: 0.9fr 2.5fr 0.5fr 0.7fr;
+  grid-template-columns: 1.12fr 2.5fr 0.5fr 1.2fr;
   padding-bottom: 10px
 }
   .logo{
@@ -138,17 +138,41 @@ body {
     }
     .playbutton{
       border:1px solid black;
+      padding-top: 10px;
       padding-left: 10px;
+      padding-right: 10px;
       justify-self: start; /* controls margin can be changed by using end instead of start*/
+      /*display: flex;*/
+      /*align-items: center;*/
+      /*width: 300px;*/
+      /*height: 50px;*/
+      /*border-radius: 10px;*/
+    }
+
+    .player button {
+      width: 40px;
+      height: 40px;
+      font-size: 20px;
+      cursor: pointer;
+    }
+
+    .player button:hover {
+      transform: scale(1.1);
+    }
+
+    .player button:active {
+      transform: scale(0.9);
     }
   }
   .volumecontrol{
     border: 1px solid black;
-    padding-left: 10px;
+    padding-top: 10px;
+    padding-left:45px;
   }
   .sidecontrols{
     border: 1px solid black;
-    padding-left: 10px;
+    padding-top: 10px;
+    padding-left:20vh;
   }
 
 .explore{
