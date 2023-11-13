@@ -108,7 +108,7 @@ body {
   padding-left: 15px;
   padding-top: 8px;
   background-color: #2b2b2b;
-  grid-template-columns: 1.12fr 2.5fr 0.5fr 1.2fr;
+  grid-template-columns: 1.2fr 2.5fr 0.5fr 1.3fr;
   padding-bottom: 10px
 }
   .logo{
@@ -137,42 +137,48 @@ body {
       }
     }
     .playbutton{
-      border:1px solid black;
-      padding-top: 10px;
-      padding-left: 10px;
-      padding-right: 10px;
+      /*border:1px solid black;*/
+      /*padding-top: 25px;*/
       justify-self: start; /* controls margin can be changed by using end instead of start*/
-      /*display: flex;*/
-      /*align-items: center;*/
-      /*width: 300px;*/
-      /*height: 50px;*/
-      /*border-radius: 10px;*/
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
 
-    .player button {
+    .playbutton button {
+      border: none;
+      outline: none;
+      background-color: transparent;
       width: 40px;
       height: 40px;
       font-size: 20px;
       cursor: pointer;
+      color: #2b2b2b;
     }
 
-    .player button:hover {
+    .playbutton .button:hover {
       transform: scale(1.1);
+
     }
 
-    .player button:active {
+    .playbutton .button:active {
       transform: scale(0.9);
+    }
+    .playbutton button:active{
+      color: #b92a2a;
     }
   }
   .volumecontrol{
     border: 1px solid black;
-    padding-top: 10px;
-    padding-left:45px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
   .sidecontrols{
     border: 1px solid black;
-    padding-top: 10px;
-    padding-left:20vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
 .explore{
