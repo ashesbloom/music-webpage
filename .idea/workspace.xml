@@ -9,13 +9,8 @@
     </configurations>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ebebbdde-3997-422c-8189-3e6c3b1f4c13" name="Changes" comment="-merged main branch to menu&#10;-fixed all margins&#10;-changes in layout">
-      <change afterPath="$PROJECT_DIR$/playback_tree/album cover.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/playback_tree/radiohead album.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/playback_tree/transparent album.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_13-11-2023_12_04_PM__Changes_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_13-11-2023_12_04_PM__Changes_.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_13-11-2023_12_05_PM__Changes_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_13-11-2023_12_05_PM__Changes_.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_24-10-2023_01_06_AM__Changes_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_24-10-2023_01_06_AM__Changes_.xml" afterDir="false" />
+    <list default="true" id="ebebbdde-3997-422c-8189-3e6c3b1f4c13" name="Changes" comment="-added album image&#10;-fix record fluency &#10;-fix height in container&#10;-added header with classes">
+      <change afterPath="$PROJECT_DIR$/playback_tree/play-solid.svg" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/insert.css" beforeDir="false" afterPath="$PROJECT_DIR$/insert.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/music.html" beforeDir="false" afterPath="$PROJECT_DIR$/music.html" afterDir="false" />
@@ -84,6 +79,7 @@
       <workItem from="1698090089444" duration="6606000" />
       <workItem from="1698096788029" duration="9000" />
       <workItem from="1698149139131" duration="8052000" />
+      <workItem from="1699893654012" duration="3205000" />
     </task>
     <task id="LOCAL-00001" summary="Changes made in (body overflow and &lt;h2&gt; music text , colour correction of h2 tag in css) -mayank">
       <option name="closed" value="true" />
@@ -165,7 +161,15 @@
       <option name="project" value="LOCAL" />
       <updated>1699858934918</updated>
     </task>
-    <option name="localTasksCounter" value="11" />
+    <task id="LOCAL-00011" summary="-added album image&#10;-fix record fluency &#10;-fix height in container&#10;-added header with classes">
+      <option name="closed" value="true" />
+      <created>1699880473062</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1699880473062</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -189,6 +193,7 @@
     <MESSAGE value="Changes made in record on css branch completed all inner divisions and given some finishing touch on record disk -mayank" />
     <MESSAGE value="-merged menu to main branch&#10;-fixed all margins&#10;-changes playback width!" />
     <MESSAGE value="-merged main branch to menu&#10;-fixed all margins&#10;-changes in layout" />
-    <option name="LAST_COMMIT_MESSAGE" value="-merged main branch to menu&#10;-fixed all margins&#10;-changes in layout" />
+    <MESSAGE value="-added album image&#10;-fix record fluency &#10;-fix height in container&#10;-added header with classes" />
+    <option name="LAST_COMMIT_MESSAGE" value="-added album image&#10;-fix record fluency &#10;-fix height in container&#10;-added header with classes" />
   </component>
 </project>
