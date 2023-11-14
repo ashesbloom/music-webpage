@@ -16,21 +16,29 @@
       </div>
       <div class="playbackarea">
         <div class="albumname">
-          <div class="cover"><img style="max-height:10vh; border-radius: 5px; width:11vh;" src="playback_tree/album%20cover.png" alt="ac"></div>
+          <div class="cover"><img style="max-height:10vh; border-radius: 5px; width:11vh;" src="playback_tree/radiohead%20album.jpg" alt="ac"></div>
             <div class="albumtext">
               <p style="color: white">song name <br> <span style="font-size:1.7vh; color:darkgrey;">description</span></p>
             </div>
         </div>
         <div class="playbutton">
           <button class="shuffle"><i class="fa-solid fa-shuffle"></i></button>
-          <button class='button' class="prev"><i class="fa-solid fa-backward" style="color: #2b2b2b;"></i></button>
-          <button class='button' class="play"><i class="fa-solid fa-play" style="color: #2b2b2b;"></i></button>
-          <button class='button' class="next"><i class="fa-solid fa-forward" style="color: #2b2b2b;"></i></button>
+          <button class="prev"><i class="fa-solid fa-backward" ></i></button>
+          <button class="play"><i class="fa-solid fa-play"></i></button>
+          <button class="next"><i class="fa-solid fa-forward"></i></button>
           <button class="repeat"><i class="fa-solid fa-repeat"></i></button>
         </div>
       </div>
       <div class="volumecontrol">
-        <p style="color: white">volume</p>
+        <div class="mute_button"><i class="fa-solid fa-volume-xmark"style="font-size:larger"></i></div>
+        <div class="v_range"><input class="v_bar" type="range" min="0" max="100" value="20"
+        onmousemove="rangeSlider(this.value)"></div>
+        <div id='v_num' class="v_num" style="color:#c0bfbf">100</div>
+        <script type="text/javascript">
+          function rangeSlider(value){
+            document.getElementById("v_num").innerHTML = value;
+          }
+        </script>
       </div>
       <div class="sidecontrols"><p style="color: white;" >top menu</p></div>
     </div>
@@ -42,7 +50,7 @@
           <div class="i2">
             <div class="i3">
               <div class="inner">
-                <img alt="Album Cover" class="album" src="playback_tree/album%20cover.png">
+                <img alt="Album Cover" class="album" src="playback_tree/radiohead%20album.jpg">
               </div>
             </div>
           </div>
