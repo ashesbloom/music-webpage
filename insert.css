@@ -79,7 +79,7 @@ body {
     border: 3.2px ridge rgb(15, 15, 15);
     border-radius: 50%;
   }
-  .inner{ /*album profile goes here*/
+  .inner{ /*album cover goes here*/
     justify-content: center;
     margin-top: 7%;
     margin-left:7%;
@@ -108,7 +108,7 @@ body {
   padding-left: 15px;
   padding-top: 8px;
   background-color: #2b2b2b;
-  grid-template-columns: 1.2fr 2.5fr 0.5fr 1.3fr;
+  grid-template-columns: 1.5fr 2.7fr 0.3fr 1.3fr;
   padding-bottom: 10px
 }
   .logo{
@@ -149,30 +149,88 @@ body {
       border: none;
       outline: none;
       background-color: transparent;
-      width: 40px;
-      height: 40px;
+      width: 15px;
+      height: 30px;
       font-size: 20px;
       cursor: pointer;
+      margin-left: 20px;
       color: #2b2b2b;
     }
 
-    .playbutton .button:hover {
-      transform: scale(1.1);
-
+    .playbutton button:hover {
+      color: #9f9f9f;
     }
-
-    .playbutton .button:active {
+    .playbutton button:active {
       transform: scale(0.9);
     }
-    .playbutton button:active{
-      color: #b92a2a;
+    .playbutton .repeat:active{
+      color: #f13c3c;
+    }
+    .playbutton .shuffle:active{
+      color: #f13c3c;
     }
   }
-  .volumecontrol{
-    border: 1px solid black;
+  .volumecontrol {
+    /*border: 1px solid black;*/
     display: flex;
     align-items: center;
     justify-content: center;
+  }
+  .volumecontrol .mute_button{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #9f9f9f;
+  }
+    .volumecontrol .mute_button:hover{
+      color: #ffffff;
+    }
+    .volumecontrol .mute_button:active{
+      transform: scale(0.9);
+    }
+    .volumecontrol .mute_button:active{
+      color: #f13c3c;
+    }
+
+  .volumecontrol .v_range{
+    display:flex;
+    align-items:center;
+    width:50%;
+    margin-left: 10px;
+    margin-right: 10px;
+  }
+  .volumecontrol .v_range .v_bar{
+    -webkit-appearance: none;
+    border: none;
+    outline: none;
+    background-color:transparent;
+    height: 9px;
+    border-radius: 100px;
+    box-shadow: inset 10px 20px 50px #1a1a1a;
+  }
+  .volumecontrol .v_range .v_bar::-webkit-slider-thumb{
+    -webkit-appearance: none;
+    width:18px;
+    height:18px;
+    border-radius: 50%;
+    background: #9f9f9f;
+    cursor: pointer;
+    border: 4px solid #a12e1e;
+    box-shadow: 0 0 20px #a12e1e;
+  }
+  /* for morzila browser */
+  .volumecontrol .v_range .v_bar::-moz-range-thumb{
+    -webkit-appearance: none;
+    width:12px;
+    height:12px;
+    border-radius: 50%;
+    background: #9f9f9f;
+    cursor: pointer;
+    border: 4px solid #a12e1e;
+    box-shadow: 0 0 20px #a12e1e;
+  }
+  .volumecontrol .v_num{
+    margin-left: 20px;
   }
   .sidecontrols{
     border: 1px solid black;
@@ -180,6 +238,8 @@ body {
     align-items: center;
     justify-content: center;
   }
+
+
 
 .explore{
   border: 1px solid black;
