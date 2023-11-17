@@ -30,15 +30,26 @@
         </div>
       </div>
       <div class="volumecontrol">
-        <div id="mute_button" class="mute_button"><i style="font-size:larger" class="fa-solid fa-volume-low"></i></div>
+        <div id="mute_button" class="mute_button"><i id="volume_icon" style="font-size:larger;" class="fa-solid fa-volume-low"></i></div>
         <div class="v_range">
-          <label for="v_bar"></label><input id="v_bar" class="v_bar" type="range" min="0" max="100" value="20" onmousemove="rangeSlider(this.value)"></div>
-        <div id='v_num' class="v_num" style="color:#c0bfbf"><span>100</span></div>
+          <label for="v_bar"></label><input id="v_bar" class="v_bar" type="range" min="0" max="100" value="20" onmousemove="rangeSlider(this.value)" onchange="rangeSlider(this.value)"></div>
+        <div id='v_num' class="v_num" style="color:#9f9d9d"><span></span></div>
         <script type="text/javascript">
           // let vol_icon = document.getElementById('mute_button');
-          // let vol = document.getElementById('v_bar');
+          // let vol = document.getElementById('v_num').innerHTML;
           function rangeSlider(value){
             document.getElementById("v_num").innerHTML = value;
+            let volumeIcon = document.getElementById('volume_icon');
+            if (value === '0') {
+              // document.getElementById('mute_button').className ='fa-solid fa-volume-xmark';
+              volumeIcon.className = 'fa-solid fa-volume-mute';
+            }
+            if (value < '50' && value !== '0') {
+              volumeIcon.className = 'fa-solid fa-volume-low';
+            }
+            if (value > '50' ||  value === '100') {
+              volumeIcon.className = 'fa-solid fa-volume-high';
+            }
           }
           // function volume(val){
           //   val.addEventListener('change', () =>{
