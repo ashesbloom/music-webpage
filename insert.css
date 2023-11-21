@@ -257,21 +257,112 @@ body {
   border: 1px solid black;
   width:60%;
   position: relative;
-  max-height: 90%;
+  overflow-y: auto;
+  max-height: 87.3vh;
   background-color: #1f1f1f;
-  box-sizing: border-box;
+
   /*background: linear-gradient(to bottom, #1f1f1f,black);/* add this if you want or do it however you want just keep
   up with theme*/
 }
   .explore,h2{color:white;}
-.menu{
-  border: 1px solid black;
-  position: relative;
-  max-height: 100vh;
-  min-width:42vh;
-  background-color: #161819;
-}
-
+  .box {
+    width: 420px;
+    height: 230px;
+    border-radius: 20px;
+    background-color: grey;
+    margin: 18px;
+    display: inline-block;
+    box-shadow: 2px 1px 8px white;
+    background: url("https://img.freepik.com/premium-photo/bright-musical-background_476363-6644.jpg?w=1380");
+  }
+  .side4{
+    width:180px;
+    height:230px;
+    background-color: #2b2b2b;
+    margin:18px;
+    display:inline-block;
+    border-radius: 20px;
+    box-shadow:1px 1px 4px grey;
+  }
+  .side1{
+    width:180px;
+    height:230px;
+    border-radius: 20px;
+    background-color: #2b2b2b;
+    margin:18px;
+    display: inline-block;
+    box-shadow:1px 1px 4px grey;
+  }
+  .side2{
+    width:180px;
+    height:230px;
+    border-radius: 20px;
+    background-color: #2b2b2b;
+    margin:18px;
+    display: inline-block;
+    box-shadow:1px 1px 4px grey;
+  }
+  .side3{
+    width:180px;
+    border-radius: 20px;
+    height:230px;
+    background-color: #2b2b2b;
+    margin:18px;
+    display: inline-block;
+    box-shadow:1px 1px 4px grey;
+  }
+  .row-1{
+    width: 95%;
+    margin-left: 18px;
+    height:200px;
+    display: inline-flex;
+  }
+  .row-2{
+    width: 95%;
+    height:200px;
+    margin-left:18px;
+    display: inline-flex;
+  }
+  .row-3{
+    margin-left: 18px;;
+  }
+  .box1{
+    width:200px;
+    border-radius: 20px;
+    background-color: #2b2b2b;
+    margin: 15px;
+  }
+  .box2{
+    width:200px;
+    border-radius: 20px;
+    background-color: #2b2b2b;
+    margin: 15px;
+  }
+  .box3{
+    width:200px;
+    border-radius: 20px;
+    background-color: #2b2b2b;
+    margin: 15px;
+  }
+  .box4{
+    width:200px;
+    border-radius: 20px;
+    background-color: #2b2b2b;
+    margin: 15px;
+  }
+  .box5{
+    width:200px;
+    border-radius: 20px;
+    background-color: #2b2b2b;
+    margin: 15px;
+  }
+  .menu{
+    border: 1px solid black;
+    position: relative;
+    max-height: 100vh;
+    min-width:42vh;
+    background-color: #161819;
+  }
 h5{
   text-align: left;
   font-family: Verdana, Geneva, Tahoma, sans-serif;
