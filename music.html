@@ -35,8 +35,6 @@
           <label for="v_bar"></label><input id="v_bar" class="v_bar" type="range" min="0" max="100" value="20" onmousemove="rangeSlider(this.value)" onchange="rangeSlider(this.value)"></div>
         <div id='v_num' class="v_num" style="color:#9f9d9d"><span></span></div>
         <script type="text/javascript">
-          // let vol_icon = document.getElementById('mute_button');
-          // let vol = document.getElementById('v_num').innerHTML;
           function rangeSlider(value){
             document.getElementById("v_num").innerHTML = value;
             let volumeIcon = document.getElementById('volume_icon');
@@ -51,25 +49,10 @@
               volumeIcon.className = 'fa-solid fa-volume-high';
             }
           }
-          // function volume(val){
-          //   val.addEventListener('change', () =>{
-          //     if (val.value === 0) {
-          //       document.getElementById('mute_button').classList.add('fa-solid fa-volume-xmark');
-          //       document.getElementById('mute_button').classList.remove('fa-solid fa-volume-low');
-          //       document.getElementById('mute_button').classList.remove('fa-solid fa-volume-high');
-          //     }
-          //     if (val.value > 0) {
-          //       document.getElementById('mute_button').classList.remove('fa-solid fa-volume-xmark');
-          //       document.getElementById('mute_button').classList.add('fa-solid fa-volume-low');
-          //       document.getElementById('mute_button').classList.remove('fa-solid fa-volume-high');
-          //     }
-          //     if (val.value > 50) {
-          //       document.getElementById('mute_button').classList.remove('fa-solid fa-volume-xmark');
-          //       document.getElementById('mute_button').classList.remove('fa-solid fa-volume-low');
-          //       document.getElementById('mute_button').classList.add('fa-solid fa-volume-high');
-          //     }
-          //   })
-          // }
+          setInterval(function () {
+            var currentValue = document.getElementById("v_bar").value;
+            rangeSlider(currentValue);
+          }, 100);
         </script>
       </div>
       <div class="sidecontrols"><p style="color: white;" >top menu</p></div>
