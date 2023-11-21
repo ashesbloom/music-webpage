@@ -11,8 +11,68 @@
 <div id="align">
   <header>
     <div class="header">
+      <div class="logo">
       <h3 style="color: white">logo and name</h3>
-      <!--<input type="search" class="searchbar" placeholder="Search...">-->
+      </div>
+      <div class="playbackarea">
+        <div class="albumname">
+          <div class="cover"><img style="max-height:10vh; border-radius: 5px; width:11vh;" src="playback_tree/radiohead%20album.jpg" alt="ac"></div>
+            <div class="albumtext">
+              <p style="color: white">song name <br> <span style="font-size:1.7vh; color:darkgrey;">description</span></p>
+            </div>
+        </div>
+        <div class="playbutton">
+          <button class="shuffle"><i class="fa-solid fa-shuffle"></i></button>
+          <button class="prev"><i class="fa-solid fa-backward-step" ></i></button>
+          <button class="play"><i class="fa-solid fa-play"></i></button>
+          <button class="next"><i class="fa-solid fa-forward-step"></i></button>
+          <button class="repeat"><i class="fa-solid fa-repeat"></i></button>
+        </div>
+      </div>
+      <div class="volumecontrol">
+        <div id="mute_button" class="mute_button"><i id="volume_icon" style="font-size:larger;" class="fa-solid fa-volume-low"></i></div>
+        <div class="v_range">
+          <label for="v_bar"></label><input id="v_bar" class="v_bar" type="range" min="0" max="100" value="20" onmousemove="rangeSlider(this.value)" onchange="rangeSlider(this.value)"></div>
+        <div id='v_num' class="v_num" style="color:#9f9d9d"><span></span></div>
+        <script type="text/javascript">
+          // let vol_icon = document.getElementById('mute_button');
+          // let vol = document.getElementById('v_num').innerHTML;
+          function rangeSlider(value){
+            document.getElementById("v_num").innerHTML = value;
+            let volumeIcon = document.getElementById('volume_icon');
+            if (value === '0') {
+              // document.getElementById('mute_button').className ='fa-solid fa-volume-xmark';
+              volumeIcon.className = 'fa-solid fa-volume-mute';
+            }
+            if (value < '50' && value !== '0') {
+              volumeIcon.className = 'fa-solid fa-volume-low';
+            }
+            if (value > '50' ||  value === '100') {
+              volumeIcon.className = 'fa-solid fa-volume-high';
+            }
+          }
+          // function volume(val){
+          //   val.addEventListener('change', () =>{
+          //     if (val.value === 0) {
+          //       document.getElementById('mute_button').classList.add('fa-solid fa-volume-xmark');
+          //       document.getElementById('mute_button').classList.remove('fa-solid fa-volume-low');
+          //       document.getElementById('mute_button').classList.remove('fa-solid fa-volume-high');
+          //     }
+          //     if (val.value > 0) {
+          //       document.getElementById('mute_button').classList.remove('fa-solid fa-volume-xmark');
+          //       document.getElementById('mute_button').classList.add('fa-solid fa-volume-low');
+          //       document.getElementById('mute_button').classList.remove('fa-solid fa-volume-high');
+          //     }
+          //     if (val.value > 50) {
+          //       document.getElementById('mute_button').classList.remove('fa-solid fa-volume-xmark');
+          //       document.getElementById('mute_button').classList.remove('fa-solid fa-volume-low');
+          //       document.getElementById('mute_button').classList.add('fa-solid fa-volume-high');
+          //     }
+          //   })
+          // }
+        </script>
+      </div>
+      <div class="sidecontrols"><p style="color: white;" >top menu</p></div>
     </div>
   </header>
   <div class="container">
@@ -22,6 +82,7 @@
           <div class="i2">
             <div class="i3">
               <div class="inner">
+                <img alt="Album Cover" class="album" src="playback_tree/radiohead%20album.jpg">
               </div>
             </div>
           </div>
@@ -34,7 +95,9 @@
     <div class="menu">
       <H2>Music</H2>
       <form>
-        <input type="text" placeholder="What do you want to listen to?" name="search">
+        <label>
+          <input type="text" placeholder="What do you want to listen to?" name="search">
+        </label>
         <button type="submit"><i class="fa-solid fa-magnifying-glass" style="color: #a21e1e; height: 15px; width: 15px;"></i></button>
       </form>
       <h5>Library</h5>
@@ -42,7 +105,7 @@
       <h4><i class="fa-solid fa-microphone-lines" style="color: #a21e1e;"></i> &nbsp;<a href="">Artists</a></h4>
       <h4><i class="fa-solid fa-record-vinyl" style="color: #a21e1e;"></i> &nbsp;<a href="">Albums</a></h4>
       <h4><i class="fa-solid fa-music" style="color: #a12e1e;"></i> &nbsp;<a href="">Songs</a></h4>
-      <h5>Playlists</a></h5>
+      <h5>Playlists</h5>
       <h4><i class="fa-solid fa-folder-closed" style="color: #a21e1e;"></i>&nbsp;&nbsp;<a href="">All Playlists</a></h4>
       <h4>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i class="fa-solid fa-folder-open" style="color: #a21e1e;"></i>&nbsp;<a href="">Favorites</a></h4>
       <h4>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i class="fa-solid fa-folder-open" style="color: #a21e1e;"></i>&nbsp;<a href="">Party Playlists</a></h4>
@@ -50,5 +113,6 @@
     </div>
   </div>
 </div>
+<!--<script src="support.js"></script>-->
 </body>
 </html>

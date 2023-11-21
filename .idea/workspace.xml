@@ -9,9 +9,8 @@
     </configurations>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ebebbdde-3997-422c-8189-3e6c3b1f4c13" name="Changes" comment="Changes made in record on css branch completed all inner divisions and given some finishing touch on record disk -mayank">
+    <list default="true" id="ebebbdde-3997-422c-8189-3e6c3b1f4c13" name="Changes" comment="-playback control">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/insert.css" beforeDir="false" afterPath="$PROJECT_DIR$/insert.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/music.html" beforeDir="false" afterPath="$PROJECT_DIR$/music.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -21,6 +20,13 @@
   </component>
   <component name="ClangdSettings">
     <option name="formatViaClangd" value="false" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="JavaScript File" />
+      </list>
+    </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
@@ -78,6 +84,11 @@
       <workItem from="1698090089444" duration="6606000" />
       <workItem from="1698096788029" duration="9000" />
       <workItem from="1698149139131" duration="8052000" />
+      <workItem from="1699893654012" duration="3205000" />
+      <workItem from="1699947878887" duration="23000" />
+      <workItem from="1699947909906" duration="17669000" />
+      <workItem from="1700132699098" duration="1149000" />
+      <workItem from="1700201160807" duration="3774000" />
     </task>
     <task id="LOCAL-00001" summary="Changes made in (body overflow and &lt;h2&gt; music text , colour correction of h2 tag in css) -mayank">
       <option name="closed" value="true" />
@@ -135,7 +146,63 @@
       <option name="project" value="LOCAL" />
       <updated>1699857668861</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="Changes made in record on css branch completed all inner divisions and given some finishing touch on record disk -mayank">
+      <option name="closed" value="true" />
+      <created>1699858804140</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1699858804140</updated>
+    </task>
+    <task id="LOCAL-00009" summary="-merged menu to main branch&#10;-fixed all margins&#10;-changes playback width!">
+      <option name="closed" value="true" />
+      <created>1699858922395</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1699858922395</updated>
+    </task>
+    <task id="LOCAL-00010" summary="-merged menu to main branch&#10;-fixed all margins&#10;-changes playback width!">
+      <option name="closed" value="true" />
+      <created>1699858934918</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1699858934918</updated>
+    </task>
+    <task id="LOCAL-00011" summary="-added album image&#10;-fix record fluency &#10;-fix height in container&#10;-added header with classes">
+      <option name="closed" value="true" />
+      <created>1699880473062</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1699880473062</updated>
+    </task>
+    <task id="LOCAL-00012" summary="-playback control">
+      <option name="closed" value="true" />
+      <created>1699902443615</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1699902443615</updated>
+    </task>
+    <task id="LOCAL-00013" summary="-playback control">
+      <option name="closed" value="true" />
+      <created>1699969065083</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1699969065083</updated>
+    </task>
+    <task id="LOCAL-00014" summary="-playback control">
+      <option name="closed" value="true" />
+      <created>1699987836395</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1699987836395</updated>
+    </task>
+    <option name="localTasksCounter" value="15" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -157,6 +224,10 @@
     <MESSAGE value="Changes made in (body overflow and &lt;h2&gt; music text , colour correction of h2 tag in css) -mayank" />
     <MESSAGE value="Changes made in playback and css (added record class as a record disk,change colour of panels)&#10; #do make sure to read comments -mayank" />
     <MESSAGE value="Changes made in record on css branch completed all inner divisions and given some finishing touch on record disk -mayank" />
-    <option name="LAST_COMMIT_MESSAGE" value="Changes made in record on css branch completed all inner divisions and given some finishing touch on record disk -mayank" />
+    <MESSAGE value="-merged menu to main branch&#10;-fixed all margins&#10;-changes playback width!" />
+    <MESSAGE value="-merged main branch to menu&#10;-fixed all margins&#10;-changes in layout" />
+    <MESSAGE value="-added album image&#10;-fix record fluency &#10;-fix height in container&#10;-added header with classes" />
+    <MESSAGE value="-playback control" />
+    <option name="LAST_COMMIT_MESSAGE" value="-playback control" />
   </component>
 </project>
