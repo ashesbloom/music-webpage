@@ -10,35 +10,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="ebebbdde-3997-422c-8189-3e6c3b1f4c13" name="Changes" comment="-mayank pandey">
-      <change afterPath="$PROJECT_DIR$/playback_tree/covers/album cover.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/playback_tree/covers/joji/joji_glimps_of_us.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/playback_tree/covers/joji/joji_golden.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/playback_tree/covers/joji/joji_nector.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/playback_tree/covers/joji/joji_run.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/playback_tree/covers/joji/joji_smithereens.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/playback_tree/covers/joji/joji_without_us.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/playback_tree/covers/nirvana.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/playback_tree/covers/radiohead album.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/playback_tree/covers/radiohead_amnesiac.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/playback_tree/songs/joji/01. Glimpse of Us.mp3" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/playback_tree/songs/joji/02. Feeling Like The End.mp3" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/playback_tree/songs/joji/03. Die For You.mp3" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/playback_tree/songs/joji/04. Before The Day Is Over.mp3" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/playback_tree/songs/joji/05. Dissolve.mp3" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/playback_tree/songs/joji/06. NIGHT RIDER.mp3" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/playback_tree/songs/joji/07. BLAHBLAHBLAH DEMO.mp3" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/playback_tree/songs/joji/08. YUKON (INTERLUDE).mp3" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/playback_tree/songs/joji/09. 1AM FREESTYLE.mp3" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/music.html" beforeDir="false" afterPath="$PROJECT_DIR$/music.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/playback_tree/album cover.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/playback_tree/disk_texture.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/playback_tree/nirvana.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/playback_tree/play-solid.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/playback_tree/radiohead album.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/playback_tree/radiohead_amnesiac.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/playback_tree/transparent album.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/support.js" beforeDir="false" afterPath="$PROJECT_DIR$/support.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
