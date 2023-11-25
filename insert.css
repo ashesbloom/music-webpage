@@ -325,6 +325,7 @@ body {
   overflow-y: auto;
   max-height: 87.3vh;
   background-color: #1f1f1f;
+  -webkit-appearance: none;
 
   /*background: linear-gradient(to bottom, #1f1f1f,black);/* add this if you want or do it however you want just keep
   up with theme*/
