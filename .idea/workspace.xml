@@ -9,14 +9,47 @@
     </configurations>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ebebbdde-3997-422c-8189-3e6c3b1f4c13" name="Changes" comment="-mayank pandey">
-      <change afterPath="$PROJECT_DIR$/playlist.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_13-11-2023_12_04_PM__Changes_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_13-11-2023_12_04_PM__Changes_.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_13-11-2023_12_05_PM__Changes_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_13-11-2023_12_05_PM__Changes_.xml" afterDir="false" />
+    <list default="true" id="ebebbdde-3997-422c-8189-3e6c3b1f4c13" name="Changes" comment="-added playlist.css and playlist.html">
+      <change afterPath="$PROJECT_DIR$/playback_tree/songs/joji/nector/01 Ew.mp3" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/playback_tree/songs/joji/nector/02 MODUS.mp3" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/playback_tree/songs/joji/nector/03 Tick Tock.mp3" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/playback_tree/songs/joji/nector/04 Daylight.mp3" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/playback_tree/songs/joji/nector/05 Upgrade.mp3" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/playback_tree/songs/joji/nector/06 Gimme Love.mp3" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/playback_tree/songs/joji/nector/07 Run.mp3" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/playback_tree/songs/joji/nector/08 Sanctuary.mp3" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/playback_tree/songs/joji/nector/09 High Hopes (feat. Omar Apollo).mp3" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/playback_tree/songs/joji/nector/10 NITROUS.mp3" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/playback_tree/songs/joji/nector/11 Pretty Boy (feat. Lil Yachty).mp3" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/playback_tree/songs/joji/nector/12 Normal People (feat. rei brown).mp3" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/playback_tree/songs/joji/nector/13 Afterthought.mp3" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/playback_tree/songs/joji/nector/14 Mr. Hollywood.mp3" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/playback_tree/songs/joji/nector/15 777.mp3" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/playback_tree/songs/joji/nector/16 Reanimator (feat. Yves Tumor).mp3" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/playback_tree/songs/joji/nector/17 Like You Do.mp3" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/playback_tree/songs/joji/nector/18 Your Man.mp3" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/playback_tree/songs/joji/smithereens/01. Glimpse of Us.mp3" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/playback_tree/songs/joji/smithereens/02. Feeling Like The End.mp3" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/playback_tree/songs/joji/smithereens/03. Die For You.mp3" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/playback_tree/songs/joji/smithereens/04. Before The Day Is Over.mp3" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/playback_tree/songs/joji/smithereens/05. Dissolve.mp3" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/playback_tree/songs/joji/smithereens/06. NIGHT RIDER.mp3" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/playback_tree/songs/joji/smithereens/07. BLAHBLAHBLAH DEMO.mp3" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/playback_tree/songs/joji/smithereens/08. YUKON (INTERLUDE).mp3" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/playback_tree/songs/joji/smithereens/09. 1AM FREESTYLE.mp3" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/insert.css" beforeDir="false" afterPath="$PROJECT_DIR$/insert.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/music.html" beforeDir="false" afterPath="$PROJECT_DIR$/music.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/playlist.html" beforeDir="false" afterPath="$PROJECT_DIR$/playlist.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/playback_tree/songs/joji/01. Glimpse of Us.mp3" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/playback_tree/songs/joji/02. Feeling Like The End.mp3" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/playback_tree/songs/joji/03. Die For You.mp3" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/playback_tree/songs/joji/04. Before The Day Is Over.mp3" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/playback_tree/songs/joji/05. Dissolve.mp3" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/playback_tree/songs/joji/06. NIGHT RIDER.mp3" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/playback_tree/songs/joji/07. BLAHBLAHBLAH DEMO.mp3" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/playback_tree/songs/joji/08. YUKON (INTERLUDE).mp3" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/playback_tree/songs/joji/09. 1AM FREESTYLE.mp3" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/playlist.css" beforeDir="false" afterPath="$PROJECT_DIR$/Playlist_tree/playlist.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/playlist.html" beforeDir="false" afterPath="$PROJECT_DIR$/Playlist_tree/playlist.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/support.js" beforeDir="false" afterPath="$PROJECT_DIR$/support.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -76,12 +109,17 @@
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
+    "settings.editor.selected.configurable": "preferences.pluginManager",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\mayan\OneDrive\Documents\GitHub\music-webpage" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\mayan\OneDrive\Documents\GitHub\music-webpage" />
+      <recent name="C:\Users\mayan\OneDrive\Documents\GitHub\music-webpage\playback_tree\Playlist_tree" />
     </key>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
@@ -239,7 +277,15 @@
       <option name="project" value="LOCAL" />
       <updated>1700922160369</updated>
     </task>
-    <option name="localTasksCounter" value="18" />
+    <task id="LOCAL-00018" summary="-added playlist.css and playlist.html">
+      <option name="closed" value="true" />
+      <created>1700937074047</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1700937074048</updated>
+    </task>
+    <option name="localTasksCounter" value="19" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -266,6 +312,7 @@
     <MESSAGE value="-added album image&#10;-fix record fluency &#10;-fix height in container&#10;-added header with classes" />
     <MESSAGE value="-playback control" />
     <MESSAGE value="-mayank pandey" />
-    <option name="LAST_COMMIT_MESSAGE" value="-mayank pandey" />
+    <MESSAGE value="-added playlist.css and playlist.html" />
+    <option name="LAST_COMMIT_MESSAGE" value="-added playlist.css and playlist.html" />
   </component>
 </project>

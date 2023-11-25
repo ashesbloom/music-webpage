@@ -1,9 +1,8 @@
-const music = new Audio("playback_tree/songs/joji/01. Glimpse of Us.mp3");
+const music = new Audio("playback_tree/songs/joji/nector/");
+// music.play();
 
 
 
-
-// volumeControl.js
 
 function rangeSlider(value) {
     document.getElementById("v_num").innerHTML = value;
