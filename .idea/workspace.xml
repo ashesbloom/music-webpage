@@ -9,47 +9,10 @@
     </configurations>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ebebbdde-3997-422c-8189-3e6c3b1f4c13" name="Changes" comment="-added playlist.css and playlist.html">
-      <change afterPath="$PROJECT_DIR$/playback_tree/songs/joji/nector/01 Ew.mp3" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/playback_tree/songs/joji/nector/02 MODUS.mp3" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/playback_tree/songs/joji/nector/03 Tick Tock.mp3" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/playback_tree/songs/joji/nector/04 Daylight.mp3" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/playback_tree/songs/joji/nector/05 Upgrade.mp3" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/playback_tree/songs/joji/nector/06 Gimme Love.mp3" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/playback_tree/songs/joji/nector/07 Run.mp3" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/playback_tree/songs/joji/nector/08 Sanctuary.mp3" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/playback_tree/songs/joji/nector/09 High Hopes (feat. Omar Apollo).mp3" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/playback_tree/songs/joji/nector/10 NITROUS.mp3" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/playback_tree/songs/joji/nector/11 Pretty Boy (feat. Lil Yachty).mp3" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/playback_tree/songs/joji/nector/12 Normal People (feat. rei brown).mp3" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/playback_tree/songs/joji/nector/13 Afterthought.mp3" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/playback_tree/songs/joji/nector/14 Mr. Hollywood.mp3" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/playback_tree/songs/joji/nector/15 777.mp3" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/playback_tree/songs/joji/nector/16 Reanimator (feat. Yves Tumor).mp3" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/playback_tree/songs/joji/nector/17 Like You Do.mp3" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/playback_tree/songs/joji/nector/18 Your Man.mp3" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/playback_tree/songs/joji/smithereens/01. Glimpse of Us.mp3" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/playback_tree/songs/joji/smithereens/02. Feeling Like The End.mp3" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/playback_tree/songs/joji/smithereens/03. Die For You.mp3" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/playback_tree/songs/joji/smithereens/04. Before The Day Is Over.mp3" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/playback_tree/songs/joji/smithereens/05. Dissolve.mp3" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/playback_tree/songs/joji/smithereens/06. NIGHT RIDER.mp3" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/playback_tree/songs/joji/smithereens/07. BLAHBLAHBLAH DEMO.mp3" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/playback_tree/songs/joji/smithereens/08. YUKON (INTERLUDE).mp3" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/playback_tree/songs/joji/smithereens/09. 1AM FREESTYLE.mp3" afterDir="false" />
+    <list default="true" id="ebebbdde-3997-422c-8189-3e6c3b1f4c13" name="Changes" comment="-backend">
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_13-11-2023_12_05_PM_[Changes]/shelved.patch" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_13-11-2023_12_05_PM__Changes_.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/music.html" beforeDir="false" afterPath="$PROJECT_DIR$/music.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/playback_tree/songs/joji/01. Glimpse of Us.mp3" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/playback_tree/songs/joji/02. Feeling Like The End.mp3" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/playback_tree/songs/joji/03. Die For You.mp3" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/playback_tree/songs/joji/04. Before The Day Is Over.mp3" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/playback_tree/songs/joji/05. Dissolve.mp3" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/playback_tree/songs/joji/06. NIGHT RIDER.mp3" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/playback_tree/songs/joji/07. BLAHBLAHBLAH DEMO.mp3" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/playback_tree/songs/joji/08. YUKON (INTERLUDE).mp3" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/playback_tree/songs/joji/09. 1AM FREESTYLE.mp3" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/playlist.css" beforeDir="false" afterPath="$PROJECT_DIR$/Playlist_tree/playlist.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/playlist.html" beforeDir="false" afterPath="$PROJECT_DIR$/Playlist_tree/playlist.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/support.js" beforeDir="false" afterPath="$PROJECT_DIR$/support.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -91,28 +54,28 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ASKED_ADD_EXTERNAL_FILES": "true",
-    "ASKED_SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.cidr.known.project.marker": "true",
-    "WebServerToolWindowFactoryState": "false",
-    "cf.first.check.clang-format": "false",
-    "cidr.known.project.marker": "true",
-    "git-widget-placeholder": "main",
-    "ignore.virus.scanning.warn.message": "true",
-    "last_opened_file_path": "C:/Users/mayan/OneDrive/Documents/GitHub/music-webpage",
-    "list.type.of.created.stylesheet": "CSS",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "settings.editor.selected.configurable": "preferences.pluginManager",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
+    &quot;ASKED_SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.cidr.known.project.marker&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;cf.first.check.clang-format&quot;: &quot;false&quot;,
+    &quot;cidr.known.project.marker&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/mayan/OneDrive/Documents/GitHub/music-webpage&quot;,
+    &quot;list.type.of.created.stylesheet&quot;: &quot;CSS&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\mayan\OneDrive\Documents\GitHub\music-webpage" />
@@ -140,6 +103,7 @@
       <workItem from="1699947909906" duration="17669000" />
       <workItem from="1700132699098" duration="1149000" />
       <workItem from="1700201160807" duration="3774000" />
+      <workItem from="1700939464646" duration="660000" />
     </task>
     <task id="LOCAL-00001" summary="Changes made in (body overflow and &lt;h2&gt; music text , colour correction of h2 tag in css) -mayank">
       <option name="closed" value="true" />
@@ -285,7 +249,23 @@
       <option name="project" value="LOCAL" />
       <updated>1700937074048</updated>
     </task>
-    <option name="localTasksCounter" value="19" />
+    <task id="LOCAL-00019" summary="-backend">
+      <option name="closed" value="true" />
+      <created>1700939411688</created>
+      <option name="number" value="00019" />
+      <option name="presentableId" value="LOCAL-00019" />
+      <option name="project" value="LOCAL" />
+      <updated>1700939411688</updated>
+    </task>
+    <task id="LOCAL-00020" summary="-backend">
+      <option name="closed" value="true" />
+      <created>1700939421616</created>
+      <option name="number" value="00020" />
+      <option name="presentableId" value="LOCAL-00020" />
+      <option name="project" value="LOCAL" />
+      <updated>1700939421616</updated>
+    </task>
+    <option name="localTasksCounter" value="21" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -313,6 +293,7 @@
     <MESSAGE value="-playback control" />
     <MESSAGE value="-mayank pandey" />
     <MESSAGE value="-added playlist.css and playlist.html" />
-    <option name="LAST_COMMIT_MESSAGE" value="-added playlist.css and playlist.html" />
+    <MESSAGE value="-backend" />
+    <option name="LAST_COMMIT_MESSAGE" value="-backend" />
   </component>
 </project>
