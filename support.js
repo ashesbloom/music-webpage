@@ -1,4 +1,4 @@
-const music = new Audio("playback_tree/songs/joji/nector/");
+const music = new Audio("playback_tree/songs/joji/nector/05 upgrade.mp3");
 // music.play();
 
 
