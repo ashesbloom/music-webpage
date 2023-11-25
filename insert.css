@@ -40,66 +40,69 @@ body {
 }
 .record{
   margin-top:6px;
+  transition: 0.6s linear;
 }
 .record .i1 {
-    /*margin-left: 50px;*/
-    height: 70vh;
-    width: 70vh;
-    border: 2px solid rgb(15, 15, 15);
-    border-radius: 50%;
-    background: #1d1d1d;
-    box-shadow: -3px 6px 20px #0a0a0a,
-    1px -2px 20px #232323;
-    animation: rotatei1 3.7s linear infinite;
-  }
-  @keyframes rotatei1{
-    0% {
-      transform: rotate(0deg);
-    }
-    100% {
-      transform: rotate(360deg);
-    }
-  }
-  .i2 {
-    margin-top: 10.1%;
-    margin-left:10.1%;
-    height: 56vh;
-    width: 56vh;
-    border: 2px solid rgb(15, 15, 15);
-    border-radius: 50%;
-    background: #1d1d1d;
-    box-shadow:  -3px 5px 20px #0c0c0c,
-    1px -2px 20px #1f1f1f;
-  }
-  .i3 {
-    margin-top: 14.5%;
-    margin-left:14.5%;
-    height: 39vh;
-    width: 39vh;
-    border: 3px ridge rgb(15, 15, 15);
-    border-radius: 50%;
-  }
-  .inner{ /*album cover goes here*/
-    justify-content: center;
-    margin-top: 7%;
-    margin-left:7%;
-    height: 33vh;
-    width: 33vh;
-    border: 3px #a21e1e groove;
-    border-radius: 50%;
-    box-shadow:  -3px 5px 20px #0c0c0c,
-    1px -2px 20px #0c0c0c;
+  /*margin-left: 50px;*/
+  height: 70vh;
+  width: 70vh;
+  border: 2px solid rgb(15, 15, 15);
+  border-radius: 50%;
+  background: #1d1d1d;
+  box-shadow: -3px 6px 20px #0a0a0a,
+  1px -2px 20px #232323;
+  animation: rotatei1 3.7s linear infinite;
 
-    .album{
-      justify-content: center;
-      border-radius: 50%;
-      width: 33vh;
-      height: 33vh;
-    }
+}
+@keyframes rotatei1{
+  0% {
+    transform: rotate(0deg);
   }
-  .inner img:hover{
-    box-shadow: 0 0 100px #f13c3c;
+  100% {
+    transform: rotate(360deg);
   }
+}
+.i2 {
+  margin-top: 10.1%;
+  margin-left:10.1%;
+  height: 56vh;
+  width: 56vh;
+  border: 2px solid rgb(15, 15, 15);
+  border-radius: 50%;
+  background: #1d1d1d;
+  box-shadow:  -3px 5px 20px #0c0c0c,
+  1px -2px 20px #1f1f1f;
+}
+.i3 {
+  margin-top: 14.5%;
+  margin-left:14.5%;
+  height: 39vh;
+  width: 39vh;
+  border: 3px ridge rgb(15, 15, 15);
+  border-radius: 50%;
+}
+.inner{ /*album cover goes here*/
+  justify-content: center;
+  margin-top: 7%;
+  margin-left:7%;
+  height: 33vh;
+  width: 33vh;
+  border: 3px #a21e1e groove;
+  border-radius: 50%;
+  box-shadow:  -3px 5px 20px #0c0c0c,
+  1px -2px 20px #0c0c0c;
+
+  .album{
+    justify-content: center;
+    border-radius: 50%;
+    width: 33vh;
+    height: 33vh;
+  }
+}
+.inner img:hover{
+  box-shadow: 0 0 100px #f13c3c;
+  transition: 0.3s linear;
+}
 
 .header{
   overflow: hidden;
@@ -114,142 +117,204 @@ body {
   grid-template-columns: 1.5fr 2.7fr 0.3fr 1.3fr;
   padding-bottom: 10px
 }
-  .logo{
-    /*border: 1px solid black;*/
-    align-self: center;
-    padding-left: 10px;
-  }
-  .playbackarea{
-    border-radius:5px;
-    background-color: #4d4d4d;
+.logo{
+  /*border: 1px solid black;*/
+  align-self: center;
+  padding-left: 10px;
+  position: relative;
+}
+.playbackarea{
+  border-radius:5px;
+  background-color: #4d4d4d;
+  display: grid;
+  /*grid-template-columns: 2fr 1fr;*/
+  max-height: 10vh;
+  box-shadow: 0 0 60px #4f4f4f;
+  transition: 1s linear;
+  .albumname{
+    /*border:1px solid black;*/
+    justify-self: start;
     display: grid;
-    grid-template-columns: 2fr 1fr;
-    max-height: 10vh;
-    box-shadow: 0 0 60px #4f4f4f;
-    .albumname{
-      /*border:1px solid black;*/
-      justify-self: start;
-      display: grid;
-      grid-template-columns:1fr 6fr;
+    grid-template-columns:1fr 4fr 2.5fr;
+    max-height: 8vh;
+    .cover{
+      border-radius: 5px;
+      box-shadow: 10px -5px 40px #232323;
       max-height: 10vh;
-      .cover{
-        border-radius: 5px;
-        box-shadow: 10px -5px 20px #232323;
-      }
-      .albumtext p{
-        /*border:1px solid black;*/
-      }
+      transition: 1s linear;
     }
-    .cover img:hover{
-      box-shadow: 0 0 6px #9f9f9f;
+    .cover img{
+      max-height:10vh;
     }
-    .playbutton{
-      /*border:1px solid black;*/
-      /*padding-top: 25px;*/
-      justify-self: start; /* controls margin can be changed by using end instead of start*/
-      display: flex;
-      align-items: center;
+    .albumtext{
+      max-height:8.7vh;
+      /*border: 1px solid black;*/
     }
-
-    .playbutton button {
-      border: none;
-      outline: none;
-      background-color: transparent;
-      width: 15px;
-      height: 30px;
-      font-size: 20px;
-      cursor: pointer;
-      margin-left: 20px;
-      color: #2b2b2b;
+    .albumtext p{
+      margin-top:7px;
+      margin-left: 10px;
+      margin-bottom: 5px;
+      /*border: 1px solid black;*/
     }
-    .playbutton button:hover {
+    #song_time{
       color: #9f9f9f;
+      margin-left: 10px;
     }
-    .playbutton i:hover{
-      box-shadow: 0 0 60px #ff2b2b;
+    #current_time:hover{
+      color: white;
     }
-    .playbutton button:active {
-      transform: scale(0.9);
-    }
-    .playbutton .repeat:active{
-      color: #f13c3c;
-    }
-    .playbutton .shuffle:active{
-      color: #f13c3c;
+    #end_time:hover{
+      color: white;
     }
   }
-  .volumecontrol {
-    /*border: 1px solid black;*/
+  .cover img:hover{
+    box-shadow: 0 0 3px #9f9f9f;
+  }
+  .playbutton{
+    /*border:1px solid black;*/
+    /*padding-top: 25px;*/
+    justify-self: start; /* controls margin can be changed by using end instead of start*/
     display: flex;
-    align-items: center;
-    padding-left: 20px;
-    /*justify-content: center;*/
-  }
-  .volumecontrol .mute_button{
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #9f9f9f;
-  }
-    .volumecontrol .mute_button:hover{
-      color: #ffffff;
-    }
-    .volumecontrol .mute_button:active{
-      transform: scale(0.9);
-    }
-    .volumecontrol .mute_button:active{
-      color: #a21e1e;
-    }
+    /*align-items: center;*/
+    max-height: 8.7vh;
 
-  .volumecontrol .v_range{
-    display:flex;
-    align-items:center;
-    width:50%;
-    margin-left: 10px;
-    margin-right: 10px;
   }
-  .volumecontrol .v_range .v_bar{
-    -webkit-appearance: none;
+
+  .playbutton button {
     border: none;
     outline: none;
-    background-color:transparent;
-    height: 9px;
-    border-radius: 100px;
-    /*box-shadow: inset 10px 20px 50px #1a1a1a;*/
-    overflow: hidden;
-    box-shadow: 0 0 45px #a12e1e;
-  }
-  .volumecontrol .v_range .v_bar::-webkit-slider-thumb{
-    -webkit-appearance: none;
-    width:14px;
-    height:12px;
-    border-radius: 50%;
-    background: #9f9f9f;
+    background-color: transparent;
+    width: 15px;
+    height: 30px;
+    font-size: 20px;
     cursor: pointer;
-    box-shadow: -410px 0 0 400px #a12e1e;
+    margin-left: 20px;
+    padding-top:24.5px;
+    color: #2b2b2b;
   }
-  /* for morzila browser */
-  .volumecontrol .v_range .v_bar::-moz-range-thumb{
-    -webkit-appearance: none;
-    width:12px;
-    height:12px;
-    border-radius: 50%;
-    background: #9f9f9f;
-    cursor: pointer;
-    box-shadow: -410px 0 0 400px #a12e1e;
+  .playbutton button:hover {
+    color: #9f9f9f;
   }
-  .volumecontrol .v_num{
-    display: flex;
-    justify-content: center;
-    margin-left:0;
-    /*border: 1px solid #a12e1e;*/
+  .playbutton i:hover{
+    box-shadow: 0 0 60px #ff2b2b;
   }
-  .sidecontrols{
-    border: 1px solid black;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  .playbutton button:active {
+    transform: scale(0.9);
   }
+  .playbutton .repeat:active{
+    color: #f13c3c;
+  }
+  .playbutton .shuffle:active{
+    color: #f13c3c;
+  }
+}
+.play_bar{
+  margin-top: 9px;
+  margin-left:80.5px;
+  border-radius: 3px;
+  position: relative;
+  max-width:100vh;
+  height:2px;
+  background-color:#9f9f9f;
+}
+.play_bar .slider{
+  position: absolute;
+  top:0;
+  border-radius: 3px;
+  width:10vh;
+  height:2px;
+  background-color: white;
+  transition: 1.5s linear;
+}
+.play_bar .dot{
+  margin-left:10vh;
+  position: absolute;
+  border-radius: 30% 30% 10% 10%;
+  width:7.5px;
+  height:10px;
+  top:-5px;
+  background-color: white;
+}
+.play_bar input{
+  position: absolute;
+  left:-1px;
+  top:-13.5px;
+  width: 100%;
+  cursor: pointer;
+  z-index:999999999999999999;
+  opacity: 0;
+}
+.volumecontrol {
+  /*border: 1px solid black;*/
+  display: flex;
+  align-items: center;
+  padding-left: 20px;
+  /*justify-content: center;*/
+}
+.volumecontrol .mute_button{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #9f9f9f;
+}
+.volumecontrol .mute_button:hover{
+  color: #ffffff;
+}
+.volumecontrol .mute_button:active{
+  transform: scale(0.9);
+}
+.volumecontrol .mute_button:active{
+  color: #a21e1e;
+}
+
+.volumecontrol .v_range{
+  display:flex;
+  align-items:center;
+  width:50%;
+  margin-left: 10px;
+  margin-right: 10px;
+}
+.volumecontrol .v_range .v_bar{
+  -webkit-appearance: none;
+  border: none;
+  outline: none;
+  background-color:transparent;
+  height: 9px;
+  border-radius: 100px;
+  overflow: hidden;
+  box-shadow: 0 0 45px #a12e1e;
+}
+.volumecontrol .v_range .v_bar::-webkit-slider-thumb{
+  -webkit-appearance: none;
+  width:14px;
+  height:12px;
+  border-radius: 50%;
+  background: #9f9f9f;
+  cursor: pointer;
+  box-shadow: -410px 0 0 400px #a12e1e;
+}
+/* for morzila browser */
+.volumecontrol .v_range .v_bar::-moz-range-thumb{
+  -webkit-appearance: none;
+  width:12px;
+  height:12px;
+  border-radius: 50%;
+  background: #9f9f9f;
+  cursor: pointer;
+  box-shadow: -410px 0 0 400px #a12e1e;
+}
+.volumecontrol .v_num{
+  display: flex;
+  justify-content: center;
+  margin-left:0;
+  /*border: 1px solid #a12e1e;*/
+}
+.sidecontrols{
+  border: 1px solid black;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 
 
 
@@ -264,105 +329,105 @@ body {
   /*background: linear-gradient(to bottom, #1f1f1f,black);/* add this if you want or do it however you want just keep
   up with theme*/
 }
-  .explore,h2{color:white;}
-  .box {
-    width: 420px;
-    height: 230px;
-    border-radius: 20px;
-    background-color: grey;
-    margin: 18px;
-    display: inline-block;
-    box-shadow: 2px 1px 8px white;
-    background: url("https://img.freepik.com/premium-photo/bright-musical-background_476363-6644.jpg?w=1380");
-  }
-  .side4{
-    width:180px;
-    height:230px;
-    background-color: #2b2b2b;
-    margin:18px;
-    display:inline-block;
-    border-radius: 20px;
-    box-shadow:1px 1px 4px grey;
-  }
-  .side1{
-    width:180px;
-    height:230px;
-    border-radius: 20px;
-    background-color: #2b2b2b;
-    margin:18px;
-    display: inline-block;
-    box-shadow:1px 1px 4px grey;
-  }
-  .side2{
-    width:180px;
-    height:230px;
-    border-radius: 20px;
-    background-color: #2b2b2b;
-    margin:18px;
-    display: inline-block;
-    box-shadow:1px 1px 4px grey;
-  }
-  .side3{
-    width:180px;
-    border-radius: 20px;
-    height:230px;
-    background-color: #2b2b2b;
-    margin:18px;
-    display: inline-block;
-    box-shadow:1px 1px 4px grey;
-  }
-  .row-1{
-    width: 95%;
-    margin-left: 18px;
-    height:200px;
-    display: inline-flex;
-  }
-  .row-2{
-    width: 95%;
-    height:200px;
-    margin-left:18px;
-    display: inline-flex;
-  }
-  .row-3{
-    margin-left: 18px;;
-  }
-  .box1{
-    width:200px;
-    border-radius: 20px;
-    background-color: #2b2b2b;
-    margin: 15px;
-  }
-  .box2{
-    width:200px;
-    border-radius: 20px;
-    background-color: #2b2b2b;
-    margin: 15px;
-  }
-  .box3{
-    width:200px;
-    border-radius: 20px;
-    background-color: #2b2b2b;
-    margin: 15px;
-  }
-  .box4{
-    width:200px;
-    border-radius: 20px;
-    background-color: #2b2b2b;
-    margin: 15px;
-  }
-  .box5{
-    width:200px;
-    border-radius: 20px;
-    background-color: #2b2b2b;
-    margin: 15px;
-  }
-  .menu{
-    border: 1px solid black;
-    position: relative;
-    max-height: 100vh;
-    min-width:42vh;
-    background-color: #161819;
-  }
+.explore,h2{color:white;}
+.box {
+  width: 420px;
+  height: 230px;
+  border-radius: 20px;
+  background-color: grey;
+  margin: 18px;
+  display: inline-block;
+  box-shadow: 2px 1px 8px white;
+  background: url("https://img.freepik.com/premium-photo/bright-musical-background_476363-6644.jpg?w=1380");
+}
+.side4{
+  width:180px;
+  height:230px;
+  background-color: #2b2b2b;
+  margin:18px;
+  display:inline-block;
+  border-radius: 20px;
+  box-shadow:1px 1px 4px grey;
+}
+.side1{
+  width:180px;
+  height:230px;
+  border-radius: 20px;
+  background-color: #2b2b2b;
+  margin:18px;
+  display: inline-block;
+  box-shadow:1px 1px 4px grey;
+}
+.side2{
+  width:180px;
+  height:230px;
+  border-radius: 20px;
+  background-color: #2b2b2b;
+  margin:18px;
+  display: inline-block;
+  box-shadow:1px 1px 4px grey;
+}
+.side3{
+  width:180px;
+  border-radius: 20px;
+  height:230px;
+  background-color: #2b2b2b;
+  margin:18px;
+  display: inline-block;
+  box-shadow:1px 1px 4px grey;
+}
+.row-1{
+  width: 95%;
+  margin-left: 18px;
+  height:200px;
+  display: inline-flex;
+}
+.row-2{
+  width: 95%;
+  height:200px;
+  margin-left:18px;
+  display: inline-flex;
+}
+.row-3{
+  margin-left: 18px;;
+}
+.box1{
+  width:200px;
+  border-radius: 20px;
+  background-color: #2b2b2b;
+  margin: 15px;
+}
+.box2{
+  width:200px;
+  border-radius: 20px;
+  background-color: #2b2b2b;
+  margin: 15px;
+}
+.box3{
+  width:200px;
+  border-radius: 20px;
+  background-color: #2b2b2b;
+  margin: 15px;
+}
+.box4{
+  width:200px;
+  border-radius: 20px;
+  background-color: #2b2b2b;
+  margin: 15px;
+}
+.box5{
+  width:200px;
+  border-radius: 20px;
+  background-color: #2b2b2b;
+  margin: 15px;
+}
+.menu{
+  border: 1px solid black;
+  position: relative;
+  max-height: 100vh;
+  min-width:42vh;
+  background-color: #161819;
+}
 h5{
   text-align: left;
   font-family: Verdana, Geneva, Tahoma, sans-serif;
@@ -376,31 +441,31 @@ h5{
   color: #d8e2e3;
 }
 
-  form{
-    text-align: center;
-    color: grey;
-  }
+form{
+  text-align: center;
+  color: grey;
+}
 
-  input{
-    background-color: black;
-    height: 25px;
-    width: 200px;
-  }
+input{
+  background-color: black;
+  height: 25px;
+  width: 200px;
+}
 
-  h4{
-    margin-left: 15px;
-  }
+h4{
+  margin-left: 15px;
+}
 
-  a{
-    text-decoration: none;
-    color:#d8e2e3;
-    line-height: 1.5;
-    margin-top: 3%;
-  }
+a{
+  text-decoration: none;
+  color:#d8e2e3;
+  line-height: 1.5;
+  margin-top: 3%;
+}
 
-  .Recently_Added,.Albums,.Artists,.Songs{
-    width: 5%;
-    height: 5%;
-  }
+.Recently_Added,.Albums,.Artists,.Songs{
+  width: 5%;
+  height: 5%;
+}
 
 
