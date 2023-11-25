@@ -4,18 +4,30 @@ body {
   padding: 0;
   overflow-x: hidden;
   background-color:black;
-
+  -webkit-appearance: none;
+  scrollbar-width: thin;
+  scrollbar-color: transparent transparent;
 }
+/* For Webkit browsers (like Chrome, Safari) */
+body::-webkit-scrollbar {
+  width: 6px;
+}
+
+body::-webkit-scrollbar-thumb {
+  background-color: transparent;
+}
+
 .container {
   display: flex;
   justify-content: center;
-  min-height: 90vh;
+  max-height:100%;
   max-width:100%;
   overflow: hidden;
+  position: absolute;
 }
 .playback {
   border: 1px solid black;
-  max-height:100vh;
+  max-height:100%;
   width:20%;
   margin: 0 auto;
   box-sizing: border-box;
@@ -78,7 +90,7 @@ body {
   margin-left:14.5%;
   height: 39vh;
   width: 39vh;
-  border: 3px ridge rgb(15, 15, 15);
+  border: 3px solid rgb(15, 15, 15);
   border-radius: 50%;
 }
 .inner{ /*album cover goes here*/
@@ -87,7 +99,7 @@ body {
   margin-left:7%;
   height: 33vh;
   width: 33vh;
-  border: 3px #a21e1e groove;
+  border: 3px  #a21e1e solid;
   border-radius: 50%;
   box-shadow:  -3px 5px 20px #0c0c0c,
   1px -2px 20px #0c0c0c;
@@ -151,14 +163,19 @@ body {
       /*border: 1px solid black;*/
     }
     .albumtext p{
-      margin-top:7px;
+      margin-top:9px;
       margin-left: 10px;
-      margin-bottom: 5px;
+      margin-bottom: 0;
       /*border: 1px solid black;*/
     }
+    #albumdescription{
+      margin-top: 3px;
+    }
     #song_time{
+      position: absolute;
       color: #9f9f9f;
       margin-left: 10px;
+      top:55px;
     }
     #current_time:hover{
       color: white;
@@ -179,7 +196,6 @@ body {
     max-height: 8.7vh;
 
   }
-
   .playbutton button {
     border: none;
     outline: none;
@@ -317,7 +333,6 @@ body {
 }
 
 
-
 .explore {
   border: 1px solid black;
   width: 60%;
@@ -325,9 +340,7 @@ body {
   overflow-y: auto;
   max-height: 87.3vh;
   background-color: #1f1f1f;
-  -webkit-appearance: none;
-  /*background: linear-gradient(to bottom, #1f1f1f,black);/* add this if you want or do it however you want just keep
-  up with theme*/
+  /*background: linear-gradient(to bottom, #1f1f1f,black);/* add this if you want or do it however you want just keep up with theme*/
 }
 .explore,h2{
   color:white;}
@@ -467,7 +480,6 @@ a .img{
 }
 .playlist_title2{
   position: absolute;
-  color: white;
   margin-left: 41vh;
   margin-top: 15vh;
   color: #a21e1e;

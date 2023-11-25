@@ -17,17 +17,17 @@
       </div>
       <div class="playbackarea">
         <div class="albumname">
-          <div class="cover"><img style="max-height: 10vh; border-radius: 5px; width: 11vh;" src="playback_tree/covers/joji/joji_nector.jpg" alt="ac"></div>
+          <div class="cover"><img id="main_cover" style="max-height: 10vh; border-radius: 5px; width: 11vh;" src="playback_tree/covers/joji/joji_nector.jpg" alt="ac"></div>
           <div class="albumtext">
-            <p style="color: white"> song name <br> <span style="font-size: 1.7vh; color: darkgrey;">description</span></p>
-            <div id="song_time" style="font-size:12px;"><span id="current_time">00:00</span>&nbsp;/&nbsp;<span id="end_time">00:00</span></div>
+            <p style="color: white" id="albumtext"> song name <br> <span><p id="albumdescription" style="font-size: 1.7vh; color: darkgrey;">description</p></span></p>
+            <div id="song_time" style="font-size:12px;"><span id="current_time" class="currentTime">00:00</span>&nbsp;/&nbsp;<span id="end_time">00:00</span></div>
           </div>
           <div class="playbutton">
-            <button class="shuffle"><i class="fa-solid fa-shuffle"></i></button>
-            <button class="prev"><i class="fa-solid fa-backward-step" ></i></button>
-            <button class="play"><i class="fa-solid fa-play"></i></button>
-            <button class="next"><i class="fa-solid fa-forward-step"></i></button>
-            <button class="repeat"><i class="fa-solid fa-repeat"></i></button>
+            <button class="shuffle"><i class="fa-solid fa-shuffle" id="shuffle"></i></button>
+            <button class="prev"><i class="fa-solid fa-backward-step" id="prev"></i></button>
+            <button class="play" id="master_play" ><i class="fa-solid fa-play" id="play"></i></button>
+            <button class="next"><i class="fa-solid fa-forward-step" id="next"></i></button>
+            <button class="repeat"><i class="fa-solid fa-repeat" id="repeat"></i></button>
           </div>
         </div>
         <div class="play_bar">
@@ -67,27 +67,27 @@
         <h3 class="songname">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Recently Played</h3>
         <div class="row-1">
           <div class = "box1">
-            <a href="Playlist_tree/playlist.html">
+            <a href="playlist.html">
             <img alt="Album Cover" class="img" id="img2" src="playback_tree/covers/joji/joji_nector.jpg">
             </a>
           </div>
           <div class = "box2" >
-            <a href="Playlist_tree/playlist.html">
+            <a href="playlist.html">
               <img alt="Album Cover" class="img" id="img3" src="playback_tree/covers/joji/joji_nector.jpg">
             </a>
           </div>
           <div class = "box3" >
-            <a href="Playlist_tree/playlist.html">
+            <a href="playlist.html">
               <img alt="Album Cover" class="img" id="img4" src="playback_tree/covers/joji/joji_nector.jpg">
             </a>
           </div>
           <div class = "box4" >
-            <a href="Playlist_tree/playlist.html">
+            <a href="playlist.html">
               <img alt="Album Cover" class="img" id="img5" src="playback_tree/covers/joji/joji_nector.jpg">
             </a>
           </div>
           <div class = "box5" >
-            <a href="Playlist_tree/playlist.html">
+            <a href="playlist.html">
               <img alt="Album Cover" class="img" id="img6" src="playback_tree/covers/joji/joji_nector.jpg">
             </a>
           </div>

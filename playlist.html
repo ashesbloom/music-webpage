@@ -8,7 +8,7 @@
   <script src="https://kit.fontawesome.com/c2db7a4b8d.js" crossorigin="anonymous"></script>
 </head>
 <body>
-<script src="../support.js"></script>
+<script src="support.js"></script>
 <div id="align">
   <header>
     <div class="header">
@@ -17,17 +17,17 @@
       </div>
       <div class="playbackarea">
         <div class="albumname">
-          <div class="cover"><img style="max-height: 10vh; border-radius: 5px; width: 11vh;" src="../playback_tree/covers/joji/joji_nector.jpg" alt="ac"></div>
+          <div class="cover"><img id="main_cover" style="max-height: 10vh; border-radius: 5px; width: 11vh;" src="" alt="ac"></div>
           <div class="albumtext">
-            <p style="color: white"> song name <br> <span style="font-size: 1.7vh; color: darkgrey;">description</span></p>
+            <p style="color: white" id="albumtext"><br> <span ><p id="albumdescription" style="font-size: 1.7vh; color: darkgrey;"></p></span></p>
             <div id="song_time" style="font-size:12px;"><span id="current_time">00:00</span>&nbsp;/&nbsp;<span id="end_time">00:00</span></div>
           </div>
           <div class="playbutton">
-            <button class="shuffle"><i class="fa-solid fa-shuffle"></i></button>
-            <button class="prev"><i class="fa-solid fa-backward-step" ></i></button>
-            <button class="play"><i class="fa-solid fa-play"></i></button>
-            <button class="next"><i class="fa-solid fa-forward-step"></i></button>
-            <button class="repeat"><i class="fa-solid fa-repeat"></i></button>
+            <button class="shuffle"><i class="fa-solid fa-shuffle" id="shuffle"></i></button>
+            <button class="prev"><i class="fa-solid fa-backward-step" id="prev"></i></button>
+            <button class="play" id="master_play" ><i class="fa-solid fa-play" id="play"></i></button>
+            <button class="next"><i class="fa-solid fa-forward-step" id="next"></i></button>
+            <button class="repeat"><i class="fa-solid fa-repeat" id="repeat"></i></button>
           </div>
         </div>
         <div class="play_bar">
@@ -41,26 +41,6 @@
         <div class="v_range">
           <label for="v_bar"></label><input id="v_bar" class="v_bar" type="range" min="0" max="100" value="20" onmousemove="rangeSlider(this.value)" onchange="rangeSlider(this.value)"></div>
         <div id='v_num' class="v_num" style="color:#9f9d9d"><span></span></div>
-        <script type="text/javascript">
-          function rangeSlider(value){
-            document.getElementById("v_num").innerHTML = value;
-            let volumeIcon = document.getElementById('volume_icon');
-            if (value === '0') {
-              // document.getElementById('mute_button').className ='fa-solid fa-volume-xmark';
-              volumeIcon.className = 'fa-solid fa-volume-mute';
-            }
-            if (value < '50' && value !== '0') {
-              volumeIcon.className = 'fa-solid fa-volume-low';
-            }
-            if (value > '50' ||  value === '100') {
-              volumeIcon.className = 'fa-solid fa-volume-high';
-            }
-          }
-          setInterval(function () {
-            var currentValue = document.getElementById("v_bar").value;
-            rangeSlider(currentValue);
-          }, 100);
-        </script>
       </div>
       <div class="sidecontrols"><p style="color: white;" >top menu</p></div>
     </div>
@@ -72,7 +52,7 @@
           <div class="i2">
             <div class="i3">
               <div class="inner">
-                <img alt="Album Cover" class="album" src="../playback_tree/covers/joji/joji_nector.jpg">
+                <img alt="Album Cover" class="album" src="playback_tree/covers/joji/joji_nector.jpg">
               </div>
             </div>
           </div>
@@ -81,7 +61,7 @@
     </div>
     <div class="explore">
       <div class="cover_area">
-        <div class="playlist_cover"><img class="cover_img" alt="Album cover" src="../playback_tree/covers/joji/joji_nector.jpg"></div>
+        <div class="playlist_cover"><img class="cover_img" alt="Album cover" src="playback_tree/covers/joji/joji_nector.jpg"></div>
         <div class="playlist_title"><h2>Your Playlist</h2></div>
         <div class="playlist_title2"><h3>Nector by Joji</h3></div>
         <div class="playlist_description"><p>The follow-up to 2018’s BALLADS 1 builds on the Japanese singer’s daring aesthetic—an arty blur of bedroom trip-hop,
@@ -95,50 +75,110 @@
         <span class="duration_head">Duration</span>
       </div>
       <div class="songs_list" >
-        <li>
-          <img alt="Ac" src="../playback_tree/covers/joji/joji_nector.jpg">
+        <li id="1" class="song_items">
+          <img src="playback_tree/covers/joji/joji_nector.jpg">
+          <div><h5 style="color: #d8e2e3">Upgrade</h5></div>
+          <div class="artist"><h5 style="color: #d8e2e3 ">Joji</h5></div>
+          <div class="duration"><h5 style="color: #d8e2e3">00:00</h5></div>
+        </li>
+        <li id="2" class="song_items">
+          <img src="playback_tree/covers/joji/joji_nector.jpg">
           <div><h5 style="color: #d8e2e3 ">Upgrade</h5></div>
           <div class="artist"><h5 style="color: #d8e2e3 ">Joji</h5></div>
           <div class="duration"><h5 style="color: #d8e2e3 ">00:00</h5></div>
         </li>
-        <li>
-          <img alt="Ac" src="../playback_tree/covers/joji/joji_nector.jpg">
+        <li id="3" class="song_items">
+          <img alt="Ac" src="playback_tree/covers/joji/joji_nector.jpg">
           <div><h5 style="color: #d8e2e3 ">Upgrade</h5></div>
           <div class="artist"><h5 style="color: #d8e2e3 ">Joji</h5></div>
           <div class="duration"><h5 style="color: #d8e2e3 ">00:00</h5></div>
         </li>
-        <li>
-          <img alt="Ac" src="../playback_tree/covers/joji/joji_nector.jpg">
+        <li id="4" class="song_items">
+          <img alt="Ac" src="playback_tree/covers/joji/joji_nector.jpg">
           <div><h5 style="color: #d8e2e3 ">Upgrade</h5></div>
           <div class="artist"><h5 style="color: #d8e2e3 ">Joji</h5></div>
           <div class="duration"><h5 style="color: #d8e2e3 ">00:00</h5></div>
         </li>
-        <li>
-          <img alt="Ac" src="../playback_tree/covers/joji/joji_nector.jpg">
+        <li id="5" class="song_items">
+          <img alt="Ac" src="playback_tree/covers/joji/joji_nector.jpg">
           <div><h5 style="color: #d8e2e3 ">Upgrade</h5></div>
           <div class="artist"><h5 style="color: #d8e2e3 ">Joji</h5></div>
           <div class="duration"><h5 style="color: #d8e2e3 ">00:00</h5></div>
         </li>
-        <li>
-          <img alt="Ac" src="../playback_tree/covers/joji/joji_nector.jpg">
+        <li id="6" class="song_items">
+          <img alt="Ac" src="playback_tree/covers/joji/joji_nector.jpg">
           <div><h5 style="color: #d8e2e3 ">Upgrade</h5></div>
           <div class="artist"><h5 style="color: #d8e2e3 ">Joji</h5></div>
           <div class="duration"><h5 style="color: #d8e2e3 ">00:00</h5></div>
         </li>
-        <li>
-          <img alt="Ac" src="../playback_tree/covers/joji/joji_nector.jpg">
+        <li id="7" class="song_items">
+          <img alt="Ac" src="playback_tree/covers/joji/joji_nector.jpg">
           <div><h5 style="color: #d8e2e3 ">Upgrade</h5></div>
           <div class="artist"><h5 style="color: #d8e2e3 ">Joji</h5></div>
           <div class="duration"><h5 style="color: #d8e2e3 ">00:00</h5></div>
         </li>
-        <li>
-          <img alt="Ac" src="../playback_tree/covers/joji/joji_nector.jpg">
+        <li id="8" class="song_items">
+          <img alt="Ac" src="playback_tree/covers/joji/joji_nector.jpg">
           <div><h5 style="color: #d8e2e3 ">Upgrade</h5></div>
           <div class="artist"><h5 style="color: #d8e2e3 ">Joji</h5></div>
           <div class="duration"><h5 style="color: #d8e2e3 ">00:00</h5></div>
         </li>
-        <li>
-          <img alt="Ac" src="../playback_tree/covers/joji/joji_nector.jpg">
+        <li id="9" class="song_items">
+          <img alt="Ac" src="playback_tree/covers/joji/joji_nector.jpg">
+          <div><h5 style="color: #d8e2e3 ">Upgrade</h5></div>
+          <div class="artist"><h5 style="color: #d8e2e3 ">Joji</h5></div>
+          <div class="duration"><h5 style="color: #d8e2e3 ">00:00</h5></div>
+        </li>
+        <li id="10" class="song_items">
+          <img alt="Ac" src="playback_tree/covers/joji/joji_nector.jpg">
+          <div><h5 style="color: #d8e2e3 ">Upgrade</h5></div>
+          <div class="artist"><h5 style="color: #d8e2e3 ">Joji</h5></div>
+          <div class="duration"><h5 style="color: #d8e2e3 ">00:00</h5></div>
+        </li>
+        <li id="11" class="song_items">
+          <img alt="Ac" src="playback_tree/covers/joji/joji_nector.jpg">
+          <div><h5 style="color: #d8e2e3 ">Upgrade</h5></div>
+          <div class="artist"><h5 style="color: #d8e2e3 ">Joji</h5></div>
+          <div class="duration"><h5 style="color: #d8e2e3 ">00:00</h5></div>
+        </li>
+        <li id="12" class="song_items">
+          <img alt="Ac" src="playback_tree/covers/joji/joji_nector.jpg">
+          <div><h5 style="color: #d8e2e3 ">Upgrade</h5></div>
+          <div class="artist"><h5 style="color: #d8e2e3 ">Joji</h5></div>
+          <div class="duration"><h5 style="color: #d8e2e3 ">00:00</h5></div>
+        </li>
+        <li id="13" class="song_items">
+          <img alt="Ac" src="playback_tree/covers/joji/joji_nector.jpg">
+          <div><h5 style="color: #d8e2e3 ">Upgrade</h5></div>
+          <div class="artist"><h5 style="color: #d8e2e3 ">Joji</h5></div>
+          <div class="duration"><h5 style="color: #d8e2e3 ">00:00</h5></div>
+        </li>
+        <li id="14" class="song_items">
+          <img alt="Ac" src="playback_tree/covers/joji/joji_nector.jpg">
+          <div><h5 style="color: #d8e2e3 ">Upgrade</h5></div>
+          <div class="artist"><h5 style="color: #d8e2e3 ">Joji</h5></div>
+          <div class="duration"><h5 style="color: #d8e2e3 ">00:00</h5></div>
+        </li>
+        <li id="15" class="song_items">
+          <img alt="Ac" src="playback_tree/covers/joji/joji_nector.jpg">
+          <div><h5 style="color: #d8e2e3 ">Upgrade</h5></div>
+          <div class="artist"><h5 style="color: #d8e2e3 ">Joji</h5></div>
+          <div class="duration"><h5 style="color: #d8e2e3 ">00:00</h5></div>
+        </li>
+        <li id="16" class="song_items">
+          <img alt="Ac" src="playback_tree/covers/joji/joji_nector.jpg">
+          <div><h5 style="color: #d8e2e3 ">Upgrade</h5></div>
+          <div class="artist"><h5 style="color: #d8e2e3 ">Joji</h5></div>
+          <div class="duration"><h5 style="color: #d8e2e3 ">00:00</h5></div>
+        </li>
+        <li id="17" class="song_items">
+          <img alt="Ac" src="playback_tree/covers/joji/joji_nector.jpg">
+          <div><h5 style="color: #d8e2e3 ">Upgrade</h5></div>
+          <div class="artist"><h5 style="color: #d8e2e3 ">Joji</h5></div>
+          <div class="duration"><h5 style="color: #d8e2e3 ">00:00</h5></div>
+        </li>
+        <li id="18" class="song_items">
+          <img alt="Ac" src="playback_tree/covers/joji/joji_nector.jpg">
           <div><h5 style="color: #d8e2e3 ">Upgrade</h5></div>
           <div class="artist"><h5 style="color: #d8e2e3 ">Joji</h5></div>
           <div class="duration"><h5 style="color: #d8e2e3 ">00:00</h5></div>

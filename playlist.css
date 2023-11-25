@@ -78,7 +78,7 @@ body {
     margin-left:14.5%;
     height: 39vh;
     width: 39vh;
-    border: 3px ridge rgb(15, 15, 15);
+    border: 3px solid rgb(15, 15, 15);
     border-radius: 50%;
 }
 .inner{ /*album cover goes here*/
@@ -87,7 +87,7 @@ body {
     margin-left:7%;
     height: 33vh;
     width: 33vh;
-    border: 3px #a21e1e groove;
+    border: 3px #a21e1e solid;
     border-radius: 50%;
     box-shadow:  -3px 5px 20px #0c0c0c,
     1px -2px 20px #0c0c0c;
@@ -151,14 +151,19 @@ body {
             /*border: 1px solid black;*/
         }
         .albumtext p{
-            margin-top:7px;
+            margin-top:9px;
             margin-left: 10px;
-            margin-bottom: 5px;
+            margin-bottom: 0;
             /*border: 1px solid black;*/
         }
+        #albumdescription{
+            margin-top: 3px;
+        }
         #song_time{
+            position: absolute;
             color: #9f9f9f;
             margin-left: 10px;
+            top:55px;
         }
         #current_time:hover{
             color: white;
@@ -372,7 +377,7 @@ body {
 }
 .song_heading{
     color: #9f9d9d;
-    margin-left: 4vh;
+    margin-left: 5vh;
     margin-top:8vh;
     margin-bottom: 0;
 }
@@ -401,15 +406,22 @@ body {
     background-color: rgba(255, 255, 255, 10%);
 }
 .songs_list li img{
+    margin-left: 10px;
     height: 35px;
     width: 35px;
     border-radius: 4px;
 }
+.songs_list div , h5{
+    font-weight: bold; font-size:13px
+}
+
 .artist{
     margin-left: 10vh;
+
 }
 .duration{
     margin-left:21vh;
+    font-weight: bold; font-size:13px
 }
 .menu{
     border: 1px solid black;
