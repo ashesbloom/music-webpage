@@ -391,10 +391,11 @@ body {
 .songs_list li{
     list-style-type: none;
     position: relative;
-    display: flex;
+    display: grid;
     align-items: center;
     cursor: pointer;
     transition: 0.2s linear;
+    grid-template-columns: 0.2fr 1.7fr 1fr 1fr;
 }
 .songs_list li:hover{
     background-color: rgba(255, 255, 255, 10%);
@@ -404,11 +405,11 @@ body {
     width: 35px;
     border-radius: 4px;
 }
-.songs_list .artist{
-    margin-left: 50vh;
+.artist{
+    margin-left: 10vh;
 }
-.songs_list .duration{
-    margin-left:38vh;
+.duration{
+    margin-left:21vh;
 }
 .menu{
     border: 1px solid black;
