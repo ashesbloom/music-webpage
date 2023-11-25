@@ -12,21 +12,27 @@
   <header>
     <div class="header">
       <div class="logo">
-      <h3 style="color: white">logo and name</h3>
+        <h3 style="color: white">logo and name</h3>
       </div>
       <div class="playbackarea">
         <div class="albumname">
-          <div class="cover"><img style="max-height:10vh; border-radius: 5px; width:11vh;" src="playback_tree/radiohead%20album.jpg" alt="ac"></div>
-            <div class="albumtext">
-              <p style="color: white">song name <br> <span style="font-size:1.7vh; color:darkgrey;">description</span></p>
-            </div>
+          <div class="cover"><img style="max-height: 10vh; border-radius: 5px; width: 11vh;" src="playback_tree/nirvana.jpg" alt="ac"></div>
+          <div class="albumtext">
+            <p style="color: white"> song name <br> <span style="font-size: 1.7vh; color: darkgrey;">description</span></p>
+            <div id="song_time" style="font-size:12px;"><span id="current_time">00:00</span>&nbsp;/&nbsp;<span id="end_time">00:00</span></div>
+          </div>
+          <div class="playbutton">
+            <button class="shuffle"><i class="fa-solid fa-shuffle"></i></button>
+            <button class="prev"><i class="fa-solid fa-backward-step" ></i></button>
+            <button class="play"><i class="fa-solid fa-play"></i></button>
+            <button class="next"><i class="fa-solid fa-forward-step"></i></button>
+            <button class="repeat"><i class="fa-solid fa-repeat"></i></button>
+          </div>
         </div>
-        <div class="playbutton">
-          <button class="shuffle"><i class="fa-solid fa-shuffle"></i></button>
-          <button class="prev"><i class="fa-solid fa-backward-step" ></i></button>
-          <button class="play"><i class="fa-solid fa-play"></i></button>
-          <button class="next"><i class="fa-solid fa-forward-step"></i></button>
-          <button class="repeat"><i class="fa-solid fa-repeat"></i></button>
+        <div class="play_bar">
+          <label for="seek"></label><input type="range" id="seek" min="0" max="100">
+          <div class="slider"></div>
+          <div class="dot"></div>
         </div>
       </div>
       <div class="volumecontrol">
@@ -65,7 +71,7 @@
           <div class="i2">
             <div class="i3">
               <div class="inner">
-                <img alt="Album Cover" class="album" src="playback_tree/radiohead%20album.jpg">
+                <img alt="Album Cover" class="album" src="playback_tree/nirvana.jpg">
               </div>
             </div>
           </div>
