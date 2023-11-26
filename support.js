@@ -168,6 +168,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const idcollector = document.querySelectorAll('.songs_list .song_items');
     let playicon = document.getElementById('play');
     let covericon = document.getElementById('main_cover');
+    let playbackicon = document.getElementById('playback_cover');
     let title = document.getElementById('albumtext');
     let description = document.getElementById('albumdescription')
     idcollector.forEach((e) => {
@@ -179,6 +180,7 @@ document.addEventListener('DOMContentLoaded', function () {
             playicon.className='fa-solid fa-pause';
             index = parseInt(index) - 1;
             covericon.src= songs[index].poster;
+            playbackicon.src= songs[index].poster;
             title.innerHTML = songs[index].songName;
             description.innerHTML = songs[index].artist;
         })
