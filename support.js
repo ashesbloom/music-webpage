@@ -1,6 +1,5 @@
 const music = new Audio("playback_tree/songs/joji/nector/5.mp3");
 // music.play();
-
 const songs = [
     {
         id: 1,
@@ -131,10 +130,6 @@ const songs = [
     },
 ]
 
-
-// Array.from(document.querySelectorAll('.song_list .song_items')).forEach((e,i) =>{
-//     e.querySelector('img')[0].src = songs[i].poster;
-// })
 document.addEventListener('DOMContentLoaded', function() {
     const songItems = document.querySelectorAll('.songs_list .song_items');
 
@@ -147,11 +142,11 @@ document.addEventListener('DOMContentLoaded', function() {
         da.innerHTML = songs[index].time;
     });
 });
+
 document.addEventListener('DOMContentLoaded', function () {
     let masterplay = document.getElementById('master_play');
     let playicon = document.getElementById('play');
     let record = document.getElementById('record');
-
     masterplay.addEventListener('click', () => {
         if (music.paused || music.currentTime <= 0) {
             music.play();
@@ -166,6 +161,7 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 let index= 0;
+
 
 document.addEventListener('DOMContentLoaded', function () {
     const idcollector = document.querySelectorAll('.songs_list .song_items');
@@ -225,6 +221,119 @@ document.addEventListener('DOMContentLoaded', function () {
         music.currentTime = seek.value * music.duration / 100;
     })
 });
+
+document.addEventListener('DOMContentLoaded', function () {
+
+    let back = document.getElementById('prev');
+    let next = document.getElementById('next');
+    let playicon = document.getElementById('play');
+    let covericon = document.getElementById('main_cover');
+    let playbackicon = document.getElementById('playback_cover');
+    let title = document.getElementById('albumtext');
+    let description = document.getElementById('albumdescription')
+    let record = document.getElementById('record');
+
+    back.addEventListener('click', ()=>{
+        index += 1;
+        index -= 1;
+
+        if (index < 1){
+            index=Array.from(document.querySelectorAll('.songs_list .song_items')).length;
+        }
+        music.src = `playback_tree/songs/joji/nector/${index}.mp3`;
+        music.play();
+        record.style.animation = `rotatei1 3.7s linear infinite`;
+        playicon.className='fa-solid fa-pause';
+        index = parseInt(index) - 1;
+        covericon.src= songs[index].poster;
+        playbackicon.src= songs[index].poster;
+        title.innerHTML = songs[index].songName;
+        description.innerHTML = songs[index].artist;
+    })
+    next.addEventListener('click', ()=>{
+        index += 1;
+        index = index + 1;
+        if (index > Array.from(document.querySelectorAll('.songs_list .song_items')).length){
+            index = 1;
+        }
+        music.src = `playback_tree/songs/joji/nector/${index}.mp3`;
+        music.play()
+        record.style.animation = `rotatei1 3.7s linear infinite`;
+        playicon.className='fa-solid fa-pause';
+        index = parseInt(index)-1;
+        covericon.src= songs[index].poster;
+        playbackicon.src= songs[index].poster;
+        title.innerHTML = songs[index].songName;
+        description.innerHTML = songs[index].artist;
+    })
+});
+document.addEventListener('DOMContentLoaded', function () {
+    music.addEventListener('ended', () => {
+        let playicon = document.getElementById('play');
+        let covericon = document.getElementById('main_cover');
+        let playbackicon = document.getElementById('playback_cover');
+        let title = document.getElementById('albumtext');
+        let description = document.getElementById('albumdescription')
+        let record = document.getElementById('record');
+        let repeat = document.getElementById('repeat');
+        let shuffle = document.getElementById('shuffle');
+
+        if (repeat.classList.contains('clicked')) {
+            setTimeout(function () {
+                index += 1;
+                index;
+                music.src = `playback_tree/songs/joji/nector/${index}.mp3`;
+                music.play();
+                record.style.animation = `rotatei1 3.7s linear infinite`;
+                playicon.className = 'fa-solid fa-pause';
+                index = parseInt(index) - 1;
+                covericon.src = songs[index].poster;
+                playbackicon.src = songs[index].poster;
+                title.innerHTML = songs[index].songName;
+                description.innerHTML = songs[index].artist;
+            }, 1000);
+        }else if(shuffle.classList.contains('clicked')){
+            setTimeout(function () {
+                index += 1;
+                // index = index + 1;
+                if (index === songs.length) {
+                    index = 1;
+                } else {
+                    index = Math.floor((Math.random() * songs.length) + 1);
+                }
+                music.src = `playback_tree/songs/joji/nector/${index}.mp3`;
+                music.play();
+                record.style.animation = `rotatei1 3.7s linear infinite`;
+                playicon.className = 'fa-solid fa-pause';
+                index = parseInt(index) - 1;
+                covericon.src = songs[index].poster;
+                playbackicon.src = songs[index].poster;
+                title.innerHTML = songs[index].songName;
+                description.innerHTML = songs[index].artist;
+            }, 1000);
+        } else {
+            setTimeout(function () {
+                index += 1;
+                // index = index + 1;
+                if (index === songs.length) {
+                    index = 1;
+                } else {
+                    index = index + 1;
+                }
+                music.src = `playback_tree/songs/joji/nector/${index}.mp3`;
+                music.play();
+                record.style.animation = `rotatei1 3.7s linear infinite`;
+                playicon.className = 'fa-solid fa-pause';
+                index = parseInt(index) - 1;
+                covericon.src = songs[index].poster;
+                playbackicon.src = songs[index].poster;
+                title.innerHTML = songs[index].songName;
+                description.innerHTML = songs[index].artist;
+            }, 1000);
+        }
+    })
+});
+
 function rangeSlider(value) {
     document.getElementById("v_num").innerHTML = value;
     let volumeIcon = document.getElementById('volume_icon');
@@ -237,6 +346,7 @@ function rangeSlider(value) {
     if (value > '50' || value === '100') {
         volumeIcon.className = 'fa-solid fa-volume-high';
     }
+    music.volume = value / 100;
 }
 setInterval(function () {
     let currentValue = document.getElementById("v_bar").value;

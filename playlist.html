@@ -17,17 +17,39 @@
       </div>
       <div class="playbackarea">
         <div class="albumname">
-          <div class="cover"><img id="main_cover" style="max-height: 10vh; border-radius: 5px; width: 11vh;" src="" alt="ac"></div>
+          <div class="cover"><img id="main_cover" style="max-height: 10vh; border-radius: 5px; width: 11vh;" src="playback_tree/covers/joji/joji_nector.jpg" alt="ac"></div>
           <div class="albumtext">
             <p style="color: white" id="albumtext"><br><span ><p id="albumdescription" style="font-size: 1.7vh; color: darkgrey;"></p></span></p>
             <div id="song_time" style="font-size:12px;"><span id="current_time"></span>&nbsp;/&nbsp;<span id="end_time"></span></div>
           </div>
           <div class="playbutton">
-            <button class="shuffle"><i class="fa-solid fa-shuffle" id="shuffle"></i></button>
+            <button class="shuffle"><i class="fa-solid fa-shuffle" id="shuffle" onclick="changeColor2()"></i></button>
             <button class="prev"><i class="fa-solid fa-backward-step" id="prev"></i></button>
             <button class="play" id="master_play" ><i class="fa-solid fa-play" id="play"></i></button>
             <button class="next"><i class="fa-solid fa-forward-step" id="next"></i></button>
-            <button class="repeat"><i class="fa-solid fa-repeat" id="repeat"></i></button>
+            <button class="repeat"><i class="fa-solid fa-repeat" id="repeat" onclick="changeColor1()"></i></button>
+            <script>
+              // JavaScript function to handle color change
+              function changeColor1() {
+                var icon = document.getElementById('repeat');
+
+                // Toggle the "clicked" class to change color
+                if (icon.classList.contains('clicked')) {
+                  icon.classList.remove('clicked');
+                } else {
+                  icon.classList.add('clicked');
+                }
+              }
+              function changeColor2() {
+                var icon2 = document.getElementById('shuffle');
+                // Toggle the "clicked" class to change color
+                if (icon2.classList.contains('clicked')) {
+                  icon2.classList.remove('clicked');
+                } else {
+                  icon2.classList.add('clicked');
+                }
+              }
+            </script>
           </div>
         </div>
         <div class="play_bar">
@@ -76,13 +98,13 @@
       </div>
       <div class="songs_list" >
         <li id="1" class="song_items">
-          <img src="playback_tree/covers/joji/joji_nector.jpg">
+          <img alt='ac' src="playback_tree/covers/joji/joji_nector.jpg">
           <div><h5 style="color: #d8e2e3">Upgrade</h5></div>
           <div class="artist"><h5 style="color: #d8e2e3 ">Joji</h5></div>
           <div class="duration"><h5 style="color: #d8e2e3">00:00</h5></div>
         </li>
         <li id="2" class="song_items">
-          <img src="playback_tree/covers/joji/joji_nector.jpg">
+          <img alt='ac' src="playback_tree/covers/joji/joji_nector.jpg">
           <div><h5 style="color: #d8e2e3 ">Upgrade</h5></div>
           <div class="artist"><h5 style="color: #d8e2e3 ">Joji</h5></div>
           <div class="duration"><h5 style="color: #d8e2e3 ">00:00</h5></div>

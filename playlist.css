@@ -144,7 +144,7 @@ body {
             transition: 1s linear;
         }
         .cover img{
-            max-height:10vh;
+            max-height:9vh;
         }
         .albumtext{
             max-height:8.7vh;
@@ -206,10 +206,10 @@ body {
     .playbutton button:active {
         transform: scale(0.9);
     }
-    .playbutton .repeat:active{
+    .playbutton .clicked{
         color: #f13c3c;
     }
-    .playbutton .shuffle:active{
+    .playbutton .clicked{
         color: #f13c3c;
     }
 }
@@ -219,7 +219,7 @@ body {
     border-radius: 3px;
     position: relative;
     max-width:100vh;
-    height:2px;
+    height:5px;
     background-color:#9f9f9f;
 }
 .play_bar .slider{
@@ -227,7 +227,7 @@ body {
     top:0;
     border-radius: 3px;
     width:0;
-    height:2px;
+    height:5px;
     background-color: white;
     transition: 1s linear;
 }
