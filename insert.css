@@ -534,7 +534,7 @@ a .img{
 .menu{
   border: 1px solid black;
   position: relative;
-  max-height: 100vh;
+  max-height: 20vh;
   min-width:42vh;
   background-color: rgba(22, 24, 25, 0.5);
 }
