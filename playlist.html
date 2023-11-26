@@ -19,8 +19,8 @@
         <div class="albumname">
           <div class="cover"><img id="main_cover" style="max-height: 10vh; border-radius: 5px; width: 11vh;" src="" alt="ac"></div>
           <div class="albumtext">
-            <p style="color: white" id="albumtext"><br> <span ><p id="albumdescription" style="font-size: 1.7vh; color: darkgrey;"></p></span></p>
-            <div id="song_time" style="font-size:12px;"><span id="current_time">00:00</span>&nbsp;/&nbsp;<span id="end_time">00:00</span></div>
+            <p style="color: white" id="albumtext"><br><span ><p id="albumdescription" style="font-size: 1.7vh; color: darkgrey;"></p></span></p>
+            <div id="song_time" style="font-size:12px;"><span id="current_time"></span>&nbsp;/&nbsp;<span id="end_time"></span></div>
           </div>
           <div class="playbutton">
             <button class="shuffle"><i class="fa-solid fa-shuffle" id="shuffle"></i></button>
@@ -32,7 +32,7 @@
         </div>
         <div class="play_bar">
           <label for="seek"></label><input type="range" id="seek" min="0" max="100">
-          <div class="slider"></div>
+          <div class="slider" id="slider"></div>
           <div class="dot"></div>
         </div>
       </div>
@@ -48,7 +48,7 @@
   <div class="container">
     <div class="playback">
       <div class="record">
-        <div class="i1">
+        <div class="i1" id="record">
           <div class="i2">
             <div class="i3">
               <div class="inner">

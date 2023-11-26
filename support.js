@@ -27,7 +27,7 @@ const songs = [
     {
         id:4,
         songName: `Daylight`,
-        poster: "playback_tree/covers/joji/joji_nector.jpg",
+        poster: "playback_tree/covers/joji/joji_daylight.jpg",
         time:'02:43',
         artist: `Joji`,
     },
@@ -35,21 +35,21 @@ const songs = [
         id:5,
         songName: `Gimme Love`,
         poster: "playback_tree/covers/joji/joji_golden.jpg",
-        time:'01:29',
+        time:'03:34',
         artist: `Joji`,
     },
     {
         id:6,
         songName: `Run`,
         poster: `playback_tree/covers/joji/joji_run.jpg`,
-        time:'03:34',
+        time:'03:15',
         artist: `Joji`,
     },
     {
         id:7,
         songName: `Santuary`,
-        poster: "playback_tree/covers/joji/joji_nector.jpg",
-        time:'03:15',
+        poster: "playback_tree/covers/joji/joji santuary.jpg",
+        time:'03:00',
         artist: `Joji`,
     },
     {
@@ -84,49 +84,49 @@ const songs = [
         id:12,
         songName: `Afterthought`,
         poster: "playback_tree/covers/joji/joji_nector.jpg",
-        time:'02:46',
+        time:'03:14',
         artist: `Joji`,
     },
     {
         id:13,
         songName: `Mr.Hollywood`,
         poster: "playback_tree/covers/joji/joji_nector.jpg",
-        time:'03:14',
+        time:'03:22',
         artist: `Joji`,
     },
     {
         id:14,
         songName: `777`,
         poster: "playback_tree/covers/joji/joji_nector.jpg",
-        time:'03:22',
+        time:'03:01',
         artist: `Joji`,
     },
     {
         id:15,
         songName: `Reanimator`,
         poster: "playback_tree/covers/joji/joji_nector.jpg",
-        time:'03:01',
+        time:'03:03',
         artist: `Joji`,
     },
     {
         id:16,
         songName: `Like You Do`,
         poster: "playback_tree/covers/joji/joji_nector.jpg",
-        time:'03:03',
+        time:'04:00',
         artist: `Joji`,
     },
     {
         id:17,
         songName: `Your Man`,
         poster: "playback_tree/covers/joji/joji_nector.jpg",
-        time:'04:00',
+        time:'02:43',
         artist: `Joji`,
     },
     {
         id:18,
         songName: `Upgrade`,
         poster: "playback_tree/covers/joji/joji_nector.jpg",
-        time:'02:43',
+        time:'01:29',
         artist: `Joji`,
     },
 ]
@@ -150,13 +150,16 @@ document.addEventListener('DOMContentLoaded', function() {
 document.addEventListener('DOMContentLoaded', function () {
     let masterplay = document.getElementById('master_play');
     let playicon = document.getElementById('play');
+    let record = document.getElementById('record');
 
     masterplay.addEventListener('click', () => {
         if (music.paused || music.currentTime <= 0) {
             music.play();
+            record.style.animation = `rotatei1 3.7s linear infinite`;
             playicon.className='fa-solid fa-pause';
         } else {
             music.pause();
+            record.style.animation = `rotatei1 12s linear infinite`;
             playicon.className='fa-solid fa-play';
         }
     });
@@ -171,12 +174,14 @@ document.addEventListener('DOMContentLoaded', function () {
     let playbackicon = document.getElementById('playback_cover');
     let title = document.getElementById('albumtext');
     let description = document.getElementById('albumdescription')
+    let record = document.getElementById('record');
     idcollector.forEach((e) => {
         e.addEventListener('click', () => {
             index = e.id;
                 // console.log(index);
             music.src = `playback_tree/songs/joji/nector/${index}.mp3`;
             music.play()
+            record.style.animation = `rotatei1 3.7s linear infinite`;
             playicon.className='fa-solid fa-pause';
             index = parseInt(index) - 1;
             covericon.src= songs[index].poster;
@@ -186,7 +191,40 @@ document.addEventListener('DOMContentLoaded', function () {
         })
     })
 });
+document.addEventListener('DOMContentLoaded', function () {
+    let currentstart=document.getElementById('current_time')
+    let currentend=document.getElementById('end_time')
+    let seek = document.getElementById('seek');
+    let slider = document.getElementById('slider');
+    let dot = document.getElementsByClassName('dot')[0];
+    music.addEventListener('timeupdate', () => {
+        let music_curr=music.currentTime;
+        let music_du=music.duration;
+        // console.log(music_curr);
+        let min1 = Math.floor(music_du / 60);
+        let sec1 = Math.floor(music_du % 60);
+        // console.log(min1,':',sec1)
+        let min2 = Math.floor(music_curr / 60);
+        let sec2 = Math.floor(music_curr % 60);
+        // console.log(min2,':',sec2)
+        if (sec1 < 10) {
+            sec1 = `0${sec1}`;
+        }if (sec2 < 10) {
+            sec2 = `0${sec2}`;
+        }
+        currentend.innerText = `${min1}:${sec1}`;
+        currentstart.innerText = `${min2}:${sec2}`;
 
+        seek.value = parseInt((music_curr / music_du) * 100);
+        let seekbar = seek.value;
+        slider.style.width = `${seekbar}%`;
+        dot.style.left = `${seekbar}%`;
+
+    });
+    seek.addEventListener('change', ()=>{
+        music.currentTime = seek.value * music.duration / 100;
+    })
+});
 function rangeSlider(value) {
     document.getElementById("v_num").innerHTML = value;
     let volumeIcon = document.getElementById('volume_icon');

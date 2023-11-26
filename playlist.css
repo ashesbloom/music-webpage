@@ -51,7 +51,7 @@ body {
     background: #1d1d1d;
     box-shadow: -3px 6px 20px #0a0a0a,
     1px -2px 20px #232323;
-    animation: rotatei1 3.7s linear infinite;
+    animation:rotatei1 12s linear infinite;
 
 }
 @keyframes rotatei1{
@@ -226,19 +226,21 @@ body {
     position: absolute;
     top:0;
     border-radius: 3px;
-    width:10vh;
+    width:0;
     height:2px;
     background-color: white;
-    transition: 1.5s linear;
+    transition: 1s linear;
 }
 .play_bar .dot{
-    margin-left:10vh;
+    left: 0;
     position: absolute;
     border-radius: 30% 30% 10% 10%;
     width:7.5px;
-    height:10px;
+    height:11px;
     top:-5px;
     background-color: white;
+    transition: 1s linear;
+    /*opacity: 10%;*/
 }
 .play_bar input{
     position: absolute;

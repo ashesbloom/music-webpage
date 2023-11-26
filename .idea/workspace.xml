@@ -10,8 +10,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="ebebbdde-3997-422c-8189-3e6c3b1f4c13" name="Changes" comment="-backend">
+      <change afterPath="$PROJECT_DIR$/playback_tree/covers/joji/joji santuary.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/playback_tree/covers/joji/joji_daylight.jpg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/insert.css" beforeDir="false" afterPath="$PROJECT_DIR$/insert.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/music.html" beforeDir="false" afterPath="$PROJECT_DIR$/music.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/playlist.css" beforeDir="false" afterPath="$PROJECT_DIR$/playlist.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/playlist.html" beforeDir="false" afterPath="$PROJECT_DIR$/playlist.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/support.js" beforeDir="false" afterPath="$PROJECT_DIR$/support.js" afterDir="false" />
     </list>
@@ -104,7 +109,7 @@
       <workItem from="1700132699098" duration="1149000" />
       <workItem from="1700201160807" duration="3774000" />
       <workItem from="1700939464646" duration="673000" />
-      <workItem from="1700940206524" duration="16479000" />
+      <workItem from="1700940206524" duration="23176000" />
     </task>
     <task id="LOCAL-00001" summary="Changes made in (body overflow and &lt;h2&gt; music text , colour correction of h2 tag in css) -mayank">
       <option name="closed" value="true" />
@@ -282,7 +287,15 @@
       <option name="project" value="LOCAL" />
       <updated>1700956517859</updated>
     </task>
-    <option name="localTasksCounter" value="23" />
+    <task id="LOCAL-00023" summary="-backend">
+      <option name="closed" value="true" />
+      <created>1700956816823</created>
+      <option name="number" value="00023" />
+      <option name="presentableId" value="LOCAL-00023" />
+      <option name="project" value="LOCAL" />
+      <updated>1700956816823</updated>
+    </task>
+    <option name="localTasksCounter" value="24" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -312,17 +325,5 @@
     <MESSAGE value="-added playlist.css and playlist.html" />
     <MESSAGE value="-backend" />
     <option name="LAST_COMMIT_MESSAGE" value="-backend" />
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="javascript">
-          <url>file://$PROJECT_DIR$/support.js</url>
-          <line>3</line>
-          <properties lambdaOrdinal="-1" />
-          <option name="timeStamp" value="1" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
   </component>
 </project>
