@@ -534,10 +534,13 @@ a .img{
 .menu{
   border: 1px solid black;
   position: relative;
+  min-height: 100vh;
+  min-width:20%;
   max-height: 100vh;
-  min-width:42vh;
+  /*min-width:42vh;*/
   background-color: #161819;
 }
+
 h5{
   text-align: left;
   font-family: Verdana, Geneva, Tahoma, sans-serif;
@@ -558,6 +561,7 @@ form{
 
 input{
   background-color: black;
+  color: #d8e2e3;
   height: 25px;
   width: 200px;
 }
@@ -576,6 +580,72 @@ a{
 .Recently_Added,.Albums,.Artists,.Songs{
   width: 5%;
   height: 5%;
+}
+
+button{
+  border-radius: 30%;
+  width: 30px;
+  margin: 0 auto;
+}
+input{
+  border-radius: 10%;
+}
+
+video{
+  position: fixed;
+  top: 0%;
+  width: 60%;
+  height: 100%;
+  object-fit: cover;
+  backdrop-filter: blur(5px);
+  opacity: 0.1;
+  z-index: -1;
+}
+
+h4:hover{
+  background-color: #1f1f1f;
+}
+
+h4{
+  text-align: left;
+}
+.resultbox ul li {
+  list-style: none;
+  border-radius: 3px;
+  padding: 10px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+
+.resultbox ul li:hover {
+  background: #1f1f1f;
+}
+
+::placeholder{
+  color: #555;
+}
+
+.resultbox ul{
+  border-top: 1px solid #999;
+  padding: 15px 10px;
+}
+
+.resultbox{
+  position: absolute;
+  background-color: black;
+  text-align: left;
+  width: 200px;
+  border: 5px solid black;
+  z-index: 2;
+  transform: translate(12%);
+
+}
+
+.resultbox ul li img {
+  width: 30px;
+  height: 30px;
+  margin-right: 10px;
 }
 
 
