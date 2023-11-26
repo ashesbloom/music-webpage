@@ -63,17 +63,19 @@ body::-webkit-scrollbar-thumb {
   background: #1d1d1d;
   box-shadow: -3px 6px 20px #0a0a0a,
   1px -2px 20px #232323;
+  transition: 2s linear;
   animation:rotatei1 12s linear infinite;
 
 }
-@keyframes rotatei1{
+@keyframes rotatei1 {
   0% {
     transform: rotate(0deg);
   }
   100% {
-    transform: rotate(360deg);
+    transform: rotate(calc(360deg * var(--rotation-multiplier, 1)));
   }
 }
+
 .i2 {
   margin-top: 10.1%;
   margin-left:10.1%;
@@ -156,7 +158,7 @@ body::-webkit-scrollbar-thumb {
       transition: 1s linear;
     }
     .cover img{
-      max-height:10vh;
+      max-height:9vh;
     }
     .albumtext{
       max-height:8.7vh;
@@ -237,13 +239,13 @@ body::-webkit-scrollbar-thumb {
   position: absolute;
   top:0;
   border-radius: 3px;
-  width:0%;
+  width:0;
   height:2px;
   background-color: white;
   transition: 1.5s linear;
 }
 .play_bar .dot{
-  margin-left:0%;
+  margin-left:0;
   position: absolute;
   border-radius: 30% 30% 10% 10%;
   width:7.5px;
