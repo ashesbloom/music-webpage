@@ -164,7 +164,7 @@ let index= 0;
 
 
 document.addEventListener('DOMContentLoaded', function () {
-    const idcollector = document.querySelectorAll('.songs_list .song_items');
+    const idcollector = document.querySelectorAll('.song_items');
     let playicon = document.getElementById('play');
     let covericon = document.getElementById('main_cover');
     let playbackicon = document.getElementById('playback_cover');

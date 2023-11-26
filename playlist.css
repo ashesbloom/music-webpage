@@ -51,6 +51,7 @@ body {
     background: #1d1d1d;
     box-shadow: -3px 6px 20px #0a0a0a,
     1px -2px 20px #232323;
+  transition: 2s linear;
     animation:rotatei1 12s linear infinite;
 
 }
