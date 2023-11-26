@@ -534,11 +534,9 @@ a .img{
 .menu{
   border: 1px solid black;
   position: relative;
-  min-height: 100vh;
-  min-width:20%;
   max-height: 100vh;
-  /*min-width:42vh;*/
-  background-color: #161819;
+  min-width:42vh;
+  background-color: rgba(22, 24, 25, 0.5);
 }
 
 h5{
@@ -647,5 +645,3 @@ h4{
   height: 30px;
   margin-right: 10px;
 }
-
-
