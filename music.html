@@ -144,23 +144,25 @@
       </div>
     </div>
     <div class="menu">
-      <H2>Music</H2>
+      <H2>music</H2>
       <form>
-        <label>
-          <input type="text" placeholder="What do you want to listen to?" name="search">
-        </label>
-        <button type="submit"><i class="fa-solid fa-magnifying-glass" style="color: #a21e1e; height: 15px; width: 15px;"></i></button>
+        <input type="text" id="inputbox" placeholder="What do you want to listen to?" name="search" autocomplete="off">
+        <button type="submit" onclick="performSearch()"><i class="fa-solid fa-magnifying-glass" style="color: #a21e1e; height: 15px; width: 15px;"></i></button>
+        <div class="resultbox"></div>
       </form>
       <h5>Library</h5>
       <h4><i class="fa-regular fa-clock" style="color: #a21e1e;"></i> &nbsp; <a href="">Recently Added</a></h4>
-      <h4><i class="fa-solid fa-microphone-lines" style="color: #a21e1e;"></i> &nbsp;<a href="">Artists</a></h4>
-      <h4><i class="fa-solid fa-record-vinyl" style="color: #a21e1e;"></i> &nbsp;<a href="">Albums</a></h4>
-      <h4><i class="fa-solid fa-music" style="color: #a12e1e;"></i> &nbsp;<a href="">Songs</a></h4>
-      <h5>Playlists</h5>
+      <h4><i class="fa-solid fa-microphone-lines" style="color: #a21e1e;"></i> &nbsp;&nbsp;&nbsp;<a href="">Artists</a></h4>
+      <h4><i class="fa-solid fa-record-vinyl" style="color: #a21e1e;"></i> &nbsp;&nbsp;<a href="">Albums</a></h4>
+      <h4><i class="fa-solid fa-music" style="color: #a12e1e;"></i> &nbsp;&nbsp;<a href="">Songs</a></h4>
+      <h5>Playlists</a></h5>
       <h4><i class="fa-solid fa-folder-closed" style="color: #a21e1e;"></i>&nbsp;&nbsp;<a href="">All Playlists</a></h4>
-      <h4>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i class="fa-solid fa-folder-open" style="color: #a21e1e;"></i>&nbsp;<a href="">Favorites</a></h4>
-      <h4>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i class="fa-solid fa-folder-open" style="color: #a21e1e;"></i>&nbsp;<a href="">Party Playlists</a></h4>
-      <h4>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i class="fa-solid fa-folder-open" style="color: #a21e1e;"></i>&nbsp;<a href="">Lo-Fi</a></h4>
+      <h4>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i class="fa-solid fa-folder-open" style="color: #a21e1e;"></i>&nbsp;&nbsp;<a href="">Favorites</a></h4>
+      <h4>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i class="fa-solid fa-folder-open" style="color: #a21e1e;"></i>&nbsp;&nbsp;<a href="">Party Playlists</a></h4>
+      <h4>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i class="fa-solid fa-folder-open" style="color: #a21e1e;"></i>&nbsp;&nbsp;<a href="">Lo-Fi</a></h4>
+      <video autoplay loop muted>
+        <source src="musicc.mp4" type="video/mp4">
+      </video>
     </div>
   </div>
 </div>
