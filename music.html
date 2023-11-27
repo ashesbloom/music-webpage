@@ -9,9 +9,10 @@
 </head>
 <body>
 <script src="support.js"></script>
-<div id="align">
-  <header>
-    <div class="header">
+<script src="playlist2.js"></script>
+<!--<script src="searchbar.js"></script>-->
+<header>
+  <div class="header">
       <div class="logo">
         <h3 style="color: white">logo and name</h3>
       </div>
@@ -65,49 +66,75 @@
       </div>
       <div class="sidecontrols"><p style="color: white;" >top menu</p></div>
     </div>
-  </header>
-  <div class="container">
-    <div class="playback">
+</header>
+<div class="container">
+  <div class="playback">
       <div class="record">
         <div class="i1" id="record">
           <div class="i2">
             <div class="i3">
               <div class="inner">
-                <img alt="Album Cover" class="album" id="playback_cover" src="playback_tree/covers/joji/joji_nector.jpg">
+                <img alt="Album Cover" class="album" id="playback_cover" src="playback_tree/logo1.jpg">
               </div>
             </div>
           </div>
         </div>
       </div>
     </div>
-    <div class="explore">
-      <div class="browser"><h2><b>&nbsp;&nbsp;Browse</b></h2></div>
+  <div class="explore">
+      <div class="browser" id="album1"><h2><b>&nbsp;&nbsp;Browse</b></h2></div>
       <div>
-        <div class="tile-1"></div>
+        <div class="tile-1" >
+          <video autoplay loop muted playsinline class="t_video" >
+          <source src="playback_tree/title1.mp4" type="video/mp4">
+          Your browser does not support the video tag.
+        </video>
+          <div class="text_title"><h2>All Playlist ></h2></div>
+        </div>
         <div class="tile-2"></div>
         <h3 class="songname">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Recently Played</h3>
-        <div class="row-1">
+        <div class="row-1" id="recent">
           <div class = "box1">
-            <li id="2" class="song_items">
-              <div class="row_text"><h5 style="color: #d8e2e3 ">Modus</h5></div>
-              <img alt='ac' class="img_row1" src="playback_tree/covers/joji/joji_nector.jpg">
+            <li style="list-style-type: none;" id="2" class="song_items">
+              <img alt='ac' class="img_box1" src="playback_tree/covers/joji/joji_nector.jpg">
             </li>
+            <div class="gradiant1" ><div class="row_text1"><h5>Modus</h5></div></div>
           </div>
-          <div class = "box2" ></div>
-          <div class = "box3" ></div>
-          <div class = "box4" ></div>
-          <div class = "box5" ></div>
+          <div class = "box2">
+            <ul style="list-style-type: none;" id="" class="song_items">
+              <img alt='ac' class="img_box2" src="playback_tree/covers/joji/joji_nector.jpg">
+            </ul>
+            <div class="gradiant2"><div class="row_text2"><h5>Modus</h5></div></div>
+          </div>
+          <div class = "box3" >
+            <ul style="list-style-type: none;" id="" class="song_items">
+              <img alt='ac' class="img_box3" src="playback_tree/covers/joji/joji_nector.jpg">
+            </ul>
+            <div class="gradiant3"><div class="row_text3"><h5>Modus</h5></div></div>
+          </div>
+          <div class = "box4" >
+            <ul style="list-style-type: none;" id="" class="song_items">
+              <img alt='ac' class="img_box4" src="playback_tree/covers/joji/joji_nector.jpg">
+            </ul>
+            <div class="gradiant4"><div class="row_text4"><h5>Modus</h5></div></div>
+          </div>
+          <div class = "box5" >
+            <ul style="list-style-type: none;" id="" class="song_items">
+              <img alt='ac' class="img_box5" src="playback_tree/covers/joji/joji_nector.jpg">
+            </ul>
+            <div class="gradiant5"><div class="row_text5"><h5>Modus</h5></div></div>
+          </div>
         </div>
         <h3 class="songname">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Songs</h3>
-        <div class = "row-2">
+        <div class = "row-2" id="playlists">
           <div class = "box1">
             <a href="playlist.html">
               <img alt="Album Cover" class="img" id="img2" src="playback_tree/covers/joji/joji_nector.jpg">
             </a>
           </div>
           <div class = "box2" >
-            <a href="playlist.html">
-              <img alt="Album Cover" class="img" id="img3" src="playback_tree/covers/joji/joji_nector.jpg">
+            <a href="playlist2.html">
+              <img alt="Album Cover" class="img" id="img3" src="playback_tree/covers/joji/joji_smithereens.jpg">
             </a>
           </div>
           <div class = "box3" >
@@ -127,14 +154,14 @@
           </div>
         </div>
         <h3 class="songname">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Songs</h3>
-        <div class = "row-3">
+        <div class = "row-3" id="artists">
           <div class = "side1" ></div>
           <div class = "side2" ></div>
           <div class = "side3" ></div>
           <div class = "side4" ></div>
         </div>
         <h3 class="songname">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Songs</h3>
-        <div class = "row-2">
+        <div class = "row-2" id="songs">
           <div class = "box1"></div>
           <div class = "box2" ></div>
           <div class = "box3" ></div>
@@ -143,7 +170,7 @@
         </div>
       </div>
     </div>
-    <div class="menu">
+  <div class="menu">
       <H2>music</H2>
       <form>
         <input type="text" id="inputbox" placeholder="What do you want to listen to?" name="search" autocomplete="off">
@@ -151,18 +178,34 @@
         <div class="resultbox"></div>
       </form>
       <h5>Library</h5>
-      <h4><i class="fa-regular fa-clock" style="color: #a21e1e;"></i> &nbsp; <a href="">Recently Added</a></h4>
-      <h4><i class="fa-solid fa-microphone-lines" style="color: #a21e1e;"></i> &nbsp;&nbsp;&nbsp;<a href="">Artists</a></h4>
-      <h4><i class="fa-solid fa-record-vinyl" style="color: #a21e1e;"></i> &nbsp;&nbsp;<a href="">Albums</a></h4>
-      <h4><i class="fa-solid fa-music" style="color: #a12e1e;"></i> &nbsp;&nbsp;<a href="">Songs</a></h4>
-      <h5>Playlists</a></h5>
-      <h4><i class="fa-solid fa-folder-closed" style="color: #a21e1e;"></i>&nbsp;&nbsp;<a href="">All Playlists</a></h4>
+      <h4><i class="fa-regular fa-clock" style="color: #a21e1e;"></i> &nbsp; <a href="#recent">Recently Added</a></h4>
+      <h4><i class="fa-solid fa-microphone-lines" style="color: #a21e1e;"></i> &nbsp;&nbsp;&nbsp;<a href="#artists">Artists</a></h4>
+      <h4><i class="fa-solid fa-record-vinyl" style="color: #a21e1e;"></i> &nbsp;&nbsp;<a href="#album1">Albums</a></h4>
+      <h4><i class="fa-solid fa-music" style="color: #a12e1e;"></i> &nbsp;&nbsp;<a href="#songs">Songs</a></h4>
+      <h5>Playlists</h5>
+      <h4><i class="fa-solid fa-folder-closed" style="color: #a21e1e;"></i>&nbsp;&nbsp;<a href="playlist.html">Playlists</a></h4>
       <h4>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i class="fa-solid fa-folder-open" style="color: #a21e1e;"></i>&nbsp;&nbsp;<a href="">Favorites</a></h4>
       <h4>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i class="fa-solid fa-folder-open" style="color: #a21e1e;"></i>&nbsp;&nbsp;<a href="">Party Playlists</a></h4>
-      <h4>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i class="fa-solid fa-folder-open" style="color: #a21e1e;"></i>&nbsp;&nbsp;<a href="">Lo-Fi</a></h4>
-      <video autoplay loop muted>
-        <source src="musicc.mp4" type="video/mp4">
-      </video>
+    <h4>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i class="fa-solid fa-folder-open" style="color: #a21e1e;"></i>&nbsp;&nbsp;<a href="">Lo-Fi</a></h4>
+    <div id="menu">
+<!--    for search bar-->
+<!--      <h2>SMITHEREENS</h2>-->
+<!--      <img id="album-cover" src="playback_tree/covers/joji/joji_smithereens.jpg" alt="Album Cover">-->
+<!--      <div id="songinfocontainer">-->
+<!--        <div id="song-title"><a href="">-->
+<!--          Feeling Like The End</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href=""><i class="fa-regular fa-circle-play" style="color: rgb(56, 130, 105);"></i></a>-->
+<!--        </div>-->
+<!--      </div>-->
+<!--      <div id="song-details">Joji</div>-->
+<!--      <div id="songdescription">-->
+<!--        <p>The song is about Joji and his lover reminiscing about all the things they've done together and feeling like their relationship might be ending.</p>-->
+<!--      </div>-->
+<!--      <div id="q">-->
+<!--        <h2>Next In Queue</h2>-->
+<!--        <img id="qimg" src="playback_tree/covers/joji/joji_smithereens.jpg" alt="qcover">-->
+<!--        <a href="dieforyou.html">Die for You</a>-->
+<!--      </div>-->
+<!--      <script src="searchbar.js"></script>-->
     </div>
   </div>
 </div>

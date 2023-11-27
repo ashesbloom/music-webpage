@@ -51,7 +51,7 @@ body {
     background: #1d1d1d;
     box-shadow: -3px 6px 20px #0a0a0a,
     1px -2px 20px #232323;
-  transition: 2s linear;
+    /*transition: 2s linear;*/
     animation:rotatei1 12s linear infinite;
 
 }
@@ -348,11 +348,11 @@ body {
     height: 230px;
     border-radius: 20px;
     /*border: 3px solid #1d1d1d;*/
-    box-shadow: 2px 1px 30px #282828;
+    box-shadow: 2px 1px 30px #5e5d5d;
 }
 .playlist_title{
     color: white;
-    margin-left: 15px;
+    margin-left: 18px;
     margin-top: 5vh;
 }
 .playlist_title2{

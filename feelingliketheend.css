@@ -1,0 +1,362 @@
+body {
+  font-family: sans-serif;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+  background-color:black;
+
+}
+.container {
+  display: flex;
+  justify-content: center;
+  min-height: 89vh;
+  max-width:100%;
+
+}
+.playback {
+  border: 1px solid black;
+  max-height:100vh;
+  width:20%;
+margin: 0px;
+  box-sizing: border-box;
+  /*background-color:#1f1f1f;*/
+  background: linear-gradient(to bottom, rgb(21,21,21),rgb(15,15,15));
+}
+/*.record{*/
+/*  display: flex;*/
+/*  justify-content: center;*/
+/*  align-items: center;*/
+/*  margin-left:15px;*/
+/*  margin-top: 10px;*/
+/*  height:86vh;*/
+/*  width:80vh;*/
+/*  background: #1d1d1d;*/
+/*  !*background: linear-gradient(225deg, #1f1f1f, #1a1a1a);*!*/
+/*  !*box-shadow:  -25px 25px 50px #121212,*!*/
+/*  !*25px -25px 50px #282828;*!*/
+/*  border-radius: 50%;*/
+/*  background: linear-gradient(225deg,#1f1f1f, #1a1a1a);*/
+/*  box-shadow:  -1px 1px 10px #111010,*/
+/*  1px -1px 10px #111111;*/
+/*}*/
+/*.record .i1 {*/
+/*  !*margin-left: 50px;*!*/
+/*  height: 70vh;*/
+/*  width: 70vh;*/
+/*  border: 2px solid rgb(15, 15, 15);*/
+/*  border-radius: 50%;*/
+/*  background: #1d1d1d;*/
+/*  box-shadow: -3px 5px 20px #0c0c0c,*/
+/*  1px -2px 20px #2e2e2e;*/
+/*  animation: rotatei1 4s linear infinite;*/
+/*}*/
+/*@keyframes rotatei1{*/
+/*  0% {*/
+/*    transform: rotate(0deg);*/
+/*  }*/
+/*  100% {*/
+/*    transform: rotate(360deg);*/
+/*  }*/
+/*}*/
+/*.i2 {*/
+/*  margin-top: 10.1%;*/
+/*  margin-left:10.1%;*/
+/*  height: 56vh;*/
+/*  width: 56vh;*/
+/*  border: 2px solid rgb(15, 15, 15);*/
+/*  border-radius: 50%;*/
+/*  background: #1d1d1d;*/
+/*  box-shadow:  -3px 5px 20px #0c0c0c,*/
+/*  1px -2px 20px #2e2e2e;*/
+/*}*/
+/*.i3 {*/
+/*  margin-top: 14.5%;*/
+/*  margin-left:14.5%;*/
+/*  height: 39vh;*/
+/*  width: 39vh;*/
+/*  border: 2px ridge rgb(15, 15, 15);*/
+/*  border-radius: 50%*/
+/*}*/
+/*.inner{ !*album profile goes here*!*/
+/*  margin-top: 7%;*/
+/*  margin-left:7%;*/
+/*  height: 33vh;*/
+/*  width: 33vh;*/
+/*  border: 2px solid black;*/
+/*  border-radius: 50%;*/
+/*  background-color: maroon;*/
+/*}*/
+.header{
+  border: 1px solid black;
+  margin-top:0;
+  height:70px;
+  position: relative;
+  min-width:100vh;
+
+  padding-top: 8px;
+  background-color: #2b2b2b;
+}
+.explore{
+  border: 1px solid black;
+  width:60%;
+  position: relative;
+  margin: 0px;
+  max-height: 90%;
+  background-color: #1f1f1f;
+  box-sizing: border-box;
+  /*background: linear-gradient(to bottom, #1f1f1f,black);/* add this if you want or do it however you want just keep
+  up with theme*/
+}
+.explore,h2{color:white;}
+
+/* don't remove any comment*/
+/* you can start from here */
+
+.menu{
+  border: 1px solid black;
+  position: relative;
+  min-height: 100vh;
+  min-width: 0 auto;
+  background-color: #161819;
+  z-index: 1;
+}
+
+h5{
+  text-align: left;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  color: gray;
+  margin-left: 10px;
+
+}
+
+.menu h2{
+  text-align: center;
+  color: #d8e2e3;
+}
+
+form{
+  text-align: center;
+  color: gray;
+}
+
+input{
+  background-color: black;
+  color: #d8e2e3;
+  height: 25px;
+  width: 200px;
+}
+
+h4{
+  margin-left: 15px;
+}
+
+a{
+  text-decoration: none;
+  color:#d8e2e3;
+  line-height: 1.5;
+  margin-top: 3%;
+}
+
+.Recently_Added,.Albums,.Artists,.Songs{
+  width: 5%;
+  height: 5%;
+}
+
+button{
+  border-radius: 30%;
+  width: 30px;
+  margin: 0 auto;
+}
+input{
+  border-radius: 10%;
+}
+
+video{
+  position: fixed;
+  top: 0%;
+  width: 60%;
+  height: 100%;
+  object-fit: cover;
+  backdrop-filter: blur(5px);
+  opacity: 0.1;
+  z-index: -1;
+}
+
+h4:hover{
+  background-color: #1f1f1f;
+}
+
+h4{
+  text-align: left;
+}
+  a:hover{
+    text-decoration: underline;
+  }
+  a{
+    text-decoration: none;
+    color:#999;
+    line-height: 1.5;
+    margin: 0 auto;
+  }
+  
+  .Recently_Added,.Albums,.Artists,.Songs{
+    width: 5%;
+    height: 5%;
+  }
+  
+  button{
+    border-radius: 30%;
+    width: 30px;
+    margin: 0 auto;
+  }
+  input{
+    border-radius: 10%;
+  }
+  
+  video{
+    position: fixed;
+    top: 0%;
+    width: 60%;
+    height: 100%;
+    object-fit: cover;
+    backdrop-filter: blur(5px);
+    opacity: 0.1;
+    z-index: -1;
+  }
+  
+  h4:hover{
+    background-color: #1f1f1f;
+  }
+  
+  h4{
+    text-align: left;
+  }
+  .resultbox ul li {
+    list-style: none;
+    border-radius: 3px;
+    padding: 10px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+  }
+  
+  .resultbox ul li:hover {
+    background: #1f1f1f;
+  }
+  
+  ::placeholder{
+    color: #555;
+  }
+  
+  .resultbox ul{
+    border-top: 1px solid #999;
+    padding: 15px 10px;
+  }
+  
+  .resultbox{
+    position: absolute;
+    background-color: black;
+    text-align: left;
+    width: 200px;
+    border: 5px solid black;
+    z-index: 2;
+    transform: translate(12%);
+    
+  }
+  
+  .resultbox ul li img {
+    width: 30px;
+    height: 30px;
+    margin-right: 10px;
+  }
+
+  #album-cover {
+    height:250px;
+    width:250px;
+    color: #161819;
+    margin-left: 28px;
+    margin-bottom: 20px;
+    border-radius: 10px;
+}
+
+#song-title {
+    font-size: 18px;
+    font-weight: bold;
+    color: #999;
+    margin-left: 28px;
+}
+
+#song-details {
+    font-size: 14px;
+    color: #999;
+    margin-left: 28px;    
+}
+
+
+#menu h2{
+ color: #999;
+ margin-left: 28px;
+
+}
+
+
+
+
+#songdescription {
+    width: 218px; /* Set the width as needed */
+    height: 80px; /* Set the height as needed */
+    background: linear-gradient(to bottom right, #4b4646, #201e1e); /* Set the background color */
+    border: 2px solid rgb(47,40,39,0.6); /* Set the border color and width */
+    border-radius: 10px; /* Set the border radius for rounded corners */
+    padding: 15px; /* Set the padding inside the box */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Add a box shadow for depth */
+    text-align: left; /* Center text horizontally */
+    color: #999; /* Set the text color */
+    margin-left: 28px;
+    margin-top: 20px;
+    overflow: auto;
+    scrollbar-width: thin;
+    scrollbar-color: transparent transparent;
+}
+#songdescription::-webkit-scrollbar{
+    width:0px;
+}
+#songdescription::-webkit-scrollbar-thumb{
+background-color: transparent;
+}
+
+#songdescription p {
+    margin: 0; /* Remove default margin inside the box */
+}
+
+#q{
+    
+    width: 218px;
+    height: 55px;
+    background: linear-gradient(to bottom right, #1f1f1f, #555);
+    border-radius: 10px;
+    margin-left:28px;
+    margin-top: 20px;;
+    padding: 15px;
+    align-items: center;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    
+    
+}
+#q>h2{
+    font-size: 12px;
+    color:#999;
+    margin-bottom: 15px;
+    margin-left: 0%;
+    margin-top: 0%;
+}
+#qimg{
+    width:30px;
+    height:30px;
+    margin-right: 10px;
+
+    
+}
+#q a{
+    display: inline-block;
+}
