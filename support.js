@@ -356,6 +356,7 @@ setInterval(function () {
 }, 100);
 document.addEventListener('DOMContentLoaded', function () {
     let availableKeywords = [
+        'smithereens',
         'ew',
         'modus',
         'tick tock',
@@ -375,14 +376,13 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     const songImageMapping = {
+        'Smithereens':'playback_tree/covers/joji/joji_smithereens.jpg',
         'Ew': 'playback_tree/covers/joji/joji_nector.jpg',
         'Modus': 'playback_tree/covers/joji/joji_nector.jpg',
         'Tick Tock': 'playback_tree/covers/joji/joji_nector.jpg',
         'Daylight': 'playback_tree/covers/joji/joji_daylight.jpg',
         'Gimme Love': 'playback_tree/covers/joji/joji_golden.jpg',
         'Run': 'playback_tree/covers/joji/joji_run.jpg',
-
-        // 'Ew': 'playback_tree/covers/joji/joji_nector.jpg',
         // Add more entries as needed
     };
 
@@ -390,9 +390,9 @@ document.addEventListener('DOMContentLoaded', function () {
         const content = result.map((list) => {
             const imageName = list.replace(/\s+/g, '_').toLowerCase();
             const imagePath = songImageMapping[imageName];
-            const fileName = list.replace(/\s+/g, '_').toLowerCase() + '.html';
+            const fileName = list + '.html';
 
-            return `<li><img src="${imagePath}" alt="${list}" style="width: 30px; height:30px; margin-right:10px;"> <a href="${fileName}">${list}</a> </li>`;
+            return `<li><img src="playback_tree/covers/joji/joji_smithereens.jpg" style="width: 30px; height:30px; margin-right:10px;"> <a href="Ew.html">${list}</a> </li>`;
         });
 
         // Assuming resultbox is a ul or ol element
