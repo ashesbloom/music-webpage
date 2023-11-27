@@ -101,7 +101,7 @@ body {
     }
 }
 .inner img:hover{
-    box-shadow: 0 0 100px #f13c3c;
+    box-shadow: 0 0 100px #ff2b2b;
     transition: 0.3s linear;
 }
 
@@ -115,15 +115,22 @@ body {
     padding-left: 15px;
     padding-top: 8px;
     background-color: #2b2b2b;
-    grid-template-columns: 1.5fr 2.7fr 0.3fr 1.3fr;
+    grid-template-columns: 1.2fr 3fr 1fr 0.3fr;
     padding-bottom: 10px
 }
+
 .logo{
     /*border: 1px solid black;*/
     align-self: center;
-    padding-left: 10px;
+    padding-left: 45px;
     position: relative;
+    font-size: 20px;
 }
+.logo .text-focus-in h3{
+    -webkit-animation: text-focus-in 1s cubic-bezier(0.550, 0.085, 0.680, 0.530) both;
+    animation: text-focus-in 1s cubic-bezier(0.550, 0.085, 0.680, 0.530) both;
+}
+
 .playbackarea{
     border-radius:5px;
     background-color: #4d4d4d;
@@ -136,13 +143,18 @@ body {
         /*border:1px solid black;*/
         justify-self: start;
         display: grid;
-        grid-template-columns:1fr 4fr 2.5fr;
+        grid-template-columns:0.5fr 4.2fr 2.5fr;
         max-height: 8vh;
         .cover{
+            /*position: absolute;*/
             border-radius: 5px;
             box-shadow: 10px -5px 40px #232323;
             max-height: 10vh;
+            max-width:11vh;
             transition: 1s linear;
+            /*margin-left: 25px;*/
+            /*border: 1px solid black;*/
+
         }
         .cover img{
             max-height:9vh;
@@ -183,6 +195,7 @@ body {
         display: flex;
         /*align-items: center;*/
         max-height: 8.7vh;
+        margin-left: 90px;
 
     }
 
@@ -219,7 +232,7 @@ body {
     margin-left:80.5px;
     border-radius: 3px;
     position: relative;
-    max-width:100vh;
+    max-width:100%;
     height:5px;
     background-color:#9f9f9f;
 }
@@ -318,13 +331,11 @@ body {
     /*border: 1px solid #a12e1e;*/
 }
 .sidecontrols{
-    border: 1px solid black;
+    /*border: 1px solid black;*/
     display: flex;
     align-items: center;
     justify-content: center;
 }
-
-
 
 .explore {
     border: 1px solid black;
@@ -472,5 +483,160 @@ a{
     width: 5%;
     height: 5%;
 }
+.menu{
+    /*border: 1px solid black;*/
+    position: relative;
+    max-height: 90vh;
+    min-width:42vh;
+    background: #1d1d1d;
+}
 
+h5{
+    text-align: left;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    color: grey;
+    margin-left: 10px;
+
+}
+
+.menu h2{
+    text-align: center;
+    color: #d8e2e3;
+}
+
+form{
+    text-align: center;
+    color: grey;
+}
+
+input{
+    background-color: #1d1d1d;
+    /*color: #d8e2e3;*/
+    height: 25px;
+    width: 200px;
+}
+
+h4{
+    margin-left: 15px;
+}
+
+a{
+    text-decoration: none;
+    color:#d8e2e3;
+    line-height: 1.5;
+    margin-top: 3%;
+}
+
+.Recently_Added,.Albums,.Artists,.Songs{
+    width: 5%;
+    height: 5%;
+}
+
+button{
+    border-radius: 20%;
+    width: 40px;
+    height: 30px;
+    margin: 0 auto;
+}
+input{
+    border-radius: 3%;
+    border: 3px groove #9f9d9d;
+}
+
+
+h4:hover{
+    background-color: #1f1f1f;
+}
+
+h4{
+    text-align: left;
+}
+.resultbox ul li {
+    list-style: none;
+    border-radius: 3px;
+    padding: 10px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+}
+
+.resultbox ul li:hover {
+    background: #1f1f1f;
+}
+
+::placeholder{
+    color: #555;
+}
+
+.resultbox ul{
+    border-top: 1px solid #999;
+    padding: 15px 10px;
+}
+
+.resultbox{
+    position: absolute;
+    background-color:#1d1d1d;
+    text-align: left;
+    width: 200px;
+    /*border: px solid black;*/
+    z-index: 2;
+    transform: translate(12%);
+
+}
+
+.resultbox ul li img {
+    width: 30px;
+    height: 30px;
+    margin-right: 10px;
+}
+#album-cover {
+    height:250px;
+    width:250px;
+    color: #161819;
+    margin-left: 28px;
+    margin-bottom: 20px;
+    border-radius: 10px;
+}
+
+#song-title {
+    font-size: 18px;
+    font-weight: bold;
+    color: #999;
+    margin-left: 28px;
+}
+
+#song-details {
+    font-size: 14px;
+    color: #999;
+    margin-left: 28px;
+}
+
+
+#menu h2{
+    color: #999;
+    margin-left: 10px;
+}
+
+
+
+
+#songdescription {
+    width: 218px; /* Set the width as needed */
+    height: 80px; /* Set the height as needed */
+    background: linear-gradient(to bottom right, #4b4646, #201e1e); /* Set the background color */
+    border: 2px solid rgb(47,40,39,0.6); /* Set the border color and width */
+    border-radius: 10px; /* Set the border radius for rounded corners */
+    padding: 15px; /* Set the padding inside the box */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Add a box shadow for depth */
+    text-align: left; /* Center text horizontally */
+    color: #999; /* Set the text color */
+    margin-left: 28px;
+    margin-top: 20px;
+    overflow: auto;
+    scrollbar-width: thin;
+    scrollbar-color: transparent transparent;
+}
+#songdescription::-webkit-scrollbar {
+    width: 0;
+}
 
