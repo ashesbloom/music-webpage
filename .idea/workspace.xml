@@ -10,37 +10,18 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="ebebbdde-3997-422c-8189-3e6c3b1f4c13" name="Changes" comment="-backend">
-      <change afterPath="$PROJECT_DIR$/Ew.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/playback_tree/covers/artist_acdc.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/playback_tree/covers/artist_joji.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/playback_tree/covers/artist_nirvana.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/playback_tree/covers/artist_radiohead.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/playback_tree/covers/artist_weekend.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/playback_tree/covers/title_2.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/playback_tree/covers/waste_land.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/playback_tree/covers/what_you.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/playback_tree/title2.mp4" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/1am.html" beforeDir="false" afterPath="$PROJECT_DIR$/search_pages/1am.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/beforethedayisover.html" beforeDir="false" afterPath="$PROJECT_DIR$/search_pages/beforethedayisover.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/blah.html" beforeDir="false" afterPath="$PROJECT_DIR$/search_pages/blah.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dieforyou.html" beforeDir="false" afterPath="$PROJECT_DIR$/search_pages/dieforyou.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dissolve.html" beforeDir="false" afterPath="$PROJECT_DIR$/search_pages/dissolve.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Ew.html" beforeDir="false" afterPath="$PROJECT_DIR$/Ew.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/feelingliketheend.css" beforeDir="false" afterPath="$PROJECT_DIR$/feelingliketheend.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/feelingliketheend.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/glimpseofus.css" beforeDir="false" afterPath="$PROJECT_DIR$/search_pages/glimpseofus.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/glimpseofus.html" beforeDir="false" afterPath="$PROJECT_DIR$/search_pages/glimpseofus.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/insert.css" beforeDir="false" afterPath="$PROJECT_DIR$/insert.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/music.html" beforeDir="false" afterPath="$PROJECT_DIR$/music.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/musicc.mp4" beforeDir="false" afterPath="$PROJECT_DIR$/search_pages/musicc.mp4" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/nightrider.html" beforeDir="false" afterPath="$PROJECT_DIR$/search_pages/nightrider.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/playback_tree/songs/joji/smithereens/1.mp3" beforeDir="false" afterPath="$PROJECT_DIR$/playback_tree/songs/joji/smithereens/1.mp3" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/playback_tree/songs/joji/smithereens/2.mp3" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/playlist.css" beforeDir="false" afterPath="$PROJECT_DIR$/playlist.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/playlist.html" beforeDir="false" afterPath="$PROJECT_DIR$/playlist.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/playlist2.html" beforeDir="false" afterPath="$PROJECT_DIR$/playlist2.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/searchbar.js" beforeDir="false" afterPath="$PROJECT_DIR$/search_pages/searchbar.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/playlist2.js" beforeDir="false" afterPath="$PROJECT_DIR$/playlist2.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/support.js" beforeDir="false" afterPath="$PROJECT_DIR$/support.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/yukon.html" beforeDir="false" afterPath="$PROJECT_DIR$/yukon.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -143,7 +124,13 @@
       <workItem from="1700940206524" duration="23432000" />
       <workItem from="1700963798098" duration="127000" />
       <workItem from="1700993225449" duration="15206000" />
-      <workItem from="1701066902346" duration="10131000" />
+      <workItem from="1701066902346" duration="10624000" />
+      <workItem from="1701087739892" duration="13374000" />
+      <workItem from="1701184486293" duration="2833000" />
+      <workItem from="1701208353559" duration="4000" />
+      <workItem from="1701230544725" duration="1282000" />
+      <workItem from="1701237647512" duration="12000" />
+      <workItem from="1701241470985" duration="4685000" />
     </task>
     <task id="LOCAL-00001" summary="Changes made in (body overflow and &lt;h2&gt; music text , colour correction of h2 tag in css) -mayank">
       <option name="closed" value="true" />
@@ -377,7 +364,31 @@
       <option name="project" value="LOCAL" />
       <updated>1701047365142</updated>
     </task>
-    <option name="localTasksCounter" value="30" />
+    <task id="LOCAL-00030" summary="-backend">
+      <option name="closed" value="true" />
+      <created>1701077697218</created>
+      <option name="number" value="00030" />
+      <option name="presentableId" value="LOCAL-00030" />
+      <option name="project" value="LOCAL" />
+      <updated>1701077697219</updated>
+    </task>
+    <task id="LOCAL-00031" summary="-backend">
+      <option name="closed" value="true" />
+      <created>1701077709419</created>
+      <option name="number" value="00031" />
+      <option name="presentableId" value="LOCAL-00031" />
+      <option name="project" value="LOCAL" />
+      <updated>1701077709419</updated>
+    </task>
+    <task id="LOCAL-00032" summary="-backend">
+      <option name="closed" value="true" />
+      <created>1701077719514</created>
+      <option name="number" value="00032" />
+      <option name="presentableId" value="LOCAL-00032" />
+      <option name="project" value="LOCAL" />
+      <updated>1701077719514</updated>
+    </task>
+    <option name="localTasksCounter" value="33" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

@@ -178,7 +178,7 @@ document.addEventListener('DOMContentLoaded', function () {
             index = e.id;
                 // console.log(index);
             music.src = `playback_tree/songs/joji/nector/${index}.mp3`;
-            music.play()
+            music.play();
             record.style.animation = `rotatei1 3.7s linear infinite`;
             playicon.className='fa-solid fa-pause';
             index = parseInt(index) - 1;
@@ -205,13 +205,14 @@ document.addEventListener('DOMContentLoaded', function () {
         let min2 = Math.floor(music_curr / 60);
         let sec2 = Math.floor(music_curr % 60);
         // console.log(min2,':',sec2)
+
         if (sec1 < 10) {
             sec1 = `0${sec1}`;
         }if (sec2 < 10) {
             sec2 = `0${sec2}`;
         }
-        currentend.innerText = `${min1}:${sec1}`;
-        currentstart.innerText = `${min2}:${sec2}`;
+        currentend.innerText = `/ ${min1}:${sec1}`;
+        currentstart.innerText = `${min2}:${sec2} `;
 
         seek.value = parseInt((music_curr / music_du) * 100);
         let seekbar = seek.value;
@@ -259,7 +260,7 @@ document.addEventListener('DOMContentLoaded', function () {
             index = 1;
         }
         music.src = `playback_tree/songs/joji/nector/${index}.mp3`;
-        music.play()
+        music.play();
         record.style.animation = `rotatei1 3.7s linear infinite`;
         playicon.className='fa-solid fa-pause';
         index = parseInt(index)-1;
@@ -400,13 +401,6 @@ document.addEventListener('DOMContentLoaded', function () {
         resultbox.innerHTML = `<ul>${content.join('')}</ul>`;
         resultbox.style.display = result.length > 0 ? 'block' : 'none';
     }
-    function calculateImageSize(songName) {
-        // Adjust the base size and factor based on your preference
-        const baseSize = 30;
-        const sizeFactor = 2;
-        return baseSize + sizeFactor * songName.length;
-    }
-
     document.addEventListener("click", function (event) {
         if (!resultbox.contains(event.target) && event.target !== inputbox) {
             resultbox.style.display = 'none';
