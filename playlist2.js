@@ -2,18 +2,19 @@ const music = new Audio("playback_tree/songs/joji/smithereens/21.mp3");
 const songs =[
     {
         id:1,
+        songName: `Feeling like the end`,
+        poster: "playback_tree/covers/joji/joji_smithereens.jpg",
+        time:'03:27',
+        artist: `Joji`,
+
+    },
+    {
+        id:'2r',
         poster: "playback_tree/covers/joji/joji_glimps_of_us.jpg",
         songName: `Glimpse of Us`,
         artist: `Joji`,
         time: '03:27'
 
-    },
-    {
-        id:2,
-        songName: `Feeling like the end`,
-        poster: "playback_tree/covers/joji/joji_smithereens.jpg",
-        time:'03:27',
-        artist: `Joji`,
     },
     {
         id:3,
@@ -146,8 +147,8 @@ document.addEventListener('DOMContentLoaded', function () {
         }if (sec2 < 10) {
             sec2 = `0${sec2}`;
         }
-        currentend.innerText = `${min1}:${sec1}`;
-        currentstart.innerText = `${min2}:${sec2}`;
+        currentend.innerText = `/ ${min1}:${sec1}`;
+        currentstart.innerText = `${min2}:${sec2} `;
 
         seek.value = parseInt((music_curr / music_du) * 100);
         let seekbar = seek.value;

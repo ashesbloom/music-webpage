@@ -964,13 +964,10 @@ h4{
 #songdescription::-webkit-scrollbar-thumb{
     background-color: transparent;
 }
-
 #songdescription p {
-    margin: 0; /* Remove default margin inside the box */
+    margin: 0;
 }
-
 #q{
-
     width: 218px;
     height: 55px;
     background: linear-gradient(to bottom right, #1f1f1f, #555);
@@ -980,8 +977,6 @@ h4{
     padding: 15px;
     align-items: center;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-
-
 }
 #q>h2{
     font-size: 12px;
@@ -994,8 +989,6 @@ h4{
     width:30px;
     height:30px;
     margin-right: 10px;
-
-
 }
 #q a {
     display: inline-block;

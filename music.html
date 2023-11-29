@@ -4,13 +4,13 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Music streaming</title>
+  <link rel="icon" href="playback_tree/logo.png" type="image/x-icon">
   <link rel="stylesheet" href="insert.css" type="text/css">
   <script src="https://kit.fontawesome.com/c2db7a4b8d.js" crossorigin="anonymous"></script>
 </head>
 <body>
 <script src="support.js"></script>
 <script src="playlist2.js"></script>
-<!--<script src="searchbar.js"></script>-->
 <header>
   <div class="header">
       <div class="logo">
@@ -21,7 +21,7 @@
           <div class="cover"><img id="main_cover" style="max-height: 10vh; border-radius: 5px; width: 11vh;" src="playback_tree/logo1.jpg" alt="ac"></div>
           <div class="albumtext">
             <p style="color: white" id="albumtext"><br> <span><p id="albumdescription" style="font-size: 1.7vh; color: darkgrey;"></p></span></p>
-            <div id="song_time" style="font-size:12px;"><span id="current_time" class="currentTime"></span>&nbsp;&nbsp;<span id="end_time"></span></div>
+            <div id="song_time" style="font-size:12px;"><span id="current_time" class="currentTime"></span><span id="end_time"></span></div>
           </div>
           <div class="playbutton">
             <button class="shuffle"><i class="fa-solid fa-shuffle" id="shuffle" onclick="changeColor2()"></i></button>
@@ -30,7 +30,6 @@
             <button class="next"><i class="fa-solid fa-forward-step" id="next"></i></button>
             <button class="repeat"><i class="fa-solid fa-repeat" id="repeat" onclick="changeColor1()"></i></button>
             <script>
-              // JavaScript function to handle color change
               function changeColor1() {
                 var icon = document.getElementById('repeat');
                 // Toggle the "clicked" class to change color
@@ -61,7 +60,8 @@
       <div class="volumecontrol">
         <div id="mute_button" class="mute_button"><i id="volume_icon" style="font-size:larger;" class="fa-solid fa-volume-low"></i></div>
         <div class="v_range">
-          <label for="v_bar"></label><input id="v_bar" class="v_bar" type="range" min="0" max="100" value="20" onmousemove="rangeSlider(this.value)" onchange="rangeSlider(this.value)"></div>
+          <label for="v_bar"></label><input id="v_bar" class="v_bar" type="range" min="0" max="100" value="20"
+                                            onmousemove="rangeSlider(this.value)" onchange="rangeSlider(this.value)"></div>
         <div id='v_num' class="v_num" style="color:#9f9d9d"><span></span></div>
       </div>
       <div class="sidecontrols"></div>
@@ -89,7 +89,7 @@
             <source src="playback_tree/title1.mp4" type="video/mp4">
             Your browser does not support the video tag.
           </video>
-          <div class="text_title"><h2>All Playlist ></h2></div>
+          <div class="text_title"><h2><a href="playlist.html"> All Playlist > </a></h2></div>
         </div>
         <div class="tile-2">
           <video autoplay loop muted playsinline class="t_video2" >
@@ -100,32 +100,32 @@
         </div>
         <h3 class="songname">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Recently Played</h3>
         <div class="row-1" id="recent">
-          <div class = "box1">
-            <li style="list-style-type: none;" id="2" class="song_items">
+          <div class = "box">
+            <li style="list-style-type: none;" id="18" class="song_items" >
               <img alt='ac' class="img_box1" src="playback_tree/covers/joji/joji_nector.jpg">
             </li>
-            <div class="gradiant1" ><div class="row_text1"><h5>Modus</h5></div></div>
+            <div class="gradiant1" ><div class="row_text1"><h5>Upgrade</h5></div></div>
           </div>
-          <div class = "box2">
-            <ul style="list-style-type: none;" id="" class="song_items">
+          <div class = "box">
+            <ul style="list-style-type: none;" id="6" class="song_items">
               <img alt='ac' class="img_box2" src="playback_tree/covers/joji/joji_glimps_of_us.jpg">
             </ul>
             <div class="gradiant2"><div class="row_text2"><h5>Glimps of us</h5></div></div>
           </div>
-          <div class = "box3" >
-            <ul style="list-style-type: none;" id="" class="song_items">
+          <div class = "box" >
+            <ul style="list-style-type: none;" id="5" class="song_items">
               <img alt='ac' class="img_box3" src="playback_tree/covers/joji/joji_golden.jpg">
             </ul>
             <div class="gradiant3"><div class="row_text3"><h5>Gimme Love</h5></div></div>
           </div>
-          <div class = "box4" >
-            <ul style="list-style-type: none;" id="" class="song_items">
+          <div class = "box" >
+            <ul style="list-style-type: none;" id="2" class="song_items">
               <img alt='ac' class="img_box4" src="playback_tree/covers/joji/joji_nector.jpg">
             </ul>
             <div class="gradiant4"><div class="row_text4"><h5>Ew</h5></div></div>
           </div>
-          <div class = "box5" >
-            <ul style="list-style-type: none;" id="" class="song_items">
+          <div class = "box" >
+            <ul style="list-style-type: none;" id="8" class="song_items">
               <img alt='ac' class="img_box5" src="playback_tree/covers/joji/joji_without_us.jpg">
             </ul>
             <div class="gradiant5"><div class="row_text5"><h5>Without Us</h5></div></div>
@@ -207,25 +207,6 @@
       <h4>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i class="fa-solid fa-folder-open" style="color: #a21e1e;"></i>&nbsp;&nbsp;<a href="">Favorites</a></h4>
       <h4>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i class="fa-solid fa-folder-open" style="color: #a21e1e;"></i>&nbsp;&nbsp;<a href="">Party Playlists</a></h4>
     <h4>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i class="fa-solid fa-folder-open" style="color: #a21e1e;"></i>&nbsp;&nbsp;<a href="">Lo-Fi</a></h4>
-<!--    <div id="menu">-->
-<!--    for search bar-->
-<!--      <h2>SMITHEREENS</h2>-->
-<!--      <img id="album-cover" src="playback_tree/covers/joji/joji_smithereens.jpg" alt="Album Cover">-->
-<!--      <div id="songinfocontainer">-->
-<!--        <div id="song-title"><a href="">-->
-<!--          Feeling Like The End</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href=""><i class="fa-regular fa-circle-play" style="color: rgb(56, 130, 105);"></i></a>-->
-<!--        </div>-->
-<!--      </div>-->
-<!--      <div id="song-details">Joji</div>-->
-<!--      <div id="songdescription">-->
-<!--        <p>The song is about Joji and his lover reminiscing about all the things they've done together and feeling like their relationship might be ending.</p>-->
-<!--      </div>-->
-<!--      <div id="q">-->
-<!--        <h2>Next In Queue</h2>-->
-<!--        <img id="qimg" src="playback_tree/covers/joji/joji_smithereens.jpg" alt="qcover">-->
-<!--        <a href="dieforyou.html">Die for You</a>-->
-<!--      </div>-->
-<!--      <script src="searchbar.js"></script>-->
     </div>
   </div>
 </div>

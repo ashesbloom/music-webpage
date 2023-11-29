@@ -63,6 +63,10 @@ body {
         transform: rotate(360deg);
     }
 }
+.inner img:hover{
+    box-shadow: 0 0 100px #9f9d9d;
+    transition: 0.3s linear;
+}
 .i2 {
     margin-top: 10.1%;
     margin-left:10.1%;
@@ -99,10 +103,6 @@ body {
         width: 33vh;
         height: 33vh;
     }
-}
-.inner img:hover{
-    box-shadow: 0 0 100px #ff2b2b;
-    transition: 0.3s linear;
 }
 
 .header{
@@ -338,7 +338,8 @@ body {
 }
 
 .explore {
-    border: 1px solid black;
+  border-left: 1px solid black;
+  border-right: 1px solid black;
     width: 60%;
     position: relative;
     overflow-y: auto;
