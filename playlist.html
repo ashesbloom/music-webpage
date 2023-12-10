@@ -4,16 +4,16 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Music streaming</title>
+  <link rel="icon" href="playback_tree/logo.png" type="image/x-icon">
   <link rel="stylesheet" href="playlist.css" type="text/css">
   <script src="https://kit.fontawesome.com/c2db7a4b8d.js" crossorigin="anonymous"></script>
 </head>
 <body>
-<script src="support.js"></script>
 <div id="align">
   <header>
     <div class="header">
       <div class="logo">
-        <h3 style="color: white" class="text-focus-in">ACRUX</h3>
+        <h3><a href="music.html" style="color: white" class="text-focus-in">ACRUX</a></h3>
       </div>
       <div class="playbackarea">
         <div class="albumname">
@@ -61,7 +61,7 @@
       <div class="volumecontrol">
         <div id="mute_button" class="mute_button"><i id="volume_icon" style="font-size:larger;" class="fa-solid fa-volume-low"></i></div>
         <div class="v_range">
-          <label for="v_bar"></label><input id="v_bar" class="v_bar" type="range" min="0" max="100" value="20" onmousemove="rangeSlider(this.value)" onchange="rangeSlider(this.value)"></div>
+          <label for="v_bar"></label><input id="v_bar" class="v_bar" type="range" min="0" max="100" value="20" onchange="rangeSlider(this.value)"></div>
         <div id='v_num' class="v_num" style="color:#9f9d9d"><span></span></div>
       </div>
       <div class="sidecontrols"></div>
@@ -73,7 +73,7 @@
         <div class="i1" id="record">
           <div class="i2">
             <div class="i3">
-              <div class="inner">
+              <div class="inner_s">
                 <img alt="Album Cover" class="album" id="playback_cover" src="playback_tree/covers/joji/joji_nector.jpg">
               </div>
             </div>
@@ -208,25 +208,31 @@
       </div>
     </div>
     <div class="menu">
-      <H2>Music</H2>
+      <H2>Explore</H2>
       <form>
-        <label>
-          <input type="text" placeholder="What do you want to listen to?" name="search">
-        </label>
-        <button type="submit"><i class="fa-solid fa-magnifying-glass" style="color: #a21e1e; height: 15px; width: 15px;"></i></button>
+        <label for="inputbox"></label><input type="text" id="inputbox" placeholder="What do you want to listen to?" name="search" autocomplete="off">
+        <button type="submit" onclick="performSearch()"><i class="fa-solid fa-magnifying-glass" style="color: #a21e1e; height: 15px; width: 15px;"></i></button>
+        <ul>
+          <li style="list-style-type: none">
+            <div class="resultbox"></div>
+          </li>
+        </ul>
       </form>
       <h5>Library</h5>
-      <h4><i class="fa-regular fa-clock" style="color: #a21e1e;"></i> &nbsp; <a href="">Recently Added</a></h4>
-      <h4><i class="fa-solid fa-microphone-lines" style="color: #a21e1e;"></i> &nbsp;<a href="">Artists</a></h4>
-      <h4><i class="fa-solid fa-record-vinyl" style="color: #a21e1e;"></i> &nbsp;<a href="">Albums</a></h4>
-      <h4><i class="fa-solid fa-music" style="color: #a12e1e;"></i> &nbsp;<a href="">Songs</a></h4>
+    <li style="list-style-type: none" class="hov">
+      <h4><i class="fa-regular fa-clock" style="color: #a21e1e;"></i> &nbsp; <a href="#recent">Recently Added</a></h4>
+    </li>
+      <h4><i class="fa-solid fa-microphone-lines" style="color: #a21e1e;"></i> &nbsp;&nbsp;&nbsp;<a href="#artists">Artists</a></h4>
+      <h4><i class="fa-solid fa-record-vinyl" style="color: #a21e1e;"></i> &nbsp;&nbsp;<a href="#album1">Albums</a></h4>
+      <h4><i class="fa-solid fa-music" style="color: #a12e1e;"></i> &nbsp;&nbsp;<a href="">Songs</a></h4>
       <h5>Playlists</h5>
-      <h4><i class="fa-solid fa-folder-closed" style="color: #a21e1e;"></i>&nbsp;&nbsp;<a href="">All Playlists</a></h4>
-      <h4>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i class="fa-solid fa-folder-open" style="color: #a21e1e;"></i>&nbsp;<a href="">Favorites</a></h4>
-      <h4>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i class="fa-solid fa-folder-open" style="color: #a21e1e;"></i>&nbsp;<a href="">Party Playlists</a></h4>
-      <h4>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i class="fa-solid fa-folder-open" style="color: #a21e1e;"></i>&nbsp;<a href="">Lo-Fi</a></h4>
-    </div>
+      <h4><i class="fa-solid fa-folder-closed" style="color: #a21e1e;"></i>&nbsp;&nbsp;<a href="playlist.html">Playlists</a></h4>
+      <h4>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i class="fa-solid fa-folder-open" style="color: #a21e1e;"></i>&nbsp;&nbsp;<a href="">Favorites</a></h4>
+      <h4>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i class="fa-solid fa-folder-open" style="color: #a21e1e;"></i>&nbsp;&nbsp;<a href="">Party Playlists</a></h4>
+    <h4>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i class="fa-solid fa-folder-open" style="color: #a21e1e;"></i>&nbsp;&nbsp;<a href="">Lo-Fi</a></h4>
   </div>
 </div>
+<script src="support.js"></script>
+<script src="volume.js"></script>
 </body>
 </html>

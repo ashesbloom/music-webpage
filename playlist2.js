@@ -272,21 +272,71 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     })
 });
-function rangeSlider(value) {
-    document.getElementById("v_num").innerHTML = value;
-    let volumeIcon = document.getElementById('volume_icon');
-    if (value === '0') {
-        volumeIcon.className = 'fa-solid fa-volume-mute';
+document.addEventListener('DOMContentLoaded', function () {
+    let availableKeywords = [
+        'smithereens',
+        'ew',
+        'modus',
+        'tick tock',
+        'daylight',
+        'gimme love',
+        'run',
+
+    ];
+
+    const resultbox = document.querySelector(".resultbox");
+    const inputbox = document.getElementById("inputbox");
+
+    inputbox.addEventListener("input", function () {
+        let input = inputbox.value.toLowerCase();
+        let result = availableKeywords.filter(keyword => keyword.toLowerCase().includes(input));
+        display(result);
+    });
+
+    const songImageMapping = {
+        'Smithereens':'playback_tree/covers/joji/joji_smithereens.jpg',
+        'Ew': 'playback_tree/covers/joji/joji_nector.jpg',
+        'Modus': 'playback_tree/covers/joji/joji_nector.jpg',
+        'Tick Tock': 'playback_tree/covers/joji/joji_nector.jpg',
+        'Daylight': 'playback_tree/covers/joji/joji_daylight.jpg',
+        'Gimme Love': 'playback_tree/covers/joji/joji_golden.jpg',
+        'Run': 'playback_tree/covers/joji/joji_run.jpg',
+        // Add more entries as needed
+    };
+
+    function display(result) {
+        const content = result.map((list) => {
+            const imageName = list.replace(/\s+/g, '_').toLowerCase();
+            // const imagePath = songImageMapping[imageName];
+            // const fileName = list + '.html';
+
+            return `<li><img src="playback_tree/covers/joji/joji_smithereens.jpg" style="width: 30px; height:30px; margin-right:10px;"> <a href="Ew.html">${list}</a> </li>`;
+        });
+
+        // Assuming resultbox is a ul or ol element
+        resultbox.innerHTML = content.join('');
+        resultbox.innerHTML = `<ul>${content.join('')}</ul>`;
+        resultbox.style.display = result.length > 0 ? 'block' : 'none';
     }
-    if (value < '50' && value !== '0') {
-        volumeIcon.className = 'fa-solid fa-volume-low';
-    }
-    if (value > '50' || value === '100') {
-        volumeIcon.className = 'fa-solid fa-volume-high';
-    }
-    music.volume = value / 100;
+    document.addEventListener("click", function (event) {
+        if (!resultbox.contains(event.target) && event.target !== inputbox) {
+            resultbox.style.display = 'none';
+        }
+    });
+
+    resultbox.addEventListener("click", function (event) {
+        if (event.target.tagName === 'LI') {
+            inputbox.value = event.target.textContent;
+            resultbox.style.display = 'none';
+        }
+    });
+});
+function selectInput(element) {
+    const imageName = element.id;
+    console.log("selectInput function called");
+
+    const pagePath = `${imageName}.html`;
+
+    // Open the web page in the same tab
+    window.open(pagePath, '_blank');
 }
-setInterval(function () {
-    let currentValue = document.getElementById("v_bar").value;
-    rangeSlider(currentValue);
-}, 100);
