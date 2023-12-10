@@ -131,16 +131,14 @@ body::-webkit-scrollbar-thumb {
     grid-template-columns: 1.2fr 3fr 1fr 0.3fr;
     padding-bottom: 10px
 }
-.logo{
-    /*border: 1px solid black;*/
+.logo h3 a{
     align-self: center;
     padding-left: 45px;
-    position: relative;
-    font-size: 20px;
+    font-size: 25px;
 }
-.logo .text-focus-in h3{
-    -webkit-animation: text-focus-in 1s cubic-bezier(0.550, 0.085, 0.680, 0.530) both;
-    animation: text-focus-in 1s cubic-bezier(0.550, 0.085, 0.680, 0.530) both;
+.logo .text-focus-in a{
+    -webkit-animation: text-focus-in 3s cubic-bezier(0.550, 0.085, 0.680, 0.530) both;
+    animation: text-focus-in 3s cubic-bezier(0.550, 0.085, 0.680, 0.530) both;
 }
 .playbackarea{
     border-radius:5px;

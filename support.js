@@ -337,24 +337,6 @@ document.addEventListener('DOMContentLoaded', function () {
     })
 });
 
-function rangeSlider(value) {
-    document.getElementById("v_num").innerHTML = value;
-    let volumeIcon = document.getElementById('volume_icon');
-    if (value === '0') {
-        volumeIcon.className = 'fa-solid fa-volume-mute';
-    }
-    if (value < '50' && value !== '0') {
-        volumeIcon.className = 'fa-solid fa-volume-low';
-    }
-    if (value > '50' || value === '100') {
-        volumeIcon.className = 'fa-solid fa-volume-high';
-    }
-    music.volume = value / 100;
-}
-setInterval(function () {
-    let currentValue = document.getElementById("v_bar").value;
-    rangeSlider(currentValue);
-}, 100);
 document.addEventListener('DOMContentLoaded', function () {
     let availableKeywords = [
         'smithereens',
@@ -390,8 +372,8 @@ document.addEventListener('DOMContentLoaded', function () {
     function display(result) {
         const content = result.map((list) => {
             const imageName = list.replace(/\s+/g, '_').toLowerCase();
-            const imagePath = songImageMapping[imageName];
-            const fileName = list + '.html';
+            // const imagePath = songImageMapping[imageName];
+            // const fileName = list + '.html';
 
             return `<li><img src="playback_tree/covers/joji/joji_smithereens.jpg" style="width: 30px; height:30px; margin-right:10px;"> <a href="Ew.html">${list}</a> </li>`;
         });

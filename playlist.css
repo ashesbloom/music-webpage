@@ -37,6 +37,7 @@ body {
     background: linear-gradient(225deg,#1f1f1f, #1a1a1a);
     box-shadow:  -10px 3px 15px #111010,
     10px -5px 15px #111111;
+  transition: 2.5s linear;
 }
 .record{
     margin-top:6px;
@@ -65,6 +66,11 @@ body {
 }
 .inner img:hover{
     box-shadow: 0 0 100px #9f9d9d;
+    transition: 0.3s linear;
+}
+
+.inner_s img:hover{
+    box-shadow: 0 0 100px #f13c3c;
     transition: 0.3s linear;
 }
 .i2 {
@@ -104,6 +110,24 @@ body {
         height: 33vh;
     }
 }
+.inner_s{ /*album cover goes here*/
+    justify-content: center;
+    margin-top: 7%;
+    margin-left:7%;
+    height: 33vh;
+    width: 33vh;
+    border: 3px #a21e1e solid;
+    border-radius: 50%;
+    box-shadow:  -3px 5px 20px #0c0c0c,
+    1px -2px 20px #0c0c0c;
+
+    .album{
+        justify-content: center;
+        border-radius: 50%;
+        width: 33vh;
+        height: 33vh;
+    }
+}
 
 .header{
     overflow: hidden;
@@ -119,16 +143,14 @@ body {
     padding-bottom: 10px
 }
 
-.logo{
-    /*border: 1px solid black;*/
+.logo h3 a{
     align-self: center;
     padding-left: 45px;
-    position: relative;
-    font-size: 20px;
+    font-size: 25px;
 }
-.logo .text-focus-in h3{
-    -webkit-animation: text-focus-in 1s cubic-bezier(0.550, 0.085, 0.680, 0.530) both;
-    animation: text-focus-in 1s cubic-bezier(0.550, 0.085, 0.680, 0.530) both;
+.logo .text-focus-in a{
+    -webkit-animation: text-focus-in 3s cubic-bezier(0.550, 0.085, 0.680, 0.530) both;
+    animation: text-focus-in 3s cubic-bezier(0.550, 0.085, 0.680, 0.530) both;
 }
 
 .playbackarea{
@@ -457,18 +479,6 @@ h5{
     text-align: center;
     color: #d8e2e3;
 }
-
-form{
-    text-align: center;
-    color: grey;
-}
-
-input{
-    background-color: black;
-    height: 25px;
-    width: 200px;
-}
-
 h4{
     margin-left: 15px;
 }
@@ -484,55 +494,10 @@ a{
     width: 5%;
     height: 5%;
 }
-.menu{
-    /*border: 1px solid black;*/
-    position: relative;
-    max-height: 90vh;
-    min-width:42vh;
-    background: #1d1d1d;
-}
-
-h5{
-    text-align: left;
-    font-family: Verdana, Geneva, Tahoma, sans-serif;
-    color: grey;
-    margin-left: 10px;
-
-}
-
-.menu h2{
-    text-align: center;
-    color: #d8e2e3;
-}
-
 form{
     text-align: center;
     color: grey;
 }
-
-input{
-    background-color: #1d1d1d;
-    /*color: #d8e2e3;*/
-    height: 25px;
-    width: 200px;
-}
-
-h4{
-    margin-left: 15px;
-}
-
-a{
-    text-decoration: none;
-    color:#d8e2e3;
-    line-height: 1.5;
-    margin-top: 3%;
-}
-
-.Recently_Added,.Albums,.Artists,.Songs{
-    width: 5%;
-    height: 5%;
-}
-
 button{
     border-radius: 20%;
     width: 40px;
@@ -542,11 +507,15 @@ button{
 input{
     border-radius: 3%;
     border: 3px groove #9f9d9d;
+  color: #d8e2e3;
+  background-color: #1d1d1d;
+  height: 25px;
+  width: 200px;
 }
 
 
 h4:hover{
-    background-color: #1f1f1f;
+  background-color: rgba(82, 82, 82, 0.2);
 }
 
 h4{
@@ -640,4 +609,38 @@ h4{
 #songdescription::-webkit-scrollbar {
     width: 0;
 }
+#songdescription::-webkit-scrollbar-thumb{
+  background-color: transparent;
+}
 
+#songdescription p {
+  margin: 0; /* Remove default margin inside the box */
+}
+
+#q{
+
+  width: 218px;
+  height: 55px;
+  background: linear-gradient(to bottom right, #1f1f1f, #555);
+  border-radius: 10px;
+  margin-left:28px;
+  margin-top: 20px;;
+  padding: 15px;
+  align-items: center;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+#q>h2{
+  font-size: 12px;
+  color:#999;
+  margin-bottom: 15px;
+  margin-left: 0;
+  margin-top: 0;
+}
+#qimg{
+  width:30px;
+  height:30px;
+  margin-right: 10px;
+}
+#q a {
+  display: inline-block;
+}
