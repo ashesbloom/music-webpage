@@ -1,6 +1,6 @@
 # Music Streaming
 
-<h3>❇️Preview: <a herf="https://ashesbloom.github.io/music-webpage" target="_blank">index.html</a></h3>
+<h3>❇️Preview: [index.html](https://ashesbloom.github.io/music-webpage)</h3>
 <hr>
 
 <h5>The primary objective of this webpage is to create a user-friendly music streaming website with abstract visuals. 
