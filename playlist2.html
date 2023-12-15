@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Music streaming</title>
+    <link rel="icon" href="playback_tree/logo.png" type="image/x-icon">
+    <link rel="stylesheet" href="playlist.css" type="text/css">
+    <script src="https://kit.fontawesome.com/c2db7a4b8d.js" crossorigin="anonymous"></script>
+</head>
+<body>
+<div id="align">
+    <header>
+        <div class="header">
+            <div class="logo">
+                <h3><a href="index.html" style="color: white" class="text-focus-in">ACRUX</a></h3>
+            </div>
+            <div class="playbackarea">
+                <div class="albumname">
+                    <div class="cover"><img id="main_cover" style="max-height: 10vh; border-radius: 5px; width: 11vh;" src="playback_tree/logo1.jpg" alt="ac"></div>
+                    <div class="albumtext">
+                        <p style="color: white" id="albumtext"><br><span ><p id="albumdescription" style="font-size: 1.7vh; color: darkgrey;"></p></span></p>
+                        <div id="song_time" style="font-size:12px;"><span id="current_time"></span><span id="end_time"></span></div>
+                    </div>
+                    <div class="playbutton">
+                        <button class="shuffle"><i class="fa-solid fa-shuffle" id="shuffle" onclick="changeColor2()"></i></button>
+                        <button class="prev"><i class="fa-solid fa-backward-step" id="prev"></i></button>
+                        <button class="play" id="master_play" ><i class="fa-solid fa-play" id="play"></i></button>
+                        <button class="next"><i class="fa-solid fa-forward-step" id="next"></i></button>
+                        <button class="repeat"><i class="fa-solid fa-repeat" id="repeat" onclick="changeColor1()"></i></button>
+                        <script>
+                            // JavaScript function to handle color change
+                            function changeColor1() {
+                                var icon = document.getElementById('repeat');
+
+                                // Toggle the "clicked" class to change color
+                                if (icon.classList.contains('clicked')) {
+                                    icon.classList.remove('clicked');
+                                } else {
+                                    icon.classList.add('clicked');
+                                }
+                            }
+                            function changeColor2() {
+                                var icon2 = document.getElementById('shuffle');
+                                // Toggle the "clicked" class to change color
+                                if (icon2.classList.contains('clicked')) {
+                                    icon2.classList.remove('clicked');
+                                } else {
+                                    icon2.classList.add('clicked');
+                                }
+                            }
+                        </script>
+                    </div>
+                </div>
+                <div class="play_bar">
+                    <label for="seek"></label><input type="range" id="seek" min="0" max="100">
+                    <div class="slider" id="slider"></div>
+                    <div class="dot"></div>
+                </div>
+            </div>
+            <div class="volumecontrol">
+                <div id="mute_button" class="mute_button"><i id="volume_icon" style="font-size:larger;" class="fa-solid fa-volume-low"></i></div>
+                <div class="v_range">
+                    <label for="v_bar"></label><input id="v_bar" class="v_bar" type="range" min="0" max="100" value="20" onchange="rangeSlider(this.value)"></div>
+                <div id='v_num' class="v_num" style="color:#9f9d9d"><span></span></div>
+            </div>
+            <div class="sidecontrols"></div>
+        </div>
+    </header>
+    <div class="container">
+        <div class="playback">
+            <div class="record">
+                <div class="i1" id="record">
+                    <div class="i2">
+                        <div class="i3">
+                            <div class="inner" style="border: 3px #9f9f9f solid;">
+                                <img alt="Album Cover" class="album" id="playback_cover" src="playback_tree/covers/joji/joji_smithereens.jpg">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="explore">
+            <div class="cover_area">
+                <div class="playlist_cover"><img class="cover_img" alt="Album cover" src="playback_tree/covers/joji/joji_smithereens.jpg"></div>
+                <div class="playlist_title"><h2>Your Playlist</h2></div>
+                <div class="playlist_title2"><h3>Smithereens by Joji</h3></div>
+                <div class="playlist_description"><p>The follow-up to 2018’s BALLADS 1 builds on the Japanese singer’s daring aesthetic—an arty blur of bedroom trip-hop,
+                    alt-R&B and slow-winding IDM that always seems to zig when you think it'll zag.
+                    Nectar, his sophomore effort,
+                    feels designed for bigger stages, with more muscular vocals, riskier production and an impressive spectrum of instrumentation.</p></div>
+            </div>
+            <div class="song_heading">
+                <span class="name">Song</span>
+                <span class="artist_head">Artist</span>
+                <span class="duration_head">Duration</span>
+            </div>
+            <div class="songs_list" >
+                <li id="1" class="song_items">
+                    <img alt='ac' src="playback_tree/covers/joji/joji_smithereens.jpg">
+                    <div><h5 style="color: #d8e2e3">Upgrade</h5></div>
+                    <div class="artist"><h5 style="color: #d8e2e3 ">Joji</h5></div>
+                    <div class="duration"><h5 style="color: #d8e2e3">00:00</h5></div>
+                </li>
+                <li id="2r" class="song_items">
+                    <img alt='ac' src="playback_tree/covers/joji/joji_glimps_of_us.jpg">
+                    <div><h5 style="color: #d8e2e3 ">Upgrade</h5></div>
+                    <div class="artist"><h5 style="color: #d8e2e3 ">Joji</h5></div>
+                    <div class="duration"><h5 style="color: #d8e2e3 ">00:00</h5></div>
+                </li>
+                <li id="3" class="song_items">
+                    <img alt="Ac" src="playback_tree/covers/joji/joji_smithereens.jpg">
+                    <div><h5 style="color: #d8e2e3 ">Upgrade</h5></div>
+                    <div class="artist"><h5 style="color: #d8e2e3 ">Joji</h5></div>
+                    <div class="duration"><h5 style="color: #d8e2e3 ">00:00</h5></div>
+                </li>
+                <li id="4" class="song_items">
+                    <img alt="Ac" src="playback_tree/covers/joji/joji_smithereens.jpg">
+                    <div><h5 style="color: #d8e2e3 ">Upgrade</h5></div>
+                    <div class="artist"><h5 style="color: #d8e2e3 ">Joji</h5></div>
+                    <div class="duration"><h5 style="color: #d8e2e3 ">00:00</h5></div>
+                </li>
+                <li id="5" class="song_items">
+                    <img alt="Ac" src="playback_tree/covers/joji/joji_smithereens.jpg">
+                    <div><h5 style="color: #d8e2e3 ">Upgrade</h5></div>
+                    <div class="artist"><h5 style="color: #d8e2e3 ">Joji</h5></div>
+                    <div class="duration"><h5 style="color: #d8e2e3 ">00:00</h5></div>
+                </li>
+                <li id="6" class="song_items">
+                    <img alt="Ac" src="playback_tree/covers/joji/joji_smithereens.jpg">
+                    <div><h5 style="color: #d8e2e3 ">Upgrade</h5></div>
+                    <div class="artist"><h5 style="color: #d8e2e3 ">Joji</h5></div>
+                    <div class="duration"><h5 style="color: #d8e2e3 ">00:00</h5></div>
+                </li>
+                <li id="7" class="song_items">
+                    <img alt="Ac" src="playback_tree/covers/joji/joji_smithereens.jpg">
+                    <div><h5 style="color: #d8e2e3 ">Upgrade</h5></div>
+                    <div class="artist"><h5 style="color: #d8e2e3 ">Joji</h5></div>
+                    <div class="duration"><h5 style="color: #d8e2e3 ">00:00</h5></div>
+                </li>
+                <li id="8" class="song_items">
+                    <img alt="Ac" src="playback_tree/covers/joji/joji_without_us.jpg">
+                    <div><h5 style="color: #d8e2e3 ">Upgrade</h5></div>
+                    <div class="artist"><h5 style="color: #d8e2e3 ">Joji</h5></div>
+                    <div class="duration"><h5 style="color: #d8e2e3 ">00:00</h5></div>
+                </li>
+                <li id="9" class="song_items">
+                    <img alt="Ac" src="playback_tree/covers/joji/joji_smithereens.jpg">
+                    <div><h5 style="color: #d8e2e3 ">Upgrade</h5></div>
+                    <div class="artist"><h5 style="color: #d8e2e3 ">Joji</h5></div>
+                    <div class="duration"><h5 style="color: #d8e2e3 ">00:00</h5></div>
+                </li>
+            </div>
+        </div>
+        <div class="menu">
+      <H2>Explore</H2>
+            <form>
+        <label for="inputbox"></label><input type="text" id="inputbox" placeholder="What do you want to listen to?" name="search" autocomplete="off">
+        <button type="submit" onclick="performSearch()"><i class="fa-solid fa-magnifying-glass" style="color: #a21e1e; height: 15px; width: 15px;"></i></button>
+        <ul>
+          <li style="list-style-type: none">
+            <div class="resultbox"></div>
+          </li>
+        </ul>
+            </form>
+            <h5>Library</h5>
+    <li style="list-style-type: none" class="hov">
+      <h4><i class="fa-regular fa-clock" style="color: #a21e1e;"></i> &nbsp; <a href="#recent">Recently Added</a></h4>
+    </li>
+      <h4><i class="fa-solid fa-microphone-lines" style="color: #a21e1e;"></i> &nbsp;&nbsp;&nbsp;<a href="#artists">Artists</a></h4>
+      <h4><i class="fa-solid fa-record-vinyl" style="color: #a21e1e;"></i> &nbsp;&nbsp;<a href="#album1">Albums</a></h4>
+      <h4><i class="fa-solid fa-music" style="color: #a12e1e;"></i> &nbsp;&nbsp;<a href="">Songs</a></h4>
+            <h5>Playlists</h5>
+      <h4><i class="fa-solid fa-folder-closed" style="color: #a21e1e;"></i>&nbsp;&nbsp;<a href="playlist.html">Playlists</a></h4>
+      <h4>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i class="fa-solid fa-folder-open" style="color: #a21e1e;"></i>&nbsp;&nbsp;<a href="">Favorites</a></h4>
+      <h4>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i class="fa-solid fa-folder-open" style="color: #a21e1e;"></i>&nbsp;&nbsp;<a href="">Party Playlists</a></h4>
+    <h4>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i class="fa-solid fa-folder-open" style="color: #a21e1e;"></i>&nbsp;&nbsp;<a href="">Lo-Fi</a></h4>
+        </div>
+    </div>
+</div>
+<script src="playlist2.js"></script>
+<script src="volume.js"></script>
+</body>
+</html>
