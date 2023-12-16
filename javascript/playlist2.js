@@ -1,16 +1,16 @@
-const music = new Audio("playback_tree/songs/joji/smithereens/21.mp3");
+const music = new Audio("../playback_tree/songs/joji/smithereens/21.mp3");
 const songs =[
     {
         id:1,
         songName: `Feeling like the end`,
-        poster: "playback_tree/covers/joji/joji_smithereens.jpg",
+        poster: "../playback_tree/covers/joji/joji_smithereens.jpg",
         time:'03:27',
         artist: `Joji`,
 
     },
     {
         id:'2r',
-        poster: "playback_tree/covers/joji/joji_glimps_of_us.jpg",
+        poster: "../playback_tree/covers/joji/joji_glimps_of_us.jpg",
         songName: `Glimpse of Us`,
         artist: `Joji`,
         time: '03:27'
@@ -19,28 +19,28 @@ const songs =[
     {
         id:3,
         songName: `Die for you`,
-        poster: "playback_tree/covers/joji/joji_smithereens.jpg",
+        poster: "../playback_tree/covers/joji/joji_smithereens.jpg",
         time:'02:12',
         artist: `Joji`,
     },
     {
         id:4,
         songName: `Before The Day is Over`,
-        poster: "playback_tree/covers/joji/joji_smithereens.jpg",
+        poster: "../playback_tree/covers/joji/joji_smithereens.jpg",
         time:'02:43',
         artist: `Joji`,
     },
     {
         id:5,
         songName: `Dissolve`,
-        poster: "playback_tree/covers/joji/joji_smithereens.jpg",
+        poster: "../playback_tree/covers/joji/joji_smithereens.jpg",
         time:'03:34',
         artist: `Joji`,
     },
     {
         id:6,
         songName: `Night Rider`,
-        poster: `playback_tree/covers/joji/joji_smithereens.jpg`,
+        poster: `../playback_tree/covers/joji/joji_smithereens.jpg`,
         time:'03:15',
         artist: `Joji`,
     },
@@ -48,21 +48,21 @@ const songs =[
     {
         id:7,
         songName: `BlahBlahBlah`,
-        poster: "playback_tree/covers/joji/joji_smithereens.jpg",
+        poster: "../playback_tree/covers/joji/joji_smithereens.jpg",
         time:'03:00',
         artist: `Joji`,
     },
     {
         id:8,
         songName: `Youkon`,
-        poster: "playback_tree/covers/joji/joji_smithereens.jpg",
+        poster: "../playback_tree/covers/joji/joji_smithereens.jpg",
         time:'03:02',
         artist: `Joji`,
     },
     {
         id:9,
         songName: `1AM Freestyle`,
-        poster: "playback_tree/covers/joji/joji_smithereens.jpg",
+        poster: "../playback_tree/covers/joji/joji_smithereens.jpg",
         time:'02:11',
         artist: `Joji`,
     },
@@ -114,7 +114,7 @@ document.addEventListener('DOMContentLoaded', function () {
         e.addEventListener('click', () => {
             index = e.id;
             // console.log(index);
-            music.src = `playback_tree/songs/joji/smithereens/${index}.mp3`;
+            music.src = `../playback_tree/songs/joji/smithereens/${index}.mp3`;
             music.play()
             record.style.animation = `rotatei1 3.7s linear infinite`;
             playicon.className='fa-solid fa-pause';
@@ -179,7 +179,7 @@ document.addEventListener('DOMContentLoaded', function () {
         if (index < 1){
             index=Array.from(document.querySelectorAll('.songs_list .song_items')).length;
         }
-        music.src = `playback_tree/songs/joji/smithereens/${index}.mp3`;
+        music.src = `../playback_tree/songs/joji/smithereens/${index}.mp3`;
         music.play();
         record.style.animation = `rotatei1 3.7s linear infinite`;
         playicon.className='fa-solid fa-pause';
@@ -195,7 +195,7 @@ document.addEventListener('DOMContentLoaded', function () {
         if (index > Array.from(document.querySelectorAll('.songs_list .song_items')).length){
             index = 1;
         }
-        music.src = `playback_tree/songs/joji/smithereens/${index}.mp3`;
+        music.src = `../playback_tree/songs/joji/smithereens/${index}.mp3`;
         music.play();
         record.style.animation = `rotatei1 3.7s linear infinite`;
         playicon.className='fa-solid fa-pause';
@@ -221,7 +221,7 @@ document.addEventListener('DOMContentLoaded', function () {
             setTimeout(function () {
                 index += 1;
                 index;
-                music.src = `playback_tree/songs/joji/smithereens/${index}.mp3`;
+                music.src = `../playback_tree/songs/joji/smithereens/${index}.mp3`;
                 music.play();
                 record.style.animation = `rotatei1 3.7s linear infinite`;
                 playicon.className = 'fa-solid fa-pause';
@@ -240,7 +240,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 } else {
                     index = Math.floor((Math.random() * songs.length) + 1);
                 }
-                music.src = `playback_tree/songs/joji/smithereens/${index}.mp3`;
+                music.src = `../playback_tree/songs/joji/smithereens/${index}.mp3`;
                 music.play();
                 record.style.animation = `rotatei1 3.7s linear infinite`;
                 playicon.className = 'fa-solid fa-pause';
@@ -259,7 +259,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 } else {
                     index = index + 1;
                 }
-                music.src = `playback_tree/songs/joji/smithereens/${index}.mp3`;
+                music.src = `../playback_tree/songs/joji/smithereens/${index}.mp3`;
                 music.play();
                 record.style.animation = `rotatei1 3.7s linear infinite`;
                 playicon.className = 'fa-solid fa-pause';
@@ -294,13 +294,13 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     const songImageMapping = {
-        'Smithereens':'playback_tree/covers/joji/joji_smithereens.jpg',
-        'Ew': 'playback_tree/covers/joji/joji_nector.jpg',
-        'Modus': 'playback_tree/covers/joji/joji_nector.jpg',
-        'Tick Tock': 'playback_tree/covers/joji/joji_nector.jpg',
-        'Daylight': 'playback_tree/covers/joji/joji_daylight.jpg',
-        'Gimme Love': 'playback_tree/covers/joji/joji_golden.jpg',
-        'Run': 'playback_tree/covers/joji/joji_run.jpg',
+        'Smithereens':'../playback_tree/covers/joji/joji_smithereens.jpg',
+        'Ew': '../playback_tree/covers/joji/joji_nector.jpg',
+        'Modus': '../playback_tree/covers/joji/joji_nector.jpg',
+        'Tick Tock': '../playback_tree/covers/joji/joji_nector.jpg',
+        'Daylight': '../playback_tree/covers/joji/joji_daylight.jpg',
+        'Gimme Love': '../playback_tree/covers/joji/joji_golden.jpg',
+        'Run': '../playback_tree/covers/joji/joji_run.jpg',
         // Add more entries as needed
     };
 
@@ -310,7 +310,7 @@ document.addEventListener('DOMContentLoaded', function () {
             // const imagePath = songImageMapping[imageName];
             // const fileName = list + '.html';
 
-            return `<li><img src="playback_tree/covers/joji/joji_smithereens.jpg" style="width: 30px; height:30px; margin-right:10px;"> <a href="Ew.html">${list}</a> </li>`;
+            return `<li><img src="../playback_tree/covers/joji/joji_smithereens.jpg" style="width: 30px; height:30px; margin-right:10px;" alt="notfound"> <a href="../search_pages/smithereens.html">${list}</a> </li>`;
         });
 
         // Assuming resultbox is a ul or ol element
@@ -333,7 +333,6 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 function selectInput(element) {
     const imageName = element.id;
-    console.log("selectInput function called");
 
     const pagePath = `${imageName}.html`;
 
