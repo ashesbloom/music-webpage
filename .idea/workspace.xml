@@ -11,10 +11,25 @@
   <component name="ChangeListManager">
     <list default="true" id="ebebbdde-3997-422c-8189-3e6c3b1f4c13" name="Changes" comment="fixed volume update problem &#10;added search functionality to all pages&#10;added home link to website name &#10;added to image to tittle &#10;fixed miner bugs">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Ew.html" beforeDir="false" afterPath="$PROJECT_DIR$/Ew.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Ew.html" beforeDir="false" afterPath="$PROJECT_DIR$/search_pages/smithereens.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/feelingliketheend.css" beforeDir="false" afterPath="$PROJECT_DIR$/style/smithereens.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/insert.css" beforeDir="false" afterPath="$PROJECT_DIR$/style/insert.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/music.html" beforeDir="false" afterPath="$PROJECT_DIR$/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/playlist.html" beforeDir="false" afterPath="$PROJECT_DIR$/playlist.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/playlist2.html" beforeDir="false" afterPath="$PROJECT_DIR$/playlist2.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/playlist.css" beforeDir="false" afterPath="$PROJECT_DIR$/style/playlist.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/playlist.html" beforeDir="false" afterPath="$PROJECT_DIR$/playlist/playlist.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/playlist2.html" beforeDir="false" afterPath="$PROJECT_DIR$/playlist/playlist2.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/playlist2.js" beforeDir="false" afterPath="$PROJECT_DIR$/javascript/playlist2.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/search_pages/1am.html" beforeDir="false" afterPath="$PROJECT_DIR$/search_pages/1am.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/search_pages/beforethedayisover.html" beforeDir="false" afterPath="$PROJECT_DIR$/search_pages/beforethedayisover.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/search_pages/blah.html" beforeDir="false" afterPath="$PROJECT_DIR$/search_pages/blah.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/search_pages/dieforyou.html" beforeDir="false" afterPath="$PROJECT_DIR$/search_pages/dieforyou.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/search_pages/dissolve.html" beforeDir="false" afterPath="$PROJECT_DIR$/search_pages/dissolve.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/search_pages/glimpseofus.html" beforeDir="false" afterPath="$PROJECT_DIR$/search_pages/glimpseofus.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/search_pages/nightrider.html" beforeDir="false" afterPath="$PROJECT_DIR$/search_pages/nightrider.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/search_pages/searchbar.js" beforeDir="false" afterPath="$PROJECT_DIR$/search_pages/searchbar.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/search_pages/yukon.html" beforeDir="false" afterPath="$PROJECT_DIR$/search_pages/yukon.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/support.js" beforeDir="false" afterPath="$PROJECT_DIR$/javascript/support.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/volume.js" beforeDir="false" afterPath="$PROJECT_DIR$/javascript/volume.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -59,40 +74,40 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ASKED_ADD_EXTERNAL_FILES": "true",
-    "ASKED_SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "DefaultHtmlFileTemplate": "HTML File",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.cidr.known.project.marker": "true",
-    "WebServerToolWindowFactoryState": "false",
-    "cf.first.check.clang-format": "false",
-    "cidr.known.project.marker": "true",
-    "git-widget-placeholder": "main",
-    "ignore.virus.scanning.warn.message": "true",
-    "last_opened_file_path": "C:/Users/mayan/OneDrive/music-webpage",
-    "list.type.of.created.stylesheet": "CSS",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "settings.editor.selected.configurable": "preferences.pluginManager",
-    "two.files.diff.last.used.file": "C:/Users/mayan/OneDrive/Documents/GitHub/music-webpage/music.html",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
+    &quot;ASKED_SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;DefaultHtmlFileTemplate&quot;: &quot;HTML File&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.cidr.known.project.marker&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;cf.first.check.clang-format&quot;: &quot;false&quot;,
+    &quot;cidr.known.project.marker&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/mayan/OneDrive/music-webpage&quot;,
+    &quot;list.type.of.created.stylesheet&quot;: &quot;CSS&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
+    &quot;two.files.diff.last.used.file&quot;: &quot;C:/Users/mayan/OneDrive/Documents/GitHub/music-webpage/music.html&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\mayan\OneDrive\Documents\GitHub\music-webpage" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
-      <recent name="C:\Users\mayan\OneDrive\Documents\GitHub\music-webpage\search_pages" />
-      <recent name="C:\Users\mayan\OneDrive\Documents\GitHub\music-webpage\playback_tree\covers\joji" />
-      <recent name="C:\Users\mayan\OneDrive\Documents\GitHub\music-webpage\playback_tree\covers" />
-      <recent name="C:\Users\mayan\OneDrive\Documents\GitHub\music-webpage\playback_tree\songs\joji\nector" />
-      <recent name="C:\Users\mayan\OneDrive\Documents\GitHub\music-webpage\playback_tree\songs\joji" />
+      <recent name="C:\Users\mayan\OneDrive\music-webpage\playlist" />
+      <recent name="C:\Users\mayan\OneDrive\music-webpage\search_pages" />
+      <recent name="C:\Users\mayan\OneDrive\music-webpage\javascript" />
+      <recent name="C:\Users\mayan\OneDrive\music-webpage\style" />
+      <recent name="C:\Users\mayan\OneDrive\music-webpage" />
     </key>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
@@ -133,6 +148,7 @@
       <workItem from="1702277661459" duration="675000" />
       <workItem from="1702318950924" duration="57000" />
       <workItem from="1702674414445" duration="49000" />
+      <workItem from="1702682789316" duration="2190000" />
     </task>
     <task id="LOCAL-00001" summary="Changes made in (body overflow and &lt;h2&gt; music text , colour correction of h2 tag in css) -mayank">
       <option name="closed" value="true" />

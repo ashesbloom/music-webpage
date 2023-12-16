@@ -1,9 +1,9 @@
-const music = new Audio("playback_tree/songs/joji/nector/5.mp3");
+const music = new Audio("../playback_tree/songs/joji/nector/5.mp3");
 // music.play();
 const songs = [
     {
         id: 1,
-        poster: "playback_tree/covers/joji/joji_nector.jpg",
+        poster: "../playback_tree/covers/joji/joji_nector.jpg",
         songName: `Ew`,
         artist: `Joji`,
         time: '03:27'
@@ -12,119 +12,119 @@ const songs = [
     {
         id:2,
         songName: `Modus`,
-        poster: "playback_tree/covers/joji/joji_nector.jpg",
+        poster: "../playback_tree/covers/joji/joji_nector.jpg",
         time:'03:27',
         artist: `Joji`,
     },
     {
         id:3,
         songName: `Tick Tock`,
-        poster: "playback_tree/covers/joji/joji_nector.jpg",
+        poster: "../playback_tree/covers/joji/joji_nector.jpg",
         time:'02:12',
         artist: `Joji`,
     },
     {
         id:4,
         songName: `Daylight`,
-        poster: "playback_tree/covers/joji/joji_daylight.jpg",
+        poster: "../playback_tree/covers/joji/joji_daylight.jpg",
         time:'02:43',
         artist: `Joji`,
     },
     {
         id:5,
         songName: `Gimme Love`,
-        poster: "playback_tree/covers/joji/joji_golden.jpg",
+        poster: "../playback_tree/covers/joji/joji_golden.jpg",
         time:'03:34',
         artist: `Joji`,
     },
     {
         id:6,
         songName: `Run`,
-        poster: `playback_tree/covers/joji/joji_run.jpg`,
+        poster: `../playback_tree/covers/joji/joji_run.jpg`,
         time:'03:15',
         artist: `Joji`,
     },
     {
         id:7,
         songName: `Santuary`,
-        poster: "playback_tree/covers/joji/joji santuary.jpg",
+        poster: "../playback_tree/covers/joji/joji santuary.jpg",
         time:'03:00',
         artist: `Joji`,
     },
     {
         id:8,
         songName: `High Hopes`,
-        poster: "playback_tree/covers/joji/joji_nector.jpg",
+        poster: "../playback_tree/covers/joji/joji_nector.jpg",
         time:'03:02',
         artist: `Joji`,
     },
     {
         id:9,
         songName: `Nitrous`,
-        poster: "playback_tree/covers/joji/joji_nector.jpg",
+        poster: "../playback_tree/covers/joji/joji_nector.jpg",
         time:'02:11',
         artist: `Joji`,
     },
     {
         id:10,
         songName: `Pretty Boy`,
-        poster: "playback_tree/covers/joji/joji_nector.jpg",
+        poster: "../playback_tree/covers/joji/joji_nector.jpg",
         time:'02:36',
         artist: `Joji`,
     },
     {
         id:11,
         songName: `Normal People`,
-        poster: "playback_tree/covers/joji/joji_nector.jpg",
+        poster: "../playback_tree/covers/joji/joji_nector.jpg",
         time:'02:46',
         artist: `Joji`,
     },
     {
         id:12,
         songName: `Afterthought`,
-        poster: "playback_tree/covers/joji/joji_nector.jpg",
+        poster: "../playback_tree/covers/joji/joji_nector.jpg",
         time:'03:14',
         artist: `Joji`,
     },
     {
         id:13,
         songName: `Mr.Hollywood`,
-        poster: "playback_tree/covers/joji/joji_nector.jpg",
+        poster: "../playback_tree/covers/joji/joji_nector.jpg",
         time:'03:22',
         artist: `Joji`,
     },
     {
         id:14,
         songName: `777`,
-        poster: "playback_tree/covers/joji/joji_nector.jpg",
+        poster: "../playback_tree/covers/joji/joji_nector.jpg",
         time:'03:01',
         artist: `Joji`,
     },
     {
         id:15,
         songName: `Reanimator`,
-        poster: "playback_tree/covers/joji/joji_nector.jpg",
+        poster: "../playback_tree/covers/joji/joji_nector.jpg",
         time:'03:03',
         artist: `Joji`,
     },
     {
         id:16,
         songName: `Like You Do`,
-        poster: "playback_tree/covers/joji/joji_nector.jpg",
+        poster: "../playback_tree/covers/joji/joji_nector.jpg",
         time:'04:00',
         artist: `Joji`,
     },
     {
         id:17,
         songName: `Your Man`,
-        poster: "playback_tree/covers/joji/joji_nector.jpg",
+        poster: "../playback_tree/covers/joji/joji_nector.jpg",
         time:'02:43',
         artist: `Joji`,
     },
     {
         id:18,
         songName: `Upgrade`,
-        poster: "playback_tree/covers/joji/joji_nector.jpg",
+        poster: "../playback_tree/covers/joji/joji_nector.jpg",
         time:'01:29',
         artist: `Joji`,
     },
@@ -177,7 +177,7 @@ document.addEventListener('DOMContentLoaded', function () {
         e.addEventListener('click', () => {
             index = e.id;
                 // console.log(index);
-            music.src = `playback_tree/songs/joji/nector/${index}.mp3`;
+            music.src = `../../playback_tree/songs/joji/nector/${index}.mp3`;
             music.play();
             record.style.animation = `rotatei1 3.7s linear infinite`;
             playicon.className='fa-solid fa-pause';
@@ -243,7 +243,7 @@ document.addEventListener('DOMContentLoaded', function () {
         if (index < 1){
             index=Array.from(document.querySelectorAll('.songs_list .song_items')).length;
         }
-        music.src = `playback_tree/songs/joji/nector/${index}.mp3`;
+        music.src = `../playback_tree/songs/joji/nector/${index}.mp3`;
         music.play();
         record.style.animation = `rotatei1 3.7s linear infinite`;
         playicon.className='fa-solid fa-pause';
@@ -259,7 +259,7 @@ document.addEventListener('DOMContentLoaded', function () {
         if (index > Array.from(document.querySelectorAll('.songs_list .song_items')).length){
             index = 1;
         }
-        music.src = `playback_tree/songs/joji/nector/${index}.mp3`;
+        music.src = `../playback_tree/songs/joji/nector/${index}.mp3`;
         music.play();
         record.style.animation = `rotatei1 3.7s linear infinite`;
         playicon.className='fa-solid fa-pause';
@@ -285,7 +285,7 @@ document.addEventListener('DOMContentLoaded', function () {
             setTimeout(function () {
                 index += 1;
                 index;
-                music.src = `playback_tree/songs/joji/nector/${index}.mp3`;
+                music.src = `../playback_tree/songs/joji/nector/${index}.mp3`;
                 music.play();
                 record.style.animation = `rotatei1 3.7s linear infinite`;
                 playicon.className = 'fa-solid fa-pause';
@@ -304,7 +304,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 } else {
                     index = Math.floor((Math.random() * songs.length) + 1);
                 }
-                music.src = `playback_tree/songs/joji/nector/${index}.mp3`;
+                music.src = `../playback_tree/songs/joji/nector/${index}.mp3`;
                 music.play();
                 record.style.animation = `rotatei1 3.7s linear infinite`;
                 playicon.className = 'fa-solid fa-pause';
@@ -323,7 +323,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 } else {
                     index = index + 1;
                 }
-                music.src = `playback_tree/songs/joji/nector/${index}.mp3`;
+                music.src = `../playback_tree/songs/joji/nector/${index}.mp3`;
                 music.play();
                 record.style.animation = `rotatei1 3.7s linear infinite`;
                 playicon.className = 'fa-solid fa-pause';
@@ -359,13 +359,13 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     const songImageMapping = {
-        'Smithereens':'playback_tree/covers/joji/joji_smithereens.jpg',
-        'Ew': 'playback_tree/covers/joji/joji_nector.jpg',
-        'Modus': 'playback_tree/covers/joji/joji_nector.jpg',
-        'Tick Tock': 'playback_tree/covers/joji/joji_nector.jpg',
-        'Daylight': 'playback_tree/covers/joji/joji_daylight.jpg',
-        'Gimme Love': 'playback_tree/covers/joji/joji_golden.jpg',
-        'Run': 'playback_tree/covers/joji/joji_run.jpg',
+        'Smithereens':'../playback_tree/covers/joji/joji_smithereens.jpg',
+        'Ew': '../playback_tree/covers/joji/joji_nector.jpg',
+        'Modus': '../playback_tree/covers/joji/joji_nector.jpg',
+        'Tick Tock': '../playback_tree/covers/joji/joji_nector.jpg',
+        'Daylight': '../playback_tree/covers/joji/joji_daylight.jpg',
+        'Gimme Love': '../playback_tree/covers/joji/joji_golden.jpg',
+        'Run': '../playback_tree/covers/joji/joji_run.jpg',
         // Add more entries as needed
     };
 
@@ -375,7 +375,7 @@ document.addEventListener('DOMContentLoaded', function () {
             // const imagePath = songImageMapping[imageName];
             // const fileName = list + '.html';
 
-            return `<li><img src="playback_tree/covers/joji/joji_smithereens.jpg" style="width: 30px; height:30px; margin-right:10px;"> <a href="Ew.html">${list}</a> </li>`;
+            return `<li><img src="../playback_tree/covers/joji/joji_smithereens.jpg" style="width: 30px; height:30px; margin-right:10px;" alt="notfound"> <a href="../search_pages/smithereens.html">${list}</a> </li>`;
         });
 
         // Assuming resultbox is a ul or ol element
@@ -398,7 +398,6 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 function selectInput(element) {
     const imageName = element.id;
-    console.log("selectInput function called");
 
     const pagePath = `${imageName}.html`;
 
