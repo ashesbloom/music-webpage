@@ -9,28 +9,7 @@
     </configurations>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ebebbdde-3997-422c-8189-3e6c3b1f4c13" name="Changes" comment="fixed volume update problem &#10;added search functionality to all pages&#10;added home link to website name &#10;added to image to tittle &#10;fixed miner bugs">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Ew.html" beforeDir="false" afterPath="$PROJECT_DIR$/search_pages/smithereens.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/feelingliketheend.css" beforeDir="false" afterPath="$PROJECT_DIR$/style/smithereens.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/insert.css" beforeDir="false" afterPath="$PROJECT_DIR$/style/insert.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/music.html" beforeDir="false" afterPath="$PROJECT_DIR$/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/playlist.css" beforeDir="false" afterPath="$PROJECT_DIR$/style/playlist.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/playlist.html" beforeDir="false" afterPath="$PROJECT_DIR$/playlist/playlist.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/playlist2.html" beforeDir="false" afterPath="$PROJECT_DIR$/playlist/playlist2.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/playlist2.js" beforeDir="false" afterPath="$PROJECT_DIR$/javascript/playlist2.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/search_pages/1am.html" beforeDir="false" afterPath="$PROJECT_DIR$/search_pages/1am.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/search_pages/beforethedayisover.html" beforeDir="false" afterPath="$PROJECT_DIR$/search_pages/beforethedayisover.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/search_pages/blah.html" beforeDir="false" afterPath="$PROJECT_DIR$/search_pages/blah.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/search_pages/dieforyou.html" beforeDir="false" afterPath="$PROJECT_DIR$/search_pages/dieforyou.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/search_pages/dissolve.html" beforeDir="false" afterPath="$PROJECT_DIR$/search_pages/dissolve.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/search_pages/glimpseofus.html" beforeDir="false" afterPath="$PROJECT_DIR$/search_pages/glimpseofus.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/search_pages/nightrider.html" beforeDir="false" afterPath="$PROJECT_DIR$/search_pages/nightrider.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/search_pages/searchbar.js" beforeDir="false" afterPath="$PROJECT_DIR$/search_pages/searchbar.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/search_pages/yukon.html" beforeDir="false" afterPath="$PROJECT_DIR$/search_pages/yukon.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/support.js" beforeDir="false" afterPath="$PROJECT_DIR$/javascript/support.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/volume.js" beforeDir="false" afterPath="$PROJECT_DIR$/javascript/volume.js" afterDir="false" />
-    </list>
+    <list default="true" id="ebebbdde-3997-422c-8189-3e6c3b1f4c13" name="Changes" comment="sort the items out&#10;fixed miner bugs" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -148,7 +127,7 @@
       <workItem from="1702277661459" duration="675000" />
       <workItem from="1702318950924" duration="57000" />
       <workItem from="1702674414445" duration="49000" />
-      <workItem from="1702682789316" duration="2190000" />
+      <workItem from="1702682789316" duration="2559000" />
     </task>
     <task id="LOCAL-00001" summary="Changes made in (body overflow and &lt;h2&gt; music text , colour correction of h2 tag in css) -mayank">
       <option name="closed" value="true" />
@@ -430,7 +409,15 @@
       <option name="project" value="LOCAL" />
       <updated>1702240542555</updated>
     </task>
-    <option name="localTasksCounter" value="36" />
+    <task id="LOCAL-00036" summary="sort the items out&#10;fixed miner bugs">
+      <option name="closed" value="true" />
+      <created>1702685194587</created>
+      <option name="number" value="00036" />
+      <option name="presentableId" value="LOCAL-00036" />
+      <option name="project" value="LOCAL" />
+      <updated>1702685194587</updated>
+    </task>
+    <option name="localTasksCounter" value="37" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -460,6 +447,7 @@
     <MESSAGE value="-merged main branch to menu&#10;-fixed all margins&#10;-changes in layout" />
     <MESSAGE value="-backend" />
     <MESSAGE value="fixed volume update problem &#10;added search functionality to all pages&#10;added home link to website name &#10;added to image to tittle &#10;fixed miner bugs" />
-    <option name="LAST_COMMIT_MESSAGE" value="fixed volume update problem &#10;added search functionality to all pages&#10;added home link to website name &#10;added to image to tittle &#10;fixed miner bugs" />
+    <MESSAGE value="sort the items out&#10;fixed miner bugs" />
+    <option name="LAST_COMMIT_MESSAGE" value="sort the items out&#10;fixed miner bugs" />
   </component>
 </project>
