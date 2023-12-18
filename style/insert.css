@@ -89,18 +89,18 @@ body::-webkit-scrollbar-thumb {
   border: 3px solid rgb(15, 15, 15);
   border-radius: 50%;
 }
-.inner{ /*album cover goes here*/
+.inner { /*album cover goes here*/
   justify-content: center;
   margin-top: 7%;
-  margin-left:7%;
+  margin-left: 7%;
   height: 33vh;
   width: 33vh;
-  border: 3px  #a21e1e solid;
+  border: 3px #a21e1e solid;
   border-radius: 50%;
-  box-shadow:  -3px 5px 20px #0c0c0c,
+  box-shadow: -3px 5px 20px #0c0c0c,
   1px -2px 20px #0c0c0c;
 
-  .album{
+  .album {
     justify-content: center;
     border-radius: 50%;
     width: 33vh;
