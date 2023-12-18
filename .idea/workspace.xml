@@ -9,7 +9,14 @@
     </configurations>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ebebbdde-3997-422c-8189-3e6c3b1f4c13" name="Changes" comment="sort the items out&#10;fixed miner bugs" />
+    <list default="true" id="ebebbdde-3997-422c-8189-3e6c3b1f4c13" name="Changes" comment="sort the items out&#10;fixed miner bugs">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/javascript/support.js" beforeDir="false" afterPath="$PROJECT_DIR$/javascript/support.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/playlist/playlist.html" beforeDir="false" afterPath="$PROJECT_DIR$/playlist/playlist.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/style/insert.css" beforeDir="false" afterPath="$PROJECT_DIR$/style/insert.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/style/playlist.css" beforeDir="false" afterPath="$PROJECT_DIR$/style/playlist.css" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -30,7 +37,7 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="kashish" />
+        <entry key="$PROJECT_DIR$" value="main" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -127,7 +134,8 @@
       <workItem from="1702277661459" duration="675000" />
       <workItem from="1702318950924" duration="57000" />
       <workItem from="1702674414445" duration="49000" />
-      <workItem from="1702682789316" duration="2559000" />
+      <workItem from="1702682789316" duration="2681000" />
+      <workItem from="1702902990374" duration="1501000" />
     </task>
     <task id="LOCAL-00001" summary="Changes made in (body overflow and &lt;h2&gt; music text , colour correction of h2 tag in css) -mayank">
       <option name="closed" value="true" />
@@ -417,7 +425,15 @@
       <option name="project" value="LOCAL" />
       <updated>1702685194587</updated>
     </task>
-    <option name="localTasksCounter" value="37" />
+    <task id="LOCAL-00037" summary="sort the items out&#10;fixed miner bugs">
+      <option name="closed" value="true" />
+      <created>1702685373840</created>
+      <option name="number" value="00037" />
+      <option name="presentableId" value="LOCAL-00037" />
+      <option name="project" value="LOCAL" />
+      <updated>1702685373840</updated>
+    </task>
+    <option name="localTasksCounter" value="38" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

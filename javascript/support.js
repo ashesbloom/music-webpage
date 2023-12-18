@@ -149,11 +149,14 @@ document.addEventListener('DOMContentLoaded', function () {
     let masterplay = document.getElementById('master_play');
     let playicon = document.getElementById('play');
     let record = document.getElementById('record');
+    var inner = document.getElementById('inner_s')
     masterplay.addEventListener('click', () => {
         if (music.paused || music.currentTime <= 0) {
             music.play();
             record.style.animation = `rotatei1 3.7s linear infinite`;
             playicon.className='fa-solid fa-pause';
+            inner.style.boxShadow = "0 0 100px #f13c3c";
+
         } else {
             music.pause();
             record.style.animation = `rotatei1 12s linear infinite`;
@@ -173,6 +176,7 @@ document.addEventListener('DOMContentLoaded', function () {
     let title = document.getElementById('albumtext');
     let description = document.getElementById('albumdescription')
     let record = document.getElementById('record');
+    var inner = document.getElementById('inner_s')
     idcollector.forEach((e) => {
         e.addEventListener('click', () => {
             index = e.id;
@@ -180,6 +184,7 @@ document.addEventListener('DOMContentLoaded', function () {
             music.src = `../../playback_tree/songs/joji/nector/${index}.mp3`;
             music.play();
             record.style.animation = `rotatei1 3.7s linear infinite`;
+            // inner.style.boxShadow = "0 0 100px #f13c3c";
             playicon.className='fa-solid fa-pause';
             index = parseInt(index) - 1;
             covericon.src= songs[index].poster;
