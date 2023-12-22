@@ -107,7 +107,7 @@ body {
         border-radius: 50%;
         width: 33vh;
         height: 33vh;
-        box-shadow: 0 0 100px #f13c3c;
+        /*box-shadow: 0 0 100px #f13c3c;*/
     }
 }
 .inner_s{ /*album cover goes here*/
