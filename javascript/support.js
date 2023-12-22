@@ -155,7 +155,7 @@ document.addEventListener('DOMContentLoaded', function () {
             music.play();
             record.style.animation = `rotatei1 3.7s linear infinite`;
             playicon.className='fa-solid fa-pause';
-            inner.style.boxShadow = "0 0 100px #f13c3c";
+            // inner.style.boxShadow = "0 0 100px #f13c3c";
 
         } else {
             music.pause();
