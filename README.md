@@ -9,7 +9,7 @@ Currently site offers two albums [Smithereens and Nector] created by Japanese ar
 
 <h4>🔜/ Later users can add their playlist and stream their songs without any hustle in both MP3 and FLAC format</h4>
 <h4>
-🔺<i>Future Improvment</i>
+🔺<i>Future Improvement</i>
 <ul>
   <li>Upload song from local machine</li>
   <li>Dynamic home webpage</li>
