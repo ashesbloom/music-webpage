@@ -17,7 +17,6 @@ Currently site offers two albums [Smithereens and Nector] created by Japanese ar
 </ul>
 </h4>
 <hr>
-<h6>⊖ site under construction ⊖</h6>
 <span><h6>ACRUX™️</h6></span>
 
 
