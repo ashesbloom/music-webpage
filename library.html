@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Library – ACRUX</title>
+  <link rel="icon" href="playback_tree/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="style/insert.css" type="text/css">
+  <!-- ponytail: phone deck trial switch (?deck=scroll|shrink); delete once a mode is chosen -->
+  <script>try{let m=new URLSearchParams(location.search).get('deck');if(m)localStorage.deck=m;document.documentElement.dataset.deck=localStorage.deck||'scroll'}catch(e){}</script>
+  <script>try{let w=+localStorage.panelWidth;if(w>0)document.documentElement.style.setProperty('--menu-pref',w+'px')}catch(e){}</script>
+</head>
+<body>
+<header class="header">
+  <div class="logo"><a href="index.html" class="text-focus-in">ACRUX</a></div>
+  <div class="playbackarea">
+    <div class="albumname">
+      <div class="cover"><img id="main_cover" src="playback_tree/placeholder.svg" alt=""></div>
+      <div class="albumtext">
+        <p id="albumtext">Nothing playing</p>
+        <p id="albumdescription"></p>
+        <div id="song_time"><span id="current_time" class="currentTime"></span><span id="end_time"></span></div>
+      </div>
+      <div class="playbutton">
+        <button class="shuffle" id="shuffle" aria-label="Shuffle" aria-pressed="false" onclick="this.setAttribute('aria-pressed', this.classList.toggle('clicked'))"><i class="icon icon-shuffle" aria-hidden="true"></i></button>
+        <button class="prev" id="prev" aria-label="Previous"><i class="icon icon-backward-step" aria-hidden="true"></i></button>
+        <button class="play" id="master_play" aria-label="Play or pause"><i class="icon icon-play" id="play" aria-hidden="true"></i></button>
+        <button class="next" id="next" aria-label="Next"><i class="icon icon-forward-step" aria-hidden="true"></i></button>
+        <button class="repeat" id="repeat" aria-label="Repeat" aria-pressed="false" onclick="this.setAttribute('aria-pressed', this.classList.toggle('clicked'))"><i class="icon icon-repeat" aria-hidden="true"></i></button>
+        <button class="more" id="more" aria-label="More" popovertarget="more_tray"><i class="icon icon-ellipsis" aria-hidden="true"></i></button>
+      </div>
+    </div>
+    <div class="play_bar">
+      <input type="range" id="seek" min="0" max="100" value="0" aria-label="Seek">
+      <div class="slider" id="slider"></div>
+      <div class="dot"></div>
+    </div>
+  </div>
+  <div class="volumecontrol">
+    <button class="queue_btn" id="queue_btn" aria-label="Queue" aria-pressed="false" aria-controls="queue"><i class="icon icon-list" aria-hidden="true"></i></button>
+    <button id="mute_button" class="mute_button" aria-label="Mute" aria-pressed="false"><i id="volume_icon" class="icon icon-volume-low" aria-hidden="true"></i></button>
+    <input id="v_bar" class="v_bar" type="range" min="0" max="100" value="20" aria-label="Volume">
+    <div id="v_num" class="v_num"></div>
+  </div>
+  <div class="sidecontrols">
+    <button class="menu_toggle" popovertarget="sidebar" aria-label="Open menu"><i class="icon icon-bars" aria-hidden="true"></i></button>
+  </div>
+</header>
+<main class="container">
+  <div class="playback">
+    <div class="record">
+      <div class="i1" id="record">
+        <div class="i2">
+          <div class="i3">
+            <div class="inner" id="inner">
+              <img alt="" class="album" id="playback_cover" src="playback_tree/placeholder.svg">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="label_ctrl"><button class="label_btn" aria-label="Play or pause" onclick="document.getElementById('master_play').click()"><i class="icon icon-play" aria-hidden="true"></i><i class="icon icon-pause" aria-hidden="true"></i></button></div>
+    <img class="tonearm" src="playback_tree/tonearm.svg" alt="">
+    <span class="deck_knob" aria-hidden="true"></span>
+    <span class="deck_pitch" aria-hidden="true"></span>
+    <button class="deck_start" aria-label="Play or pause" onclick="document.getElementById('master_play').click()"></button>
+  </div>
+  <div class="explore library" id="library"></div>
+  <div class="divider" role="separator" aria-orientation="vertical" aria-label="Resize the side panel" aria-controls="sidebar" tabindex="0"></div>
+  <div class="menu" id="sidebar" popover>
+    <button class="menu_close" popovertarget="sidebar" popovertargetaction="hide" aria-label="Close menu"><i class="icon icon-xmark" aria-hidden="true"></i></button>
+    <form class="search" role="search">
+      <input type="text" id="inputbox" placeholder="What do you want to listen to?" name="search" autocomplete="off" aria-label="Search">
+      <button type="submit" aria-label="Search"><i class="icon icon-magnifying-glass" aria-hidden="true"></i></button>
+    </form>
+    <section class="history" aria-labelledby="history_h">
+      <h5 id="history_h">Recent searches</h5>
+      <ol class="history_list"></ol>
+      <p class="h_empty">No results</p>
+    </section>
+    <nav class="playlists" aria-labelledby="playlists_h">
+      <h5 id="playlists_h">Playlists</h5>
+      <ul class="nav">
+        <li><a href="library.html?view=playlist"><i class="icon icon-folder-closed" aria-hidden="true"></i>Playlists</a></li>
+        <li class="sub"><a href="library.html?view=playlist&amp;id=favorites"><i class="icon icon-folder-open" aria-hidden="true"></i>Favorites</a></li>
+        <li class="sub"><a href="library.html?view=playlist&amp;id=party"><i class="icon icon-folder-open" aria-hidden="true"></i>Party Playlists</a></li>
+        <li class="sub"><a href="library.html?view=playlist&amp;id=lo-fi"><i class="icon icon-folder-open" aria-hidden="true"></i>Lo-Fi</a></li>
+      </ul>
+      <p class="empty">No playlists</p>
+    </nav>
+  </div>
+</main>
+<script src="javascript/catalog.js"></script>
+<script src="javascript/deck-audio.js"></script>
+<script src="javascript/library.js"></script>
+<script src="javascript/player.js"></script>
+<script src="javascript/more.js"></script>
+<script src="javascript/queue.js"></script>
+<script src="javascript/seekbar.js"></script>
+<script src="javascript/search.js"></script>
+<script src="javascript/volume.js"></script>
+<script src="javascript/divider.js"></script>
+<script src="javascript/turntable.js"></script>
+<script src="javascript/nav.js"></script>
+</body>
+</html>
