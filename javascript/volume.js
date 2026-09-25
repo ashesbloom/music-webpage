@@ -1,12 +1,15 @@
+const volumeBar = document.getElementById("v_bar");
+const muteButton = document.getElementById("mute_button");
+
 function rangeSlider(value) {
-    document.getElementById("v_num").innerHTML = value;
+    document.getElementById("v_num").textContent = value;
     let volumeIcon = document.getElementById('volume_icon');
-    if (value === '0') {
-        volumeIcon.className = 'fa-solid fa-volume-mute';
-    } else if (value < '50') {
-        volumeIcon.className = 'fa-solid fa-volume-low';
+    if (music.muted || Number(value) === 0) {
+        volumeIcon.className = 'icon icon-volume-mute';
+    } else if (Number(value) < 50) {
+        volumeIcon.className = 'icon icon-volume-low';
     } else {
-        volumeIcon.className = 'fa-solid fa-volume-high';
+        volumeIcon.className = 'icon icon-volume-high';
     }
     music.volume = value / 100;
 
@@ -14,28 +17,19 @@ function rangeSlider(value) {
     localStorage.setItem('savedVolume', value);
 }
 
-// Set interval to update volume slider
-setInterval(function () {
-    let currentValue = document.getElementById("v_bar").value;
-    rangeSlider(currentValue);
-}, 100);
+// Restore the saved volume (or apply the slider's default) on load
+let savedVolume = localStorage.getItem('savedVolume');
+if (savedVolume !== null) {
+    volumeBar.value = savedVolume;
+}
+rangeSlider(volumeBar.value);
 
-// Check if there's a saved volume in localStorage and set it
-document.addEventListener("DOMContentLoaded", function() {
-    let savedVolume = localStorage.getItem('savedVolume');
-    if (savedVolume !== null) {
-        document.getElementById("v_bar").value = savedVolume;
-        rangeSlider(savedVolume);
-    }
+volumeBar.addEventListener("input", function () {
+    rangeSlider(this.value);
 });
 
-// Event listener to save volume when it changes
-document.getElementById("v_bar").addEventListener("input", function() {
-    let currentValue = this.value;
-    rangeSlider(currentValue);
-    // Store the updated volume value in localStorage
-    localStorage.setItem('savedVolume', currentValue);
+muteButton.addEventListener("click", function () {
+    music.muted = !music.muted;
+    this.setAttribute('aria-pressed', music.muted);
+    rangeSlider(volumeBar.value);
 });
-
-
-

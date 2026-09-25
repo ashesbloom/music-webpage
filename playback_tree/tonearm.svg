@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 300">
+  <!-- Pivot sits at (60, 50) = 60% / 16.667% of the box; CSS rotates around that point. -->
+  <defs>
+    <linearGradient id="metal" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#4d4d4d"/>
+      <stop offset=".5" stop-color="#d8e2e3"/>
+      <stop offset="1" stop-color="#6b6b6b"/>
+    </linearGradient>
+    <radialGradient id="cap" cx=".35" cy=".3" r=".75">
+      <stop offset="0" stop-color="#d8e2e3"/>
+      <stop offset="1" stop-color="#4d4d4d"/>
+    </radialGradient>
+  </defs>
+  <circle cx="60" cy="50" r="38" fill="#1d1d1d" stroke="#3f3f3f" stroke-width="2"/>
+  <circle cx="60" cy="50" r="27" fill="none" stroke="#2b2b2b" stroke-width="3"/>
+  <rect x="50" y="4" width="20" height="30" rx="4" fill="url(#metal)" stroke="#2b2b2b"/>
+  <path d="M60 50 L57 222 L36 262" fill="none" stroke="#2b2b2b" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M60 50 L57 222 L36 262" fill="none" stroke="#9f9f9f" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M59 50 L56 222 L35.2 261" fill="none" stroke="#d8e2e3" stroke-width="1.2" stroke-linecap="round" opacity=".7"/>
+  <g transform="translate(31 272) rotate(28)">
+    <rect x="-8" y="-14" width="16" height="28" rx="3" fill="url(#metal)" stroke="#2b2b2b"/>
+    <rect x="-5" y="-4" width="10" height="14" rx="1.5" fill="#a21e1e"/>
+    <path d="M8 -10 l9 -3" stroke="#9f9f9f" stroke-width="2.5" stroke-linecap="round"/>
+  </g>
+  <circle cx="60" cy="50" r="12" fill="url(#cap)" stroke="#2b2b2b" stroke-width="1.5"/>
+  <circle cx="60" cy="50" r="3" fill="#2b2b2b"/>
+</svg>
