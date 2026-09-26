@@ -68,9 +68,17 @@ function placeTray(tray, anchor) {
       return;
     }
     placeTray(tray, anchor);
-    const album = CATALOG.album(song().album);
-    tray.querySelector('[data-act=album]').href = CATALOG.page(`view=album&id=${album.id}`);
-    tray.querySelector('[data-act=artist]').href = CATALOG.page(`view=artist&id=${album.artist}`);
+    const s = song();
+    const album = CATALOG.album(s.album); // a Discover song has none: its own album and artist pages (discover.js)
+    const toAlbum = tray.querySelector('[data-act=album]');
+    const toArtist = tray.querySelector('[data-act=artist]');
+    const albumHref = album ? CATALOG.page(`view=album&id=${album.id}`) : s.albumHref;
+    const artistHref = album ? CATALOG.page(`view=artist&id=${album.artist}`) : s.artistHref;
+    toAlbum.hidden = !albumHref;
+    toArtist.hidden = !artistHref;
+    toAlbum.previousElementSibling.hidden = !albumHref && !artistHref;
+    if (albumHref) toAlbum.href = albumHref;
+    if (artistHref) toArtist.href = artistHref;
   });
 
   tray.addEventListener('click', async (e) => {
@@ -80,11 +88,11 @@ function placeTray(tray, anchor) {
     if (act === 'info') {
       info.querySelector('img').src = s.cover;
       info.querySelector('h3').textContent = s.title;
-      info.querySelector('p').textContent = `${s.artist} — ${album.title} · ${s.time}`;
+      info.querySelector('p').textContent = `${s.artist} — ${album ? album.title : s.albumTitle} · ${s.time}`;
       tray.togglePopover(false);
       info.showModal();
     } else if (act === 'share') {
-      await shareLink({ title: `${s.title} — ${s.artist}`, url: CATALOG.page(`view=album&id=${album.id}`) }, tray.querySelector('[data-act=share] span'));
+      await shareLink({ title: `${s.title} — ${s.artist}`, url: album ? CATALOG.page(`view=album&id=${album.id}`) : s.sourceUrl }, tray.querySelector('[data-act=share] span'));
       tray.togglePopover(false);
     }
   });

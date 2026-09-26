@@ -26,7 +26,7 @@
         <button class="prev" id="prev" aria-label="Previous"><i class="icon icon-backward-step" aria-hidden="true"></i></button>
         <button class="play" id="master_play" aria-label="Play or pause"><i class="icon icon-play" id="play" aria-hidden="true"></i></button>
         <button class="next" id="next" aria-label="Next"><i class="icon icon-forward-step" aria-hidden="true"></i></button>
-        <button class="repeat" id="repeat" aria-label="Repeat" aria-pressed="false" onclick="this.setAttribute('aria-pressed', this.classList.toggle('clicked'))"><i class="icon icon-repeat" aria-hidden="true"></i></button>
+        <button class="repeat" id="repeat" aria-label="Repeat" aria-pressed="false" data-mode="off"><i class="icon icon-repeat" aria-hidden="true"></i></button>
         <button class="more" id="more" aria-label="More" popovertarget="more_tray"><i class="icon icon-ellipsis" aria-hidden="true"></i></button>
       </div>
     </div>
@@ -75,7 +75,7 @@
       <div class="tile-2">
         <div class="sleeve_disc" aria-hidden="true"><img alt="" src="playback_tree/covers/joji/joji_smithereens.jpg"></div>
         <img class="sleeve" alt="" src="playback_tree/covers/joji/joji_smithereens.jpg">
-        <div class="text_title2"><span class="kicker">New for you</span><h2><a href="library.html?view=album&amp;id=smithereens">Discover</a></h2><p>Fresh picks to explore</p><span class="open" aria-hidden="true">Open <i class="icon icon-chevron-right"></i></span></div>
+        <div class="text_title2"><span class="kicker">New for you</span><h2><a href="library.html?view=discover">Discover</a></h2><p>Fresh picks to explore</p><span class="open" aria-hidden="true">Open <i class="icon icon-chevron-right"></i></span></div>
       </div>
     </div>
     <h3 class="songname">Recently Played</h3>
@@ -141,6 +141,7 @@
         <li><a href="library.html"><i class="icon icon-disc" aria-hidden="true"></i>My Music</a></li>
         <li><a href="library.html?view=albums"><i class="icon icon-grid" aria-hidden="true"></i>Albums</a></li>
         <li><a href="library.html?view=artist"><i class="icon icon-mic" aria-hidden="true"></i>Artists</a></li>
+        <li><a href="library.html?view=discover"><i class="icon icon-magnifying-glass" aria-hidden="true"></i>Discover</a></li>
       </ul>
     </nav>
     <nav class="playlists" aria-labelledby="playlists_h">
@@ -168,5 +169,6 @@
 <script src="javascript/turntable.js"></script>
 <script src="javascript/nav.js"></script>
 <script src="javascript/rows.js"></script>
+<script src="javascript/home.js"></script>
 </body>
 </html>

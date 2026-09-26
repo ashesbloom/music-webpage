@@ -1,7 +1,11 @@
-// Minimal static file server for local UI testing. Run: node server.js (PORT env var overrides 3000; HOST=0.0.0.0 for the LAN).
+// ACRUX server: the site's files plus the Discover and taste API (api/). Run: node server.js (PORT env var overrides 3000;
+// HOST=0.0.0.0 for the LAN). API keys come from .env (gitignored): JAMENDO_CLIENT_ID, YOUTUBE_API_KEY.
 const http = require('http');
 const fs = require('fs');
 const path = require('path');
+
+try { process.loadEnvFile(); } catch {} // no .env: Discover's sections say which key is missing
+const discover = require('./api/discover');
 
 const ROOT = __dirname;
 const PORT = Number(process.env.PORT) || 3000;
@@ -28,17 +32,22 @@ function send(res, status, message) {
 }
 
 http.createServer(async (req, res) => {
-  res.on('close', () => console.log(req.method, req.url, res.statusCode));
-  if (req.method !== 'GET' && req.method !== 'HEAD') return send(res, 405, 'Method Not Allowed');
-
+  res.on('close', () => console.log(req.method, req.url.replace(/([?&]u=)[^&]*/, '$1…'), res.statusCode));
+  let url;
   let file;
   try {
-    file = path.join(ROOT, decodeURIComponent(new URL(req.url, 'http://localhost').pathname));
+    url = new URL(req.url, 'http://localhost');
+    file = path.join(ROOT, decodeURIComponent(url.pathname));
   } catch {
     return send(res, 400, 'Bad Request');
   }
+  if (url.pathname.startsWith('/discover/') || url.pathname.startsWith('/api/')) return discover(req, res, url); // it checks its own methods
+  if (req.method !== 'GET' && req.method !== 'HEAD') return send(res, 405, 'Method Not Allowed');
   if (file.includes('\0')) return send(res, 400, 'Bad Request');
   if (file !== ROOT && !file.startsWith(ROOT + path.sep)) return send(res, 403, 'Forbidden');
+  // Never serve dotfiles (.env holds the API keys, .git) or the database.
+  const parts = path.relative(ROOT, file).split(path.sep);
+  if (parts.some((part) => part.startsWith('.')) || parts[0] === 'data') return send(res, 404, 'Not Found');
 
   let stat;
   try {

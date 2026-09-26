@@ -65,9 +65,36 @@ cd music-webpage
 node server.js          # http://localhost:3000  (PORT=8080 node server.js to change it)
 ```
 
-There's nothing to install and nothing to build. `server.js` is a tiny static server with byte ranges and no
-dependencies. The site needs **http**, because the audio engine loads an AudioWorklet and fetches the songs, and a
-browser won't allow either from `file://`. Any static host works, GitHub Pages included.
+There's nothing to install and nothing to build. `server.js` serves the site (with byte ranges) and the Discover API,
+with no dependencies (Node 22.13+ for its built-in SQLite). The site needs **http**, because the audio engine loads an
+AudioWorklet and fetches the songs, and a browser won't allow either from `file://`. The library works on any static
+host, GitHub Pages included. **Discover** needs `node server.js`.
+
+### Discover: free music online
+
+Discover (the home banner, or *Discover “…” online* at the end of any search) finds songs, albums and artists in
+[Jamendo](https://www.jamendo.com), [Audius](https://audius.co) and the [Internet Archive](https://archive.org) (the
+Live Music Archive and community uploads, marked as such), with 30-second iTunes previews only for songs none of them
+has in full. Its tabs are *All · Songs · Albums · Artists · YouTube*; lists keep loading as you scroll, and albums and
+artists open pages laid out like the library's. Songs play on the record at the quality you pick, starting within a
+couple of seconds while the rest downloads. On YouTube, an artist's whole catalogue comes from their "Topic" channel
+(found through [MusicBrainz](https://musicbrainz.org)) for a few quota units; other searches cost one of about 99 a day.
+
+With no search, Discover opens on **For you**: *Your taste* (your top genres, kinds of song, artists and albums, lately
+and all-time) and rows built from it: On repeat, Your recent mix, Because you like…, More from…, Artists like…. The
+server learns from how long you actually listen to each song, including YouTube videos (a skip counts against). The home
+page's Recently Played, Recently Added, By Artist and By Albums rows follow your listening too. Pictures a source lacks
+(artist photos, covers) are found by name on Deezer, iTunes, the Cover Art Archive and Wikimedia Commons. The Archive needs no key. For the other two, create a `.env` file next to
+`server.js` (it's gitignored) and restart the server:
+
+```sh
+JAMENDO_CLIENT_ID=…   # free, from https://devportal.jamendo.com
+YOUTUBE_API_KEY=…     # Google Cloud console, with YouTube Data API v3 enabled
+```
+
+A YouTube search costs 101 of the 10,000 daily quota units, about 99 searches a day; an artist's catalogue about 20.
+The page shows how many searches are left. Answers are cached in `data/acrux.db` (a day for most sources, a week for
+YouTube), so a repeat is instant and free. Your listening history lives there too, and never leaves your machine.
 
 ## Under the hood
 
@@ -80,20 +107,26 @@ Plain HTML, CSS and JavaScript. There's no framework, no bundler and no packages
   and `popstate`. The player is never unloaded.
 - **Data:** [catalog.js](javascript/catalog.js) is the single source for songs, albums, artists and playlists. The
   library pages ([library.js](javascript/library.js)) are drawn from it.
+- **Discover:** [api/](api) maps Jamendo, Audius, Internet Archive, iTunes and YouTube results to one shape and caches
+  them in SQLite (`node:sqlite`); [taste.js](api/taste.js) turns your plays into the For-you rows. The browser streams
+  the audio straight from each source, decoding the first part while the rest downloads.
 - **Modern CSS in place of JS:** native `popover` menus, `<dialog closedby="any">`, `:has()`, container queries (the
   folding lists), CSS nesting, and `cos()`/`sin()` to place the dial items. The icons are CSS masks.
 
 ```
-index.html · library.html        pages (the library views are ?view=playlist|album|albums|artist)
+server.js                        the site and the Discover API
+api/                             Discover: jamendo · audius · archive · itunes · youtube · musicbrainz, taste, SQLite (db.js)
+index.html · library.html        pages (the library views are ?view=playlist|album|albums|artist|discover)
 javascript/
   catalog.js                     every song, album, artist, playlist
   deck-audio.js (+ worklet)      the audio engine
   player.js · queue.js · more.js playback, queue, ⋯ tray
   turntable.js · seekbar.js      the record and the progress bar
   library.js · search.js · nav.js  library views, search, in-page navigation
+  discover.js                    the Discover page and its YouTube card
 style/insert.css                 all of the styling
 playback_tree/                   covers, songs, video tiles
-tests/                           paste-into-console checks (queue, library, navigation)
+tests/                           node --test (audio DSP, Discover mapping) and paste-into-console checks
 ```
 
 ## Roadmap
@@ -102,7 +135,10 @@ tests/                           paste-into-console checks (queue, library, navi
 - [x] Queue with Infinite and Shuffle, History, and the ⋯ tray
 - [x] Library: My Music, playlists, albums, artists
 - [x] Playback that carries on across pages
-- [ ] Accounts and storage: saving playlists and favorites, and uploads through *Add More Songs*
+- [x] Discover: Jamendo, Audius, the Internet Archive and YouTube, with quality tiers
+- [x] For you: recommendations from what you listen to
+- [ ] *Add More Songs*, then the local edition (your own music library)
+- [ ] Accounts and storage: saving playlists and favorites
 - [ ] Auto Mix crossfades
 - [ ] FLAC streaming
 

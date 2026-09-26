@@ -3,7 +3,7 @@
 // (pushState/popstate). A back button marked [data-back] steps back through that history when there is some,
 // otherwise it follows its link. Anything that fails falls back to a normal page load.
 (() => {
-  const PAGE_SCRIPTS = ['library.js', 'rows.js', 'search.js']; // they build the swapped-in part, so they run again
+  const PAGE_SCRIPTS = ['library.js', 'discover.js', 'home.js', 'rows.js', 'search.js']; // they build the swapped-in part, so they run again
   // The header logo reads "Home" everywhere but the home page, where it's the ACRUX name.
   const logo = document.querySelector('.logo a');
   const label = () => { if (logo) logo.textContent = /\/(index\.html)?$/.test(location.pathname) ? 'ACRUX' : 'HOME'; };

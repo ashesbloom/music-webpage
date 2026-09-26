@@ -18,6 +18,7 @@
         <h5>Continue Playing</h5>
         <p class="q_note q_shuffle">Shuffle is on: songs play in random order</p>
         <p class="q_note q_repeat">Repeating this song</p>
+        <p class="q_note q_loop">Repeating the queue: it starts over when it ends</p>
         <ol class="q_list q_next"></ol>
         <p class="q_note q_empty">End of queue</p>
       </div>
@@ -55,7 +56,10 @@
     } catch { return []; }
   }
   const sameSite = (href) => { try { return new URL(href).origin === location.origin; } catch { return false; } };
-  const entry = (s) => ({ id: s.id, name: s.title, artist: s.artist, cover: s.cover, album: CATALOG.album(s.album).title, href: CATALOG.page(`view=album&id=${s.album}`) });
+  const entry = (s) => {
+    const album = CATALOG.album(s.album); // a Discover song has none: it links back to its search instead
+    return { id: s.id, name: s.title, artist: s.artist, cover: s.cover, album: album ? album.title : s.albumTitle, href: album ? CATALOG.page(`view=album&id=${s.album}`) : s.href };
+  };
 
   // Infinite (on by default: the album loops, as it always has) and Auto Mix remember their state.
   for (const [b, fallback] of [[infinite, 'true'], [document.getElementById('automix'), 'false']]) {

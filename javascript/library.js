@@ -4,18 +4,20 @@
 // buttons use player.js (playAt, setList), queue.js (upNext) and more.js (showTray, shareLink) once clicked.
 // ponytail: actions that need saving (pin, favorite, edit, duplicate, delete, reorder, download) say "Coming soon"
 // until the phase 3 backend; the Edit dialog opens but can't save yet.
-(() => {
+// It waits for your saved playlists (catalog.js: CATALOG.ready), which come from the server.
+CATALOG.ready.then(() => {
   const root = document.getElementById('library');
   if (!root) return;
   const q = new URLSearchParams(location.search);
   const view = q.get('view') || 'mymusic';
+  if (view === 'discover') return; // discover.js renders that one
   const id = q.get('id');
   const esc = (t) => String(t ?? '').replace(/[&<>"']/g, (c) => `&#${c.charCodeAt(0)};`);
   const ic = (name) => `<i class="icon icon-${name}" aria-hidden="true"></i>`;
   const soon = (label, icon = '') => `<button aria-disabled="true">${icon}${label}<small>Coming soon</small></button>`;
   const secs = (t) => t.split(':').reduce((m, s) => m * 60 + Number(s), 0);
   const count = (n, word) => `${n} ${word}${n === 1 ? '' : 's'}`;
-  const albumOf = (s) => CATALOG.album(s.album);
+  const albumOf = (s) => CATALOG.album(s.album) || { title: s.albumTitle || '' }; // a Discover song has no library album
   const find = (label) => `<label class="find">${ic('magnifying-glass')}<input type="search" placeholder="${label}" aria-label="${label}"></label>`;
   const radio = (group, value, label, on) =>
     `<button role="menuitemradio" data-group="${group}" data-value="${value}" aria-checked="${on}">${ic('check')}${label}</button>`;
@@ -65,7 +67,7 @@
       ['Playlists', 'grid', CATALOG.page('view=playlist'), 162],
       ['Albums', 'disc', CATALOG.page('view=albums'), 126],
       ['Your Favorites', 'heart', CATALOG.page('view=playlist&id=favorites'), 90],
-      ['Recently Added', 'clock', CATALOG.page('view=playlist&id=recently-added'), 54],
+      ['Recently Added', 'clock', CATALOG.page('view=discover&mine=1'), 54], // your songs: Discover songs you've played
       ['Artists', 'mic', CATALOG.page('view=artist'), 18],
     ];
     return `
@@ -162,7 +164,8 @@
           <div class="pl_btns">
             <button class="round red" data-act="shuffle" aria-label="Shuffle"${none}>${ic('shuffle')}</button>
             <button class="pl_playall" data-act="play"${none}>${ic('play')}Play</button>
-            <button class="round red" aria-disabled="true" aria-label="Download · coming soon">${ic('download')}</button>
+            ${item.saved ? `<a class="round red" href="${SITE}api/download?playlist=${encodeURIComponent(item.id)}" download aria-label="Download all · best quality, as a ZIP">${ic('download')}</a>`
+              : `<button class="round red" aria-disabled="true" aria-label="Download · coming soon">${ic('download')}</button>`}
           </div>
         </div>
       </section>
@@ -377,7 +380,7 @@
     const b = e.target.closest('[data-act], [data-more], [role=menuitemradio]');
     if (!b || b.getAttribute('aria-disabled') === 'true') return;
     const menu = b.closest('[popover]');
-    if (b.dataset.more) return showTray(CATALOG.song(b.dataset.more), b);
+    if (b.dataset.more) return showTray(CATALOG.song(b.dataset.more) || list.find((s) => s.id === b.dataset.more), b);
     if (b.getAttribute('role') === 'menuitemradio') {
       menu.querySelectorAll(`[data-group="${b.dataset.group}"]`).forEach((r) => r.setAttribute('aria-checked', r === b));
       const pick = (group) => menu.querySelector(`[data-group="${group}"][aria-checked="true"]`).dataset.value;
@@ -400,4 +403,4 @@
   const hook = () => { music.addEventListener('play', mark); mark(); }; // mark() now: a song may already be playing
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', hook);
   else hook();
-})();
+});

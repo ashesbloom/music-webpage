@@ -37,6 +37,7 @@ const CATALOG = (() => {
   const songs = Object.entries(tracks).flatMap(([album, [folder, list]]) => list.map(([title, time, art, file], i) => ({
     id: `${album}-${i + 1}`, n: i + 1, title, time, album, artist: 'Joji',
     cover: art ? cover(`joji/${art}`) : albums.find((a) => a.id === album).cover,
+    alt: albums.find((a) => a.id === album).cover, // the album's cover, if the song's own picture fails
     src: `${SITE}playback_tree/songs/joji/${folder}/${file || i + 1}.mp3`,
   })));
   // Mock playlists (phase 3 makes them yours). A cover is `favorites` (heart), `photo`, `groove` colours, or else a
@@ -61,12 +62,61 @@ const CATALOG = (() => {
   const album = (id) => albums.find((a) => a.id === id);
   const artist = (id) => artists.find((a) => a.id === id);
   const playlist = (id) => playlists.find((p) => p.id === id);
-  // "album:nectar" or "playlist:lo-fi" -> its songs, in order
+  // Lists made at runtime (Discover's results, discover.js): key -> songs. The player plays them like any other list.
+  const made = {};
+  const addList = (key, songs) => { made[key] = songs; };
+  // "album:nectar" or "playlist:lo-fi" (or a made list's key) -> its songs, in order
   const list = (key = '') => {
+    if (made[key]) return made[key];
     const [kind, id] = key.split(':');
     if (kind === 'album') return songs.filter((s) => s.album === id);
     return (playlist(id)?.songs || []).map(song).filter(Boolean);
   };
   const page = (query) => `${SITE}library.html${query ? `?${query}` : ''}`;
-  return { artists, albums, songs, playlists, song, album, artist, playlist, list, page };
+
+  // Songs from the server (Discover, and your listening: api/common.js's result shape) as songs the player, queue and
+  // ⋯ tray understand. A library song comes back as itself. Its src follows the streaming quality picked on Discover.
+  const quality = () => {
+    try {
+      const saved = localStorage.getItem('quality');
+      return ['low', 'medium', 'high'].includes(saved) ? saved : 'medium';
+    } catch { return 'medium'; }
+  };
+  const BADGE = { jamendo: 'Jamendo', archive: 'Archive', audius: 'Audius', itunes: 'Preview', youtube: 'YouTube' };
+  // A Discover album or artist page, for the sources that have them.
+  const discover = (kind, source, id) => (['jamendo', 'archive', 'audius'].includes(source) && id
+    ? page(`view=discover&${kind}=${encodeURIComponent(`${source}:${id}`)}`) : null);
+  const fromResult = (r) => {
+    if (r.source === 'library') return song(r.id) || null;
+    if (r.playback?.kind !== 'audio') return null; // YouTube plays in Discover's video card, not on the record
+    const albumHref = discover('album', r.source, r.albumId);
+    const secs = Math.floor(r.durationSec || 0);
+    return {
+      id: `${r.source}:${r.id}`, jamendoId: r.source === 'jamendo' ? r.id : null, source: r.source, result: r,
+      title: r.title, artist: r.artist, albumTitle: r.album || BADGE[r.source], time: secs ? `${Math.floor(secs / 60)}:${String(secs % 60).padStart(2, '0')}` : '',
+      cover: r.artworkUrl || `${SITE}playback_tree/placeholder.svg`, alt: r.artworkAlt || null, urls: r.playback.urls, sourceUrl: r.sourceUrl,
+      albumHref, artistHref: discover('artist', r.source, r.artistId), href: albumHref || page('view=discover'),
+      get src() { return this.urls[quality()] || this.urls.medium; },
+    };
+  };
+  // Your playlists saved from Discover albums live on the server (api/playlists.js). They join the catalog once fetched
+  // (library.js waits for `ready`); a playlist saved now joins through addSaved. Without the server there are none.
+  const addSaved = (p) => {
+    const list = p.songs.map(fromResult).filter(Boolean);
+    if (!list.length) return;
+    addList(`playlist:${p.id}`, list);
+    const at = playlists.findIndex((x) => x.id === p.id);
+    const cover = p.cover?.startsWith('/') ? `${SITE}${p.cover.slice(1)}` : p.cover;
+    const item = { id: p.id, title: p.title, photo: cover, desc: 'Saved from Discover.', songs: list.map((s) => s.id), saved: true, from: p.from };
+    if (at >= 0) playlists[at] = item;
+    else playlists.push(item);
+  };
+  const ready = fetch(`${SITE}api/playlists`)
+    .then((res) => (res.headers.get('content-type')?.includes('json') ? res.json() : { playlists: [] }))
+    .then((body) => (body.playlists || []).forEach(addSaved))
+    .catch(() => {});
+
+  // Where a song lives, opened at that song (which then plays): its album's page, else your songs (Recently Added).
+  const songPage = (s) => `${s.albumHref || page('view=discover&mine=1')}&song=${encodeURIComponent(s.id)}`;
+  return { artists, albums, songs, playlists, song, album, artist, playlist, list, addList, page, quality, discover, fromResult, songPage, ready, addSaved };
 })();

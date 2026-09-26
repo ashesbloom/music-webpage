@@ -1,5 +1,5 @@
 // ACRUX deck: one Web Audio engine for all playback. It stands in for `new Audio()` with the surface the player uses
-// (src, play/pause, paused, ended, currentTime, duration, volume, muted; play/pause/timeupdate/ended/error events),
+// (src, play/pause, paused, ended, currentTime, duration, volume, muted; play/pause/timeupdate/ended/error/canplay events),
 // plus scratchRate for the record (turntable.js). It needs the site served over http (node server.js), not file://.
 const DECK_WORKLET = new URL('deck-audio-worklet.js', document.currentScript.src).href;
 
@@ -11,7 +11,11 @@ class DeckAudio extends EventTarget {
     this._volume = 1;
     this._muted = false;
     this._scratch = null; // signed rate while the record is held or catching up; null = normal playback
-    this._frames = 0;     // length of the loaded track; 0 until decoded
+    this._frames = 0;     // length of the audio decoded so far; 0 until the first part is decoded
+    this._partial = false; // only the start of the song is decoded yet (the rest is still downloading)
+    this._estimate = 0;   // the whole song's length (frames), estimated from its size while partial
+    this._stalled = false; // playback caught up with the download: waiting for more
+    this._wantPos = null; // a seek past what's decoded yet, done once it arrives
     this._pos = 0;        // playhead (frames) at the worklet's last report...
     this._rate = 0;       // ...its rate then...
     this._at = 0;         // ...and when (ctx.currentTime)
@@ -49,36 +53,98 @@ class DeckAudio extends EventTarget {
     this._src = new URL(url, location.href).href;
     this.paused = true;
     this.ended = false;
-    this._frames = 0;
+    this._frames = this._estimate = 0;
+    this._partial = this._stalled = false;
+    this._wantPos = null;
     this._pos = this._rate = 0;
     this._track++;
     this._loading = null; // the new song loads on play(), like <audio preload="none">
     this._apply();
   }
 
+  // Loads the song and plays it as soon as its start is decoded: the download streams in, and at 256 KB (and each
+  // doubling after) the part so far is decoded and handed to the worklet, which keeps its place when a longer part
+  // replaces a shorter one; the whole file replaces the last part. So a song starts in about a second instead of after
+  // its whole download. A part that won't decode (some browsers refuse a cut-off FLAC) is skipped: the whole file
+  // still plays. A song preload() already fetched is decoded whole at once.
   _loadTrack() {
     if (this._loading) return;
     const track = this._track;
-    const fetchBytes = () => fetch(this._src).then((r) => {
-      if (!r.ok) throw new Error(`${r.status} ${r.url}`);
-      return r.arrayBuffer();
-    });
-    const bytes = this._next?.url === this._src ? this._next.bytes.catch(fetchBytes) : fetchBytes();
+    const url = this._src;
+    const ready = this._init();
+    const preloaded = this._next?.url === url ? this._next.bytes : null;
     this._next = null;
-    this._loading = Promise.all([bytes, this._init()])
-      .then(([data]) => this.ctx.decodeAudioData(data))
-      .then((buffer) => {
-        if (track !== this._track) return; // the user moved on to another song meanwhile
-        const channels = Array.from({ length: buffer.numberOfChannels }, (_, c) => buffer.getChannelData(c).slice());
-        this._frames = buffer.length;
-        this.node.port.postMessage({ channels, track }, channels.map((ch) => ch.buffer));
-        this._apply(true);
-      })
+    let total = 0;
+    let last = null; // the previous part: { frames, bytes }
+
+    const post = (buffer, bytes, whole) => {
+      if (track !== this._track) return;
+      if (buffer.length <= this._frames) { // not longer than what's playing (a slower, shorter part)
+        if (whole) { // the whole song turned out no longer than the last part: it's complete as it is
+          this._partial = this._stalled = false;
+          this._apply();
+        }
+        return;
+      }
+      const first = !this._frames;
+      const channels = Array.from({ length: buffer.numberOfChannels }, (_, c) => buffer.getChannelData(c).slice());
+      this._frames = buffer.length;
+      this._partial = !whole;
+      // The song's length while partial: from how fast frames grew between the last two parts (the file's start holds
+      // tags and cover art, which would inflate a plain bytes ratio), or that ratio for the first part.
+      const perByte = last ? (buffer.length - last.frames) / (bytes - last.bytes) : buffer.length / bytes;
+      this._estimate = whole || !total ? buffer.length : Math.round(buffer.length + (total - bytes) * perByte);
+      last = { frames: buffer.length, bytes };
+      this.node.port.postMessage({ channels, track, keep: !first }, channels.map((ch) => ch.buffer));
+      if (this._wantPos !== null && this._wantPos < this._frames) {
+        const want = this._wantPos;
+        this._wantPos = null;
+        this.currentTime = want / this.ctx.sampleRate;
+      }
+      this._stalled = false;
+      this._apply(first);
+      if (first) this.dispatchEvent(new Event('canplay')); // decoded: seeking works from here
+    };
+    const decode = (bytes, size, whole) => ready.then(() => this.ctx.decodeAudioData(bytes)).then((buffer) => post(buffer, size, whole));
+
+    const stream = async () => {
+      const res = await fetch(url);
+      if (!res.ok) throw new Error(`${res.status} ${res.url}`);
+      total = Number(res.headers.get('content-length')) || 0;
+      if (!res.body) return res.arrayBuffer();
+      const reader = res.body.getReader();
+      const parts = [];
+      let got = 0;
+      let at = 256 * 1024;
+      const joined = () => {
+        const all = new Uint8Array(got);
+        let o = 0;
+        for (const part of parts) { all.set(part, o); o += part.length; }
+        return all.buffer;
+      };
+      for (;;) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        if (track !== this._track) { reader.cancel(); throw new Error('moved on'); }
+        parts.push(value);
+        got += value.length;
+        if (got >= at && got < total) {
+          at *= 2;
+          decode(joined(), got, false).catch(() => {}); // this part didn't decode: the next, or the whole file, will
+        }
+      }
+      return joined();
+    };
+
+    const bytes = preloaded ? preloaded.catch(stream) : stream(); // a failed preload just loads normally
+    this._loading = bytes
+      .then((data) => decode(data, data.byteLength, true))
       .catch((err) => {
         if (track !== this._track) return;
         console.error('DeckAudio:', err);
         this._loading = null; // Play tries again
         this.paused = true;
+        this._frames = 0;
         this._apply();
         this.dispatchEvent(new Event('error'));
       });
@@ -87,7 +153,7 @@ class DeckAudio extends EventTarget {
   // Pushes the state to the worklet (rate) and the gain (volume, mute, silence when stopped).
   // snap: jump straight to the rate (Play starts at full speed) instead of gliding.
   _apply(snap = false) {
-    const moving = this._frames > 0 && (this._scratch !== null || !this.paused);
+    const moving = this._frames > 0 && !this._stalled && (this._scratch !== null || !this.paused);
     const rate = moving ? this._scratch ?? 1 : 0;
     if (this.node) this.node.port.postMessage({ target: rate, snap });
     if (this.gain) {
@@ -103,6 +169,13 @@ class DeckAudio extends EventTarget {
     this._pos = pos;
     this._rate = rate;
     this._at = this.ctx.currentTime;
+    if (this._partial) { // the end of what's downloaded, not of the song: wait there for more
+      if (!this._stalled && !this.paused && this._scratch === null && pos >= this._frames - 1) {
+        this._stalled = true;
+        this._apply();
+      }
+      return;
+    }
     if (!this.paused && this._scratch === null && this._frames && pos >= this._frames - 1) {
       this.paused = true;
       this.ended = true;
@@ -139,20 +212,30 @@ class DeckAudio extends EventTarget {
   get currentTime() {
     if (!this._frames) return 0;
     const sr = this.ctx.sampleRate;
+    if (this._wantPos !== null) return this._wantPos / sr;
     const rate = this.paused && this._scratch === null ? 0 : this._rate;
     const pos = this._pos + rate * (this.ctx.currentTime - this._at) * sr;
     return Math.min(Math.max(pos, 0), this._frames - 1) / sr;
   }
   set currentTime(seconds) {
     if (!this._frames) return;
-    this._pos = Math.min(Math.max(seconds * this.ctx.sampleRate, 0), this._frames - 1);
+    const want = Math.max(seconds * this.ctx.sampleRate, 0);
+    if (this._partial && want > this._frames - 1) { // not downloaded that far yet: wait there, silent, until it is
+      this._wantPos = want;
+      this._stalled = true;
+      this._apply();
+      this.dispatchEvent(new Event('timeupdate'));
+      return;
+    }
+    this._wantPos = null;
+    this._pos = Math.min(want, this._frames - 1);
     this._at = this._seekAt = this.ctx.currentTime;
     this.ended = false;
     this.node.port.postMessage({ seek: this._pos });
     this.dispatchEvent(new Event('timeupdate'));
   }
 
-  get duration() { return this._frames ? this._frames / this.ctx.sampleRate : NaN; }
+  get duration() { return this._frames ? (this._partial ? this._estimate : this._frames) / this.ctx.sampleRate : NaN; }
 
   get volume() { return this._volume; }
   set volume(value) { this._volume = value; this._apply(); }

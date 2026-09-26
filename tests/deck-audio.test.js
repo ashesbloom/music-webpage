@@ -1,7 +1,7 @@
 // DSP checks for the deck worklet: node --test tests/
 const test = require('node:test');
 const assert = require('node:assert/strict');
-const { render, makeState } = require('../javascript/deck-audio-worklet.js');
+const { render, makeState, load } = require('../javascript/deck-audio-worklet.js');
 
 const SR = 48000;
 const ramp = (n) => Float32Array.from({ length: n }, (_, i) => i / n); // rising line, so direction shows
@@ -74,4 +74,14 @@ test('a record held still is silent, even over a loud sample', () => {
   s.target = 0; // the hand stops a moving record
   const [l] = run([dc], s, 4800); // 100 ms later
   assert.ok(Math.abs(l[4799]) < 0.01, `a stopped record still outputs ${l[4799]}`);
+});
+
+test('more of the same track keeps the playhead; a new track starts at 0', () => {
+  const s = moving(1, 500);
+  load(s, { track: 1, keep: true }); // a longer decoded part of the song playing
+  assert.equal(s.pos, 500);
+  assert.equal(s.rate, 1);
+  load(s, { track: 2 });
+  assert.equal(s.pos, 0);
+  assert.equal(s.track, 2);
 });

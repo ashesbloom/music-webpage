@@ -140,6 +140,22 @@ h5 { font-family: Verdana, Geneva, Tahoma, sans-serif; }
 }
 .playbutton button:active { transform: scale(0.9); }
 .playbutton button.clicked { color: var(--glow); }
+/* Repeat this song: a small "1" on the repeat icon (the phone deck's lamp uses ::after) */
+.playbutton .repeat { position: relative; }
+.playbutton .repeat[data-mode="one"]::before {
+  content: "1";
+  position: absolute;
+  top: 5px;
+  right: 3px;
+  display: grid;
+  place-items: center;
+  width: 13px;
+  height: 13px;
+  border-radius: 50%;
+  background: var(--tint, var(--glow));
+  font: 700 9px/1 system-ui, sans-serif;
+  color: white;
+}
 
 /* Touch: no double-tap zoom delay and no grey tap flash; buttons show their own press. */
 button, a, input { touch-action: manipulation; -webkit-tap-highlight-color: transparent; }
@@ -715,6 +731,7 @@ body:has(#play.icon-pause) .label_btn .icon-pause { display: inline-block; }
 }
 .box img { aspect-ratio: 1; }
 .side img { aspect-ratio: 180 / 230; }
+.box > .card, .side > .card { aspect-ratio: auto; } /* your artists and albums (home.js): the tile's shape, the cards' name label */
 
 /* ---------- Explore menu ---------- */
 
@@ -883,7 +900,8 @@ body:has(#play.icon-pause) .label_btn .icon-pause { display: inline-block; }
 .q_mode:hover { color: white; }
 .q_mode[aria-pressed="true"] { background: var(--accent); color: white; }
 .q_note { display: none; margin: 0 16px 8px; font-size: 12px; color: var(--muted); }
-body:has(#shuffle.clicked) .q_shuffle, body:has(#repeat.clicked) .q_repeat, .q_next:not(:has(li)) + .q_empty { display: block; }
+body:has(#shuffle.clicked) .q_shuffle, body:has(#repeat[data-mode="one"]) .q_repeat, body:has(#repeat[data-mode="all"]) .q_loop,
+.q_next:not(:has(li)) + .q_empty { display: block; }
 .q_list { margin: 0; padding: 0 16px; list-style: none; }
 .q_list :is(a, button) {
   display: flex;
@@ -1278,6 +1296,49 @@ body:has(#play.icon-pause) .now .pl_thumb img { animation-play-state: running; }
 @keyframes found {
   0%, 35% { background: color-mix(in srgb, var(--tint, var(--glow)) 30%, transparent); box-shadow: inset 3px 0 0 var(--tint, var(--glow)); }
 }
+
+/* Discover (discover.js): the playlist and album pages' parts, plus tabs, a quality switch and the YouTube card */
+.dc_sec { display: flex; flex-direction: column; gap: 12px; min-width: 0; }
+.dc_sec[hidden], .dc_notes:empty { display: none; } /* display: flex would otherwise beat [hidden] */
+.dc_foryou { display: flex; flex-direction: column; gap: 40px; }
+/* Your taste: tappable chips for your top genres, kinds, artists and albums */
+.dc_taste { gap: 14px; }
+.dc_chips { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+.dc_chips .dc_label { min-width: 70px; }
+.dc_chip { display: inline-flex; align-items: center; gap: 6px; height: 32px; padding: 0 14px; border-radius: 999px; background: #2a2a2a; font-size: 13px; font-weight: 700; color: var(--text); }
+.dc_chip:hover { background: var(--accent); color: white; }
+.dc_chip .icon { font-size: 11px; color: var(--glow); }
+.dc_chip:hover .icon { color: white; }
+.dc_videos .dc_go { padding: 8px 0; list-style: none; }
+.dc_sec .pl_list { margin: 0; }
+.dc_sec > .pl_head + .pl_list { margin-top: -12px; }
+.dc_sec .row-1 { padding-inline: 0; } /* the page already has its gutter */
+.dc_head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
+.dc_head a { display: flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 700; color: var(--muted); }
+.dc_head a:hover { color: white; }
+.dc_head .icon { font-size: 10px; }
+.dc_titles { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
+.dc_titles .pl_play { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; line-clamp: 2; white-space: normal; line-height: 1.3; } /* long titles take two lines before they're cut */
+.dc_badges { display: flex; gap: 4px; }
+.dc_badge { flex: none; line-height: 1.3; padding: 2px 6px; border-radius: 4px; background: rgb(255 255 255 / 0.08); font-size: 10px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--muted); }
+.dc_link { position: relative; z-index: 1; } /* above the row's play-anywhere button */
+.dc_link:hover { color: white; text-decoration: underline; }
+.dc_pill .tool { width: auto; padding: 0 14px; border-radius: 999px; font-size: 13px; font-weight: 700; color: var(--muted); }
+.dc_pill .tool:is([aria-pressed="true"], [aria-current]) { background: var(--accent); color: white; }
+.dc_tabs { align-self: flex-start; max-width: 100%; margin-top: 6px; overflow-x: auto; scrollbar-width: none; }
+.dc_q { flex-wrap: wrap; justify-content: flex-end; }
+.dc_label { font-size: 12px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--muted); }
+.dc_q_note { flex-basis: 100%; font-size: 12px; text-align: right; }
+.dc_ar .al_art > * { width: 100%; height: 100%; border-radius: 50%; }
+.dc_ar .av, .dc_round .av { font-size: 32px; }
+.cv.dc_round { border-radius: 50%; }
+.dc_round .av { width: 100%; height: 100%; font-size: 48px; }
+.dc_go { display: flex; flex-wrap: wrap; align-items: center; gap: 16px; }
+/* YouTube's rules: the player stays visible (sticky while its list scrolls) and at least 200×200 */
+.dc_card { position: sticky; top: 8px; z-index: 2; width: min(100%, 640px); min-width: 200px; min-height: 200px; aspect-ratio: 16 / 9; overflow: hidden; border-radius: var(--radius); background: #000; box-shadow: 0 16px 40px rgb(0 0 0 / 0.55); }
+.dc_card[hidden] { display: none; }
+.dc_card iframe { display: block; width: 100%; height: 100%; border: 0; }
+.dc_on .pl_play { color: var(--tint, var(--glow)); }
 
 /* Albums: a cover grid; the hovered album's record peeks out */
 .al_grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 32px 28px; margin: 0; padding: 0; list-style: none; }

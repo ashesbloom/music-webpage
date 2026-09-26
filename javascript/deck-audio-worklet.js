@@ -43,6 +43,11 @@ function render(channels, s, out) {
   }
 }
 
+// A new track starts at its beginning; more of the same track (a longer decoded part) keeps the playhead where it is.
+function load(s, { track, keep }) {
+  if (!keep) Object.assign(s, { pos: 0, rate: 0, motion: 0, seekTo: null, gain: 1, track });
+}
+
 if (typeof registerProcessor === 'function') {
   registerProcessor('deck-audio', class extends AudioWorkletProcessor {
     constructor() {
@@ -50,11 +55,12 @@ if (typeof registerProcessor === 'function') {
       this.channels = null;
       this.s = makeState(sampleRate);
       this.blocks = 0;
-      // From DeckAudio: {channels, track} a new track, {target, snap} a rate, {seek} a frame to jump to.
+      // From DeckAudio: {channels, track, keep} a new track (keep: more of the same one, at the same place),
+      // {target, snap} a rate, {seek} a frame to jump to.
       this.port.onmessage = ({ data }) => {
         if (data.channels) {
           this.channels = data.channels;
-          Object.assign(this.s, { pos: 0, rate: 0, motion: 0, seekTo: null, gain: 1, track: data.track });
+          load(this.s, data);
         }
         if ('target' in data) {
           this.s.target = data.target;
@@ -77,4 +83,4 @@ if (typeof registerProcessor === 'function') {
   });
 }
 
-if (typeof module === 'object') module.exports = { render, makeState };
+if (typeof module === 'object') module.exports = { render, makeState, load };
