@@ -137,7 +137,10 @@
       angle += turn;
       held.v += (turn / dt - held.v) * Math.min(1, dt / 0.04); // hand speed, smoothed over ~40 ms (for flicks)
     });
-    for (const type of ['pointerup', 'pointercancel', 'lostpointercapture']) host.addEventListener(type, release);
+    for (const type of ['pointerup', 'pointercancel']) host.addEventListener(type, release);
+    // Only the host's own capture ending lets go: a touch starts captured by the element under the finger, and
+    // moving that capture to the host (grab) fires lostpointercapture on it, which bubbles here.
+    host.addEventListener('lostpointercapture', (e) => { if (e.target === host) release(e); });
     host.addEventListener('touchmove', (e) => { if (held) e.preventDefault(); }, { passive: false }); // no scrolling mid-scratch
     plate.addEventListener('dragstart', (e) => e.preventDefault());
     host.addEventListener('contextmenu', (e) => { if (hitDisc(plate, e.clientX, e.clientY)) e.preventDefault(); }); // long-press menu

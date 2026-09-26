@@ -2,6 +2,7 @@
    Breakpoints: >=1200 three columns | 700-1199 record + browse, menu in a drawer | <700 phone (turntable deck). */
 
 :root {
+  color-scheme: dark; /* already dark: Safari's own controls and dark-mode extensions leave it be */
   --accent: #a21e1e;
   --accent-2: #a12e1e;
   --glow: #f13c3c;
@@ -142,7 +143,8 @@ h5 { font-family: Verdana, Geneva, Tahoma, sans-serif; }
 
 /* Touch: no double-tap zoom delay and no grey tap flash; buttons show their own press. */
 button, a, input { touch-action: manipulation; -webkit-tap-highlight-color: transparent; }
-.record { touch-action: none; } /* a drag on the record scratches it (turntable.js), never scrolls */
+.record, .label_ctrl { touch-action: none; } /* a drag on the record (or its label) turns it (turntable.js), never scrolls */
+.playback, .playbackarea { -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; } /* no iOS selection or image menu mid-hold */
 
 /* The phone's rising record (phone.js adds these; the phone layout shows them on the home page only). The arc's
    progress and the needle follow --p, which seekbar.js sets on .play_bar. */
@@ -185,6 +187,7 @@ button, a, input { touch-action: manipulation; -webkit-tap-highlight-color: tran
   pointer-events: none;
   animation: hint 5s ease both;
 }
+@keyframes sheet { from { translate: 0 100%; } }
 @keyframes hint {
   0% { opacity: 0; translate: -50% 6px; }
   10%, 85% { opacity: 1; translate: -50% 0; }
@@ -1725,6 +1728,30 @@ body:has(#play.icon-pause) .ar_trk.now .ar_n::before { animation-play-state: run
   .q_list :is(a, button) { min-height: 60px; }
   .q_mode { height: 44px; }
 
+  /* The ⋯ tray rises from the bottom as a sheet, like the record (more.js leaves it unplaced here). */
+  #more_tray {
+    inset: auto 8px calc(8px + env(safe-area-inset-bottom)) 8px;
+    width: auto;
+    max-width: none;
+    padding: 20px 8px 8px;
+    border-radius: 18px;
+    background: rgb(36 36 36 / 0.97);
+    box-shadow: 0 -12px 40px rgb(0 0 0 / 0.7);
+  }
+  #more_tray:popover-open { animation: sheet 0.28s cubic-bezier(0.2, 0.8, 0.2, 1); }
+  #more_tray::before { /* grab bar */
+    content: "";
+    position: absolute;
+    top: 8px;
+    left: calc(50% - 18px);
+    width: 36px;
+    height: 4px;
+    border-radius: 2px;
+    background: rgb(255 255 255 / 0.2);
+  }
+  #more_tray > :is(button, a) { min-height: 48px; }
+  #more_tray::backdrop { background: rgb(0 0 0 / 0.45); }
+
   .row-1, .row-2, .row-3 {
     grid-auto-columns: 40vw;
     scroll-snap-type: x mandatory;
@@ -1892,6 +1919,7 @@ body:has(#play.icon-pause) .ar_trk.now .ar_n::before { animation-play-state: run
   .record::after { animation: none !important; } /* turntable.js keeps the record itself still */
   .logo a.text-focus-in { animation: none; }
   .tonearm, .card_label, .deck_knob, .deck_start, .deck_pitch, .queue { transition: none; }
+  #more_tray:popover-open { animation: none; }
   .sleeve_disc img { rotate: none !important; } /* the card record still slides out, but its label doesn't turn */
 }
 

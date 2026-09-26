@@ -46,18 +46,23 @@ async function shareLink(data, label) {
     tray.togglePopover(true);
   };
 
+  const sheet = matchMedia('(max-width: 699px)'); // phones: the tray rises from the bottom instead
   tray.addEventListener('beforetoggle', (e) => {
     if (e.newState !== 'open') {
       target = null;
       anchor = btn;
       return;
     }
-    const r = anchor.getBoundingClientRect();
-    const { clientWidth: w, clientHeight: h } = document.documentElement;
-    const up = r.top > h / 2;
-    tray.style.top = up ? 'auto' : `${r.bottom + 8}px`;
-    tray.style.bottom = up ? `${h - r.top + 8}px` : 'auto';
-    tray.style.right = `${Math.max(8, w - r.right)}px`;
+    if (sheet.matches) tray.style.top = tray.style.right = tray.style.bottom = ''; // a sheet from the bottom (CSS)
+    else {
+      const r = anchor.getBoundingClientRect();
+      const { clientWidth: w, clientHeight: h } = document.documentElement;
+      const up = r.top > h / 2;
+      tray.style.top = up ? 'auto' : `${r.bottom + 8}px`;
+      tray.style.bottom = up ? `${h - r.top + 8}px` : 'auto';
+      // By the button's right edge, but never past the screen's left edge (the width is the CSS one, even while closed).
+      tray.style.right = `${Math.max(8, Math.min(w - r.right, w - parseFloat(getComputedStyle(tray).width) - 8))}px`;
+    }
     const album = CATALOG.album(song().album);
     tray.querySelector('[data-act=album]').href = CATALOG.page(`view=album&id=${album.id}`);
     tray.querySelector('[data-act=artist]').href = CATALOG.page(`view=artist&id=${album.artist}`);
