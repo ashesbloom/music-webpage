@@ -43,7 +43,9 @@ function setList(list, key) {
   $('prev').addEventListener('click', () => playAt((index - 1 + songs.length) % songs.length));
   $('next').addEventListener('click', () => {
     const n = upNext(); // queue.js: Next plays the top of Continue Playing (shuffled order included)
-    playAt(n >= 0 ? n : (index + 1) % songs.length);
+    if (n >= 0) return playAt(n);
+    const skip = $('shuffle').classList.contains('clicked') ? 1 + Math.floor(Math.random() * (songs.length - 1)) : 1; // nothing queued (Infinite off)
+    playAt((index + skip) % songs.length);
   });
 
   document.addEventListener('click', (e) => {

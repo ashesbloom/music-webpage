@@ -40,14 +40,15 @@ const CATALOG = (() => {
     src: `${SITE}playback_tree/songs/joji/${folder}/${file || i + 1}.mp3`,
   })));
   // Mock playlists (phase 3 makes them yours). A cover is `favorites` (heart), `photo`, `groove` colours, or else a
-  // mosaic of the first four song covers. `hidden` lists open from the Library but aren't in My Playlists.
+  // mosaic of the first four song covers. `hidden` lists open from the Library but aren't in My Playlists. `collab`: the
+  // people you invited to it (names only, until accounts).
   const playlists = [
     { id: 'favorites', title: 'Favorites', favorites: true, songs: [] },
     { id: 'late-night-joji', title: 'Late Night Joji', desc: 'Slow ones for after midnight: Joji, mostly.',
       songs: ['smithereens-2', 'nectar-1', 'nectar-7', 'nectar-4', 'smithereens-3', 'nectar-6', 'smithereens-1', 'nectar-5', 'smithereens-8', 'nectar-12', 'smithereens-5', 'nectar-18'] },
     { id: 'lo-fi', title: 'Lo-Fi', groove: ['#e8a73c', '#2c1905'],
       songs: ['nectar-2', 'nectar-9', 'nectar-11', 'nectar-13', 'smithereens-7', 'smithereens-9', 'nectar-17', 'nectar-15', 'smithereens-6'] },
-    { id: 'party', title: 'Party Playlists', groove: ['#e8457f', '#2a0714'],
+    { id: 'party', title: 'Party Playlists', groove: ['#e8457f', '#2a0714'], collab: ['Aria', 'Kai'],
       songs: ['nectar-3', 'nectar-14', 'nectar-5', 'nectar-10', 'nectar-8', 'nectar-16', 'nectar-4', 'nectar-17'] },
     { id: 'summer-20', title: 'Summer ’20', photo: cover('joji/joji_daylight.jpg'),
       songs: ['nectar-4', 'nectar-5', 'nectar-6', 'nectar-7', 'nectar-16', 'nectar-18', 'nectar-3', 'nectar-1'] },

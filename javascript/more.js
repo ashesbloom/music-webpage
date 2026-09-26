@@ -1,6 +1,6 @@
 // ACRUX ⋯ tray: actions for a song. The header's ⋯ opens it for the song in the player; showTray(song, button) opens
 // it for any other (the library's song rows). It opens beside its button (upwards from the phone's bottom player).
-// Uses CATALOG and player.js (songs, index). shareLink() is shared with library.js.
+// Uses CATALOG and player.js (songs, index). shareLink() and placeTray() are shared with library.js.
 async function shareLink(data, label) {
   try {
     if (navigator.share) return await navigator.share(data);
@@ -11,6 +11,21 @@ async function shareLink(data, label) {
     await new Promise((done) => setTimeout(done, 1200));
     label.textContent = was;
   } catch {} // share sheet dismissed, or no clipboard access
+}
+
+// A tray (a popover menu) opens beside its button: below it, or above it in the lower half of the screen, by its
+// right edge but never past the screen's left. On phones every tray rises from the bottom as a sheet (CSS) instead.
+function placeTray(tray, anchor) {
+  if (matchMedia('(max-width: 699px)').matches) {
+    tray.style.top = tray.style.right = tray.style.bottom = '';
+    return;
+  }
+  const r = anchor.getBoundingClientRect();
+  const { clientWidth: w, clientHeight: h } = document.documentElement;
+  const up = r.top > h / 2;
+  tray.style.top = up ? 'auto' : `${r.bottom + 8}px`;
+  tray.style.bottom = up ? `${h - r.top + 8}px` : 'auto';
+  tray.style.right = `${Math.max(8, Math.min(w - r.right, w - parseFloat(getComputedStyle(tray).width) - 8))}px`; // the CSS width, even while closed
 }
 
 (() => {
@@ -46,23 +61,13 @@ async function shareLink(data, label) {
     tray.togglePopover(true);
   };
 
-  const sheet = matchMedia('(max-width: 699px)'); // phones: the tray rises from the bottom instead
   tray.addEventListener('beforetoggle', (e) => {
     if (e.newState !== 'open') {
       target = null;
       anchor = btn;
       return;
     }
-    if (sheet.matches) tray.style.top = tray.style.right = tray.style.bottom = ''; // a sheet from the bottom (CSS)
-    else {
-      const r = anchor.getBoundingClientRect();
-      const { clientWidth: w, clientHeight: h } = document.documentElement;
-      const up = r.top > h / 2;
-      tray.style.top = up ? 'auto' : `${r.bottom + 8}px`;
-      tray.style.bottom = up ? `${h - r.top + 8}px` : 'auto';
-      // By the button's right edge, but never past the screen's left edge (the width is the CSS one, even while closed).
-      tray.style.right = `${Math.max(8, Math.min(w - r.right, w - parseFloat(getComputedStyle(tray).width) - 8))}px`;
-    }
+    placeTray(tray, anchor);
     const album = CATALOG.album(song().album);
     tray.querySelector('[data-act=album]').href = CATALOG.page(`view=album&id=${album.id}`);
     tray.querySelector('[data-act=artist]').href = CATALOG.page(`view=artist&id=${album.artist}`);

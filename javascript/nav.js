@@ -49,7 +49,6 @@
       window.scrollTo(0, 0);
       document.querySelector('.explore').scrollTop = 0;
     }
-    document.dispatchEvent(new Event('pagechange'));
   }
 
   document.addEventListener('click', (e) => {

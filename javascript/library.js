@@ -34,6 +34,14 @@
   }
   const lab = (p) => (p.favorites ? 'var(--glow)' : p.groove?.[0] || 'var(--accent)'); // the colour of the record's label
 
+  // Collaborators on a playlist you made: you (the owner) and whoever you invited (mock `collab` names until phase 3).
+  const crew = (p) => ['You', ...(p.collab || [])];
+  const face = (name, i) => `<span class="pp_av" style="--c: ${['var(--accent)', '#e8a73c', '#4fb3c9', '#b07cf0'][i % 4]}">${esc(name[0])}</span>`;
+  const and = (names) => (names.length < 2 ? names.join('') : `${names.slice(0, -1).join(', ')} and ${names.at(-1)}`);
+  const people = (p) => `<button class="pl_people" data-act="people">
+    <span class="pp_stack">${crew(p).slice(0, 3).map(face).join('')}</span>
+    <span>${crew(p).length > 1 ? esc(and(crew(p))) : 'Add collaborators'}</span><span class="pp_add">${ic('plus')}</span></button>`;
+
   let list = [];      // the songs this view plays, in the order shown
   let key = '';       // its player.js list key
   let resort = null;  // re-sorts the view after a sort menu pick
@@ -136,7 +144,7 @@
       </div>
       <div class="tray" id="pl_menu" popover>
         ${mine ? soon('Pin Playlist', ic('pin')) : ''}${soon('Download', ic('download'))}
-        ${mine ? `<button data-act="edit">${ic('pen')}Edit…</button>${soon('Order Songs', ic('order'))}${soon('Duplicate', ic('copy'))}` : ''}
+        ${mine ? `<button data-act="edit">${ic('pen')}Edit…</button><button data-act="people">${ic('users')}Collaborators…</button>${soon('Order Songs', ic('order'))}${soon('Duplicate', ic('copy'))}` : ''}
         ${soon('Favorite', ic('heart'))}
         <hr><button data-act="share">${ic('share')}<span>Share</span></button>
         ${mine ? `<hr>${soon('Delete Playlist', ic('trash'))}` : ''}
@@ -149,6 +157,7 @@
           <h1>${esc(item.title)}</h1>
           ${artist ? `<p class="pl_meta"><a href="${CATALOG.page(`view=artist&id=${artist.id}`)}">${esc(artist.name)}</a> · ${esc(item.genre)} · ${item.year}</p>` : ''}
           ${item.desc ? `<p class="pl_desc">${esc(item.desc)}</p>` : ''}
+          ${mine ? people(item) : ''}
           <span class="lib_muted">${count(all.length, 'song')}${all.length ? ` · ${mins} min` : ''}</span>
           <div class="pl_btns">
             <button class="round red" data-act="shuffle" aria-label="Shuffle"${none}>${ic('shuffle')}</button>
@@ -256,8 +265,8 @@
     const shuffle = document.getElementById('shuffle');
     setList(list, key);
     if (shuffle.classList.contains('clicked') !== shuffled) shuffle.click();
-    const n = shuffled ? upNext() : -1;
-    playAt(n >= 0 ? n : 0);
+    const n = shuffled ? upNext() : -1; // -1 with Infinite off: nothing queued, so shuffle picks here
+    playAt(n >= 0 ? n : shuffled ? Math.floor(Math.random() * songs.length) : 0);
   }
 
   function openEdit(p) {
@@ -290,6 +299,21 @@
     dialog.showModal();
   }
 
+  // Who can change the playlist. Inviting and roles need the backend, so for now it only shows them.
+  function openPeople(p) {
+    document.getElementById('people_pl')?.remove(); // built fresh: nav.js may have swapped in another playlist
+    document.body.insertAdjacentHTML('beforeend', `
+      <dialog class="edit_pl" id="people_pl" aria-labelledby="people_h" closedby="any"><form method="dialog">
+        <h2 id="people_h">Collaborators</h2>
+        <p class="edit_note">People you invite can add, remove and reorder songs in ${esc(p.title)}.</p>
+        <ul class="pp_list">${crew(p).map((name, i) => `<li class="pp_row">${face(name, i)}<span>${esc(name)}</span><small>${i ? 'Can edit' : 'Owner'}</small></li>`).join('')}</ul>
+        <button type="button" class="pp_invite" aria-disabled="true">${ic('plus')}Invite with link<small>Coming soon</small></button>
+        <p class="edit_note">Inviting comes with the library backend.</p>
+        <div class="edit_foot"><span></span><button class="edit_done">Done</button></div>
+      </form></dialog>`);
+    document.getElementById('people_pl').showModal();
+  }
+
   // A song opened from search (?song=): scroll its row into view and highlight it.
   function reveal() {
     const row = root.querySelector(`.pl_row[data-id="${CSS.escape(q.get('song') || '')}"]`);
@@ -313,15 +337,14 @@
   dial?.addEventListener('pointerover', aim);
   dial?.addEventListener('focusin', aim);
 
-  // Menus open under their button, right-aligned to it.
+  // Menus open by their button (more.js), or as a sheet on phones.
   root.querySelectorAll('[popover]').forEach((pop) => pop.addEventListener('beforetoggle', (e) => {
-    if (e.newState !== 'open') return;
-    const r = root.querySelector(`[popovertarget="${pop.id}"]`).getBoundingClientRect();
-    pop.style.top = `${r.bottom + 8}px`;
-    pop.style.right = `${Math.max(8, document.documentElement.clientWidth - r.right)}px`;
+    if (e.newState === 'open') placeTray(pop, root.querySelector(`[popovertarget="${pop.id}"]`));
   }));
 
-  root.querySelector('.find input')?.addEventListener('input', filter);
+  const findBox = root.querySelector('.find input');
+  findBox?.addEventListener('input', filter);
+  findBox?.addEventListener('keydown', (e) => { if (e.key === 'Enter') findBox.blur(); }); // the keyboard's search key closes it
 
   // The Artist / Playlists list folds to its pictures by itself when the middle column gets narrow (the side panel
   // dragged wider), or when you press its button. Your choice holds until the column next crosses that width.
@@ -363,6 +386,8 @@
       shareLink({ title: document.title, url: location.href }, b.querySelector('span'));
     } else if (b.dataset.act === 'edit') {
       openEdit(CATALOG.playlist(id));
+    } else if (b.dataset.act === 'people') {
+      openPeople(CATALOG.playlist(id));
     } else if (b.dataset.act === 'new') {
       openEdit(null);
     } else if (b.dataset.act === 'play' || b.dataset.act === 'shuffle') {

@@ -112,15 +112,7 @@
     align();
   }
 
-  // On a phone the queue is part of the home page (phone.js): the button scrolls to it, going home first if need be.
-  const phone = matchMedia('(max-width: 699px)');
-  const toQueue = () => scrollTo({ top: document.querySelector('.playback').offsetHeight, behavior: 'smooth' }); // the player pins, the queue sits under it
-  btn.addEventListener('click', () => {
-    if (!phone.matches) return setOpen(btn.getAttribute('aria-pressed') !== 'true');
-    if (document.body.dataset.page === 'home') return toQueue();
-    document.addEventListener('pagechange', toQueue, { once: true });
-    document.querySelector('.logo a').click();
-  });
+  btn.addEventListener('click', () => setOpen(btn.getAttribute('aria-pressed') !== 'true')); // phones hide it: the queue is on the home page (phone.js)
   queue.querySelector('.q_min').addEventListener('click', () => { setOpen(false); btn.focus(); });
   panel.addEventListener('toggle', (e) => { if (e.newState === 'closed') setOpen(false); });
   queue.addEventListener('click', (e) => {
