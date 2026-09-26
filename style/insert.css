@@ -113,6 +113,7 @@ h5 { font-family: Verdana, Geneva, Tahoma, sans-serif; }
 #albumtext { color: white; }
 #albumdescription { margin-top: 3px; font-size: clamp(12px, 1.7vh, 16px); color: darkgrey; }
 #song_time { margin-top: 3px; font-size: 12px; color: var(--metal); }
+#end_time:not(:empty)::before { content: "\00a0/ "; }
 #current_time:hover, #end_time:hover { color: white; }
 
 .playbutton {
@@ -133,9 +134,62 @@ h5 { font-family: Verdana, Geneva, Tahoma, sans-serif; }
   font-size: 20px;
   color: var(--header);
 }
-.playbutton button:hover { color: var(--metal); box-shadow: 0 0 60px #ff2b2b; }
+@media (hover: hover) { /* touch keeps :hover on a tapped button, which hid the pressed glow and left a stray one */
+  .playbutton button:hover { color: var(--metal); box-shadow: 0 0 60px #ff2b2b; }
+}
 .playbutton button:active { transform: scale(0.9); }
-.playbutton .clicked { color: var(--glow); }
+.playbutton button.clicked { color: var(--glow); }
+
+/* Touch: no double-tap zoom delay and no grey tap flash; buttons show their own press. */
+button, a, input { touch-action: manipulation; -webkit-tap-highlight-color: transparent; }
+.record { touch-action: none; } /* a drag on the record scratches it (turntable.js), never scrolls */
+
+/* The phone's rising record (phone.js adds these; the phone layout shows them on the home page only). The arc's
+   progress and the needle follow --p, which seekbar.js sets on .play_bar. */
+.pv_disc, .pv_arc, .pv_needle { display: none; }
+.pv_track, .pv_prog { fill: none; stroke-width: 4; stroke-linecap: round; }
+.pv_track { stroke: #3a3a3a; }
+.pv_prog { stroke: var(--tint, var(--glow)); stroke-dasharray: var(--p, 0) 1; }
+.pv_title { font-size: 18px; font-weight: bold; letter-spacing: 0.5px; fill: white; }
+.pv_artist { font-size: 14px; fill: #b3b3b3; }
+.pv_needle {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 18px;
+  height: 18px;
+  box-sizing: border-box;
+  border: 3px solid var(--tint, var(--glow));
+  border-radius: 50%;
+  background: white;
+  offset-path: path("M13 97 A238 238 0 0 1 377 97"); /* the outer groove, the same path as the arc's */
+  offset-distance: calc(var(--p, 0) * 100%);
+  offset-rotate: 0deg;
+}
+
+/* One time only (turntable.js): a small note that turning the record seeks. */
+.seek_hint {
+  position: absolute;
+  left: 50%;
+  bottom: 16px;
+  z-index: 6;
+  margin: 0;
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: rgb(20 20 20 / 0.85);
+  box-shadow: 0 4px 12px rgb(0 0 0 / 0.5);
+  font-size: 13px;
+  white-space: nowrap;
+  color: white;
+  translate: -50% 0;
+  pointer-events: none;
+  animation: hint 5s ease both;
+}
+@keyframes hint {
+  0% { opacity: 0; translate: -50% 6px; }
+  10%, 85% { opacity: 1; translate: -50% 0; }
+  100% { opacity: 0; }
+}
 
 .play_bar {
   grid-column: 2 / 4;
@@ -841,7 +895,8 @@ body:has(#shuffle.clicked) .q_shuffle, body:has(#repeat.clicked) .q_repeat, .q_n
   font-size: 14px;
   transition: background-color 0.2s;
 }
-.q_list :is(a, button):hover { background: rgb(255 255 255 / 0.05); }
+@media (hover: hover) { .q_list :is(a, button):hover { background: rgb(255 255 255 / 0.05); } }
+.q_list :is(a, button):active { background: rgb(255 255 255 / 0.08); }
 .q_list img { flex: none; width: 44px; height: 44px; object-fit: cover; border-radius: 6px; background: var(--header); }
 .q_list :is(a, button) > span { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
 .q_name, .q_meta { overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
@@ -1494,24 +1549,31 @@ body:has(#play.icon-pause) .ar_trk.now .ar_n::before { animation-play-state: run
 /* ---------- Layout: phone ---------- */
 
 @media (max-width: 699px) {
-  body { padding-bottom: calc(140px + env(safe-area-inset-bottom)); }
+  body { padding-bottom: calc(88px + env(safe-area-inset-bottom)); } /* room for the mini player */
 
+  /* Top bar: logo, volume, queue, menu. */
   .header {
     position: sticky;
     top: 0;
     z-index: 5;
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    gap: 4px;
     height: 56px;
     padding: 0 8px 0 16px;
   }
   .logo a { padding-left: 0; font-size: 22px; }
-  .volumecontrol { margin-left: auto; padding: 0; } /* only the Queue button, beside the menu button */
-  .volumecontrol > :not(.queue_btn) { display: none; }
-  .queue_btn { width: 44px; height: 44px; }
+  .volumecontrol { gap: 2px; margin-left: auto; padding: 0; }
+  .v_num { display: none; }
+  .v_bar { width: min(96px, 24vw); }
+  .queue_btn { order: 1; }
+  .mute_button, .queue_btn { width: 44px; height: 44px; }
 
-  /* Player docks to the bottom: seek bar, then cover + title, then controls. */
+  .container { display: block; }
+  .explore { display: flow-root; border: none; }
+
+  /* Every page but home: its content, over a mini player (phone.js: a tap on it opens the iPod screen). */
+  body:not([data-page="home"]) :is(.playback, .container > .queue) { display: none; }
   .playbackarea {
     position: fixed;
     left: 0;
@@ -1519,22 +1581,149 @@ body:has(#play.icon-pause) .ar_trk.now .ar_n::before { animation-play-state: run
     bottom: 0;
     z-index: 5;
     height: auto;
-    grid-template-columns: 44px minmax(0, 1fr);
-    grid-template-rows: auto auto auto;
+    grid-template-columns: 44px minmax(0, 1fr) auto;
+    grid-template-rows: auto;
     column-gap: 12px;
-    row-gap: 6px;
-    padding: 12px 16px calc(6px + env(safe-area-inset-bottom));
+    padding: 10px 8px calc(10px + env(safe-area-inset-bottom)) 12px;
     border-radius: 12px 12px 0 0;
     box-shadow: 0 0 40px #000;
+    cursor: pointer;
   }
-  .play_bar { grid-column: 1 / -1; grid-row: 1; margin: 0 0 6px; }
-  .cover { grid-row: 2; width: 44px; height: 44px; aspect-ratio: auto; }
-  .albumtext { grid-row: 2; }
-  .playbutton { grid-column: 1 / -1; grid-row: 3; justify-content: space-evenly; padding: 0; }
+  .play_bar { position: absolute; top: 0; left: 12px; right: 12px; grid-column: auto; height: 2px; margin: 0; pointer-events: none; }
+  .play_bar .slider { height: 2px; }
+  .play_bar .dot, #song_time { display: none; }
+  .cover { grid-row: 1; width: 44px; height: 44px; aspect-ratio: auto; }
+  .albumtext { grid-row: 1; }
+  .playbutton { grid-column: 3; grid-row: 1; gap: 0; padding: 0; }
   .playbutton button { width: 44px; height: 44px; }
+  .playbutton :is(.shuffle, .prev, .repeat, .more) { display: none; }
+  .playbutton button:active { background: rgb(255 255 255 / 0.1); }
 
-  .container { display: block; }
-  .explore { display: flow-root; border: none; }
+  /* Home is the iPod screen: the record, then the queue, over the rising record pinned to the bottom: the top of a
+     big disc whose outer groove is the seek bar (its needle rides it), with the title curving along the grooves,
+     ⏯ on the red label and the other controls on the vinyl. Turning it seeks, like the deck (turntable.js).
+     phone.js adds .pv_disc, the arc (.pv_arc) and the needle; the 390px stage is centred, the disc is wider. */
+  body[data-page="home"] {
+    padding-bottom: calc(260px + env(safe-area-inset-bottom));
+    .explore { display: none; }
+    .playbackarea {
+      display: block;
+      height: calc(250px + env(safe-area-inset-bottom));
+      padding: 0;
+      border-radius: 0;
+      background: none;
+      box-shadow: none;
+      cursor: auto;
+      touch-action: none; /* a drag here turns the disc */
+    }
+    .playbackarea::before { /* the queue fades into the record */
+      content: "";
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: -70px;
+      bottom: 0;
+      background: linear-gradient(transparent, var(--menu) 80px);
+      pointer-events: none;
+    }
+    .pv_disc {
+      display: block;
+      position: absolute;
+      left: calc(50% - 260px);
+      top: -10px;
+      width: 520px;
+      aspect-ratio: 1;
+      border-radius: 50%;
+      background:
+        conic-gradient(from 200deg, transparent 0deg 20deg, rgb(255 255 255 / 0.07) 32deg, transparent 46deg 180deg, rgb(255 255 255 / 0.05) 212deg, transparent 226deg),
+        repeating-radial-gradient(circle, #141414 0 2px, #1d1d1d 2px 4px);
+      box-shadow: 0 -12px 40px rgb(0 0 0 / 0.85), inset 0 0 0 2px #0c0c0c;
+    }
+    .playbackarea::after { /* the label, half showing: ⏯ sits on it */
+      content: "";
+      position: absolute;
+      left: calc(50% - 80px);
+      top: 170px;
+      width: 160px;
+      aspect-ratio: 1;
+      box-sizing: border-box;
+      border: 3px solid var(--tint, var(--glow));
+      border-radius: 50%;
+      background: radial-gradient(circle at 50% 25%, #b92727, var(--accent) 65%);
+      box-shadow: 0 0 24px rgb(241 60 60 / 0.35);
+      pointer-events: none;
+    }
+    .play_bar { /* the stage: the arc, its needle and the hidden seek input for keyboards */
+      position: absolute;
+      top: 0;
+      left: calc(50% - 195px);
+      width: 390px;
+      height: 250px;
+      margin: 0;
+      border-radius: 0;
+      background: none;
+      pointer-events: none;
+    }
+    .play_bar :is(.slider, .dot) { display: none; }
+    .play_bar input { top: 0; width: 1px; height: 1px; clip-path: inset(50%); }
+    .play_bar:has(input:focus-visible) .pv_track { stroke: var(--metal); }
+    .pv_arc { display: block; position: absolute; inset: 0; overflow: visible; }
+    .pv_needle { display: block; }
+    .cover, #albumtext, #albumdescription { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); } /* the arc shows them */
+    .albumtext, #song_time, .playbutton { display: contents; }
+    #current_time, #end_time { position: absolute; top: 110px; font-size: 12px; color: #9a9a9a; }
+    #current_time { left: calc(50% - 185px); }
+    #end_time { right: calc(50% - 185px); }
+    #end_time::before { content: none; }
+    .playbutton button { position: absolute; z-index: 1; display: grid; color: #e6e6e6; }
+    .playbutton .shuffle { left: calc(50% - 183px); top: 186px; }
+    .playbutton .prev { left: calc(50% - 131px); top: 182px; width: 48px; height: 48px; }
+    .playbutton .play { /* no disc of its own: a soft light on the label */
+      left: calc(50% - 32px);
+      top: 182px;
+      width: 64px;
+      height: 64px;
+      background: radial-gradient(circle, rgb(255 255 255 / 0.22), rgb(255 255 255 / 0) 70%);
+      color: white;
+      font-size: 26px;
+    }
+    .playbutton .next { left: calc(50% + 83px); top: 182px; width: 48px; height: 48px; }
+    .playbutton .repeat { left: calc(50% + 139px); top: 186px; }
+    .playbutton .more { left: calc(50% - 22px); top: 122px; color: var(--metal); }
+    .playbutton :is(.shuffle, .prev, .repeat, .more) { display: grid; }
+    .playbutton :is(.shuffle, .repeat)::after { /* a lamp: lit when on */
+      content: "";
+      position: absolute;
+      left: calc(50% - 2.5px);
+      bottom: -6px;
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: #3a1414;
+    }
+    .playbutton :is(.shuffle, .repeat).clicked { color: var(--tint, var(--glow)); }
+    .playbutton :is(.shuffle, .repeat).clicked::after { background: var(--tint, var(--glow)); box-shadow: 0 0 6px var(--tint, var(--glow)), 0 0 12px var(--tint, var(--glow)); }
+    .playbutton .play:active { background: radial-gradient(circle, rgb(255 255 255 / 0.4), rgb(255 255 255 / 0) 70%); }
+    .seek_hint { bottom: calc(262px + env(safe-area-inset-bottom)); }
+  }
+
+  /* The queue, in the page under the player (phone.js moves it here): Continue Playing, then History. */
+  .container > .queue {
+    position: static;
+    display: flex;
+    flex-direction: column;
+    padding-bottom: 24px;
+    overflow: visible;
+    background: none;
+    translate: none;
+    visibility: visible;
+    transition: none;
+  }
+  .container > .queue .q_bar { display: none; }
+  .container > .queue .q_up { min-height: 0; }
+  .container > .queue .q_hist { order: 1; }
+  .q_list :is(a, button) { min-height: 60px; }
+  .q_mode { height: 44px; }
 
   .row-1, .row-2, .row-3 {
     grid-auto-columns: 40vw;
@@ -1698,31 +1887,6 @@ body:has(#play.icon-pause) .ar_trk.now .ar_n::before { animation-play-state: run
     .deck_knob, .deck_start, .deck_pitch, .label_ctrl { opacity: 0; visibility: hidden; }
   }
 }
-
-@media (min-width: 480px) and (max-width: 699px) {
-  body { padding-bottom: calc(90px + env(safe-area-inset-bottom)); }
-  .playbackarea { grid-template-columns: 44px minmax(0, 1fr) auto; }
-  .playbutton { grid-column: 3; grid-row: 2; gap: 0; }
-  .playbutton button { width: 40px; }
-}
-
-/* Deck mode B: pinned under the top bar, shrinking to a strip as the page scrolls. */
-@supports (animation-timeline: scroll()) {
-  @media (max-width: 699px) {
-    html[data-deck="shrink"] .container { padding-top: min(75vw, 62svh); }
-    html[data-deck="shrink"] .playback {
-      position: fixed;
-      top: 56px;
-      left: 0;
-      right: 0;
-      z-index: 4;
-      animation: deck-shrink linear both;
-      animation-timeline: scroll(root);
-      animation-range: 0 calc(min(75vw, 62svh) - 64px);
-    }
-  }
-}
-@keyframes deck-shrink { to { height: 64px; } }
 
 @media (prefers-reduced-motion: reduce) {
   .record::after { animation: none !important; } /* turntable.js keeps the record itself still */

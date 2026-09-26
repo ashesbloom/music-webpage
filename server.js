@@ -1,10 +1,11 @@
-// Minimal static file server for local UI testing. Run: node server.js (PORT env var overrides 3000).
+// Minimal static file server for local UI testing. Run: node server.js (PORT env var overrides 3000; HOST=0.0.0.0 for the LAN).
 const http = require('http');
 const fs = require('fs');
 const path = require('path');
 
 const ROOT = __dirname;
 const PORT = Number(process.env.PORT) || 3000;
+const HOST = process.env.HOST || '127.0.0.1'; // HOST=0.0.0.0 to open it to phones on the same Wi-Fi
 const TYPES = {
   '.html': 'text/html; charset=utf-8',
   '.css': 'text/css; charset=utf-8',
@@ -82,4 +83,4 @@ http.createServer(async (req, res) => {
   res.writeHead(status, headers);
   if (req.method === 'HEAD' || size === 0) return res.end();
   fs.createReadStream(file, { start, end }).on('error', () => res.destroy()).pipe(res);
-}).listen(PORT, '127.0.0.1', () => console.log(`Serving ${ROOT} at http://localhost:${PORT}/`));
+}).listen(PORT, HOST, () => console.log(`Serving ${ROOT} at http://${HOST === '127.0.0.1' ? 'localhost' : HOST}:${PORT}/`));

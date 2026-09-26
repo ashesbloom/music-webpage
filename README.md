@@ -36,7 +36,7 @@ album that's playing. You can move through the library, the queue and the search
 | 🔴 **Now playing is a record too** | The playing row's thumbnail turns into a tiny spinning record. Click it again to pause. |
 | 🗂️ **Split views that fold** | The Playlists and Artist pages have a side list that folds to icons by itself when the column gets narrow. It can also be folded by hand. |
 | 🔎 **Search that lands** | A song opened from search scrolls into place in its album, and the row briefly lights up. Recent searches keep up with the catalog. |
-| 📱 **Phone layout** | The deck moves to the top, a player sits at the bottom, and the dial becomes a row of chips. |
+| 📱 **An iPod on your phone** | On a phone, home is the deck and the queue, over a record rising from the bottom of the screen. Its outer groove is the seek bar and the title curves along it. ⏯ sits on the red label, and you turn the record to seek. Every other page has a mini player that brings you back. |
 
 ## Screens
 

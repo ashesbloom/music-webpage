@@ -6,8 +6,6 @@
   <title>Library – ACRUX</title>
   <link rel="icon" href="playback_tree/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="style/insert.css" type="text/css">
-  <!-- ponytail: phone deck trial switch (?deck=scroll|shrink); delete once a mode is chosen -->
-  <script>try{let m=new URLSearchParams(location.search).get('deck');if(m)localStorage.deck=m;document.documentElement.dataset.deck=localStorage.deck||'scroll'}catch(e){}</script>
   <script>try{let w=+localStorage.panelWidth;if(w>0)document.documentElement.style.setProperty('--menu-pref',w+'px')}catch(e){}</script>
 </head>
 <body>
@@ -78,6 +76,14 @@
       <ol class="history_list"></ol>
       <p class="h_empty">No results</p>
     </section>
+    <nav class="playlists" aria-labelledby="library_h">
+      <h5 id="library_h">Library</h5>
+      <ul class="nav">
+        <li><a href="library.html"><i class="icon icon-disc" aria-hidden="true"></i>My Music</a></li>
+        <li><a href="library.html?view=albums"><i class="icon icon-grid" aria-hidden="true"></i>Albums</a></li>
+        <li><a href="library.html?view=artist"><i class="icon icon-mic" aria-hidden="true"></i>Artists</a></li>
+      </ul>
+    </nav>
     <nav class="playlists" aria-labelledby="playlists_h">
       <h5 id="playlists_h">Playlists</h5>
       <ul class="nav">
@@ -96,6 +102,7 @@
 <script src="javascript/player.js"></script>
 <script src="javascript/more.js"></script>
 <script src="javascript/queue.js"></script>
+<script src="javascript/phone.js"></script>
 <script src="javascript/seekbar.js"></script>
 <script src="javascript/search.js"></script>
 <script src="javascript/volume.js"></script>

@@ -22,7 +22,7 @@
         bar.style.setProperty('--p', p);
         if (!dragging) seek.value = p * 100;
       }
-      const now = `${clock(t)} `, end = `/ ${clock(d)}`;
+      const now = clock(t), end = clock(d); // the " / " between them is CSS (none on the phone's iPod screen)
       if (elapsed.textContent !== now) elapsed.textContent = now;
       if (total.textContent !== end) total.textContent = end;
     } else if (shown !== 0) { // a new song is loading

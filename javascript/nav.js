@@ -26,8 +26,10 @@
     // The new URL is in place first, so the swapped-in markup's relative links and images resolve against it.
     document.title = doc.title;
     label();
-    if (doc.body.dataset.list) document.body.dataset.list = doc.body.dataset.list;
-    else delete document.body.dataset.list;
+    for (const key of ['list', 'page']) { // the page's song list, and "home" on the home page
+      if (doc.body.dataset[key]) document.body.dataset[key] = doc.body.dataset[key];
+      else delete document.body.dataset[key];
+    }
     document.querySelector('.explore').replaceWith(document.adoptNode(doc.querySelector('.explore')));
     const panel = document.getElementById('sidebar');
     const keep = panel.querySelector('.queue');
@@ -47,6 +49,7 @@
       window.scrollTo(0, 0);
       document.querySelector('.explore').scrollTop = 0;
     }
+    document.dispatchEvent(new Event('pagechange'));
   }
 
   document.addEventListener('click', (e) => {
