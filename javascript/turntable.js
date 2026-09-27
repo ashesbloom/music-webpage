@@ -63,6 +63,7 @@
 
   // The disc under a point: its centre, and a dead zone at the spindle where the angle is unsteady.
   function hitDisc(plate, x, y) {
+    if (playback.classList.contains('video')) return null; // a YouTube video on the deck: no record to grab
     const r = plate.getBoundingClientRect();
     const cx = r.left + r.width / 2, cy = r.top + r.height / 2;
     return Math.hypot(x - cx, y - cy) <= r.width / 2 ? { cx, cy, rMin: r.width * 0.05 } : null;
@@ -100,7 +101,7 @@
   // The deck's record, and on phones the rising record at the bottom too (phone.js); both drive the same song.
   function surface(host, plate) {
     host.addEventListener('pointerdown', (e) => {
-      if (held || e.button !== 0 || e.target.closest('button')) return;
+      if (held || e.button !== 0 || e.target.closest('button') || pref('scratch') === 'off') return; // Settings: it only spins
       const hit = hitDisc(plate, e.clientX, e.clientY);
       if (!hit) return;
       if (e.pointerType === 'mouse') {
@@ -180,8 +181,13 @@
   });
 
   music.addEventListener('error', () => {
+    const text = document.getElementById('albumtext');
     document.getElementById('play').className = 'icon icon-play'; // nothing is playing: Play will try again
-    document.getElementById('albumtext').textContent =
-      location.protocol === 'file:' ? 'Start with node server.js to play' : "Couldn't load this song";
+    text.textContent = location.protocol === 'file:' ? 'Start with node server.js to play' : "Couldn't load this song";
+    if (songs[index]?.drive) { // from Google Drive: say why when Drive is holding downloads back (api/drive.js)
+      fetch(`${SITE}api/sources`).then((res) => res.json()).then((body) => {
+        if (body.drive?.held) text.textContent = `Google Drive is holding back downloads. Try again in ${body.drive.held} min`;
+      }).catch(() => {});
+    }
   });
 })();

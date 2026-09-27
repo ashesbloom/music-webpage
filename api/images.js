@@ -32,7 +32,7 @@ async function first(...finders) {
 const artist = (name) => first(
   async () => (await deezer('artist', name)).find((a) => same(a.name, name) && !/\/artist\/\/|artist\/?$/.test(a.picture_xl || ''))?.picture_xl,
   async () => {
-    const wikidata = (await mbz.artist(name))?.wikidata;
+    const wikidata = (await mbz.artist(name, true))?.wikidata;
     if (!wikidata) return null;
     const entity = (await getJson(`https://www.wikidata.org/wiki/Special:EntityData/${wikidata}.json`)).entities?.[wikidata];
     const file = entity?.claims?.P18?.[0]?.mainsnak?.datavalue?.value;
@@ -45,7 +45,7 @@ const album = (title, by) => first(
   async () => (await deezer('album', `${by} ${title}`)).find((a) => same(a.title, title) && near(a.artist?.name, by))?.cover_xl,
   async () => big((await itunes({ term: `${by} ${title}`, entity: 'album' })).find((a) => same(a.collectionName, title) && near(a.artistName, by))?.artworkUrl100),
   async () => {
-    const group = await mbz.releaseGroup(title, by);
+    const group = await mbz.releaseGroup(title, by, true);
     return group ? `https://coverartarchive.org/release-group/${group}/front-500` : null;
   },
 );

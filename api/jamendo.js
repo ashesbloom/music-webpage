@@ -2,6 +2,7 @@
 // client ID from devportal.jamendo.com in .env (JAMENDO_CLIENT_ID). Its stream URLs send CORS headers, so the browser
 // plays them directly.
 const { playable, fail, getJson } = require('./common');
+const keys = require('./keys');
 
 const API = 'https://api.jamendo.com/v3.0';
 const PAGE = 20;
@@ -41,8 +42,8 @@ const artist = (a) => ({ source: 'jamendo', id: String(a.id), name: a.name, artw
 const tracks = (list) => list.map(map).filter(Boolean);
 
 async function get(path, params) {
-  const id = process.env.JAMENDO_CLIENT_ID;
-  if (!id) throw fail('Jamendo isn’t set up yet: add JAMENDO_CLIENT_ID to .env and restart the server.', 503);
+  const id = keys.key('jamendo');
+  if (!id) throw fail('Jamendo isn’t set up yet: add its key in My Music → Set up ACRUX.', 503);
   const body = await getJson(`${API}${path}?${new URLSearchParams({ client_id: id, format: 'json', ...params })}`);
   if (body.headers?.status === 'failed') throw fail(`Jamendo: ${body.headers.error_message}`);
   return body.results;

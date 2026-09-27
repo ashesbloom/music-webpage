@@ -5,10 +5,11 @@
 //   &artist=audius:45 · &artist=archive:<name>   an artist page
 //   &mine=1                                      your songs (Discover songs you've played): the library's Recently Added
 //   …&song=<id>                                  on an album page or your songs: scrolls to that song and plays it
-// Each source is asked on its own and drawn as it answers; Songs, Albums and Artists load more as you scroll.
+// The sources are asked together (one request) and each is drawn as it answers; Songs, Albums and Artists load more
+// as you scroll.
 // Discover songs play on the record like any song: their lists go to CATALOG.addList, so player.js's
-// [data-song]/[data-list] clicks, the queue and its prefetch work unchanged. YouTube plays only in this page's video
-// card (YouTube's rules: visible, at least 200×200, no background play), so leaving the page stops it.
+// [data-song]/[data-list] clicks, the queue and its prefetch work unchanged. YouTube videos do too: they play as a
+// screen on the deck (deck-audio.js), since YouTube's rules don't allow the sound without the video.
 (() => {
   const root = document.getElementById('library');
   const params = new URLSearchParams(location.search);
@@ -36,9 +37,8 @@
   const bare = (s) => String(s || '').toLowerCase().replace(/\(.*?\)|\[.*?\]/g, '').replace(/[^a-z0-9]/g, '');
   const songKey = (r) => `${bare(r.artist)}|${bare(r.title)}`; // "the same song" across sources
 
-  // Streaming quality, remembered. A song reads it each time it loads (its src getter); switching reloads the song
-  // playing now at the same spot.
-  const TIERS = { low: 'Low · 96 kbps MP3, saves data', medium: 'Medium · about 200 kbps MP3', high: 'High · lossless FLAC where the source has it, larger downloads' };
+  // Streaming quality, remembered (catalog.js). A song reads it each time it loads (its src getter).
+  const TIERS = CATALOG.tiers;
   const quality = CATALOG.quality;
 
   // An API result -> a song the player, queue, ⋯ tray and taste report understand (catalog.js; `result` is reported).
@@ -56,10 +56,10 @@
   // A song row. Its source badges sit on a small line under the title, so the title keeps the width; on an album or
   // artist page (plain), where every song comes from the same place (the header says so), there are none.
   const row = (s, plain = false) => `<li class="pl_row" data-id="${esc(s.id)}">
-      <button class="pl_fav" aria-disabled="true" aria-label="Favorite · coming soon">${ic('heart')}</button>
+      ${favButton('song', s.id)}
       <span class="pl_song"><span class="pl_thumb">${img(s.cover, s.alt)}</span><span class="dc_titles"><button class="pl_play" data-song="${esc(s.id)}" title="${esc(s.title)}">${esc(s.title)}</button>${plain ? '' : `<span class="dc_badges">${badges(s.result)}</span>`}</span></span>
       ${cell(s.artist, s.artistHref)}${cell(s.albumTitle, s.albumHref)}
-      <span class="pl_dl"></span>
+      ${keepButton(`song:${s.id}`)}
       <span class="pl_time">${s.time}</span>
       <button class="pl_more" data-more="${esc(s.id)}" aria-label="More">${ic('ellipsis')}</button></li>`;
   const songCard = (s) => `<li><button class="song_items card" data-song="${esc(s.id)}">${img(s.cover, s.alt)}<span class="card_label">${esc(s.title)}</span></button></li>`;
@@ -67,12 +67,12 @@
       <span class="al_t">${esc(a.title)}</span><span class="al_a">${esc(a.artist)}${a.year ? ` · ${esc(a.year)}` : ''}</span></a></li>`;
   const artistCard = (a) => `<li><a class="al dc_ar" href="${esc(at('artist', a.source, a.id) || link(`q=${enc(a.name)}`))}"><span class="al_art">${img(a.artworkUrl || picture({ artist: a.name }))}</span>
       <span class="al_t">${esc(a.name)}</span><span class="al_a">${a.source ? BADGE[a.source] : 'Discover'}</span></a></li>`;
-  const videoRow = (v, i) => `<li class="pl_row" data-video-row="${i}">
-      <span class="pl_fav"></span>
-      <span class="pl_song"><span class="pl_thumb">${img(v.artworkUrl)}</span><span class="dc_titles"><button class="pl_play" data-video="${i}" title="${esc(v.title)}">${esc(v.title)}</button><span class="dc_badges"><span class="dc_badge">YouTube</span></span></span></span>
-      <span class="pl_cell">${esc(v.artist)}</span><span class="pl_cell">${esc(v.album || '')}</span>
+  const videoRow = (s) => `<li class="pl_row" data-id="${esc(s.id)}">
+      ${favButton('song', s.id)}
+      <span class="pl_song"><span class="pl_thumb">${img(s.cover)}</span><span class="dc_titles"><button class="pl_play" data-song="${esc(s.id)}" title="${esc(s.title)}">${esc(s.title)}</button><span class="dc_badges"><span class="dc_badge">YouTube</span></span></span></span>
+      <span class="pl_cell">${esc(s.artist)}</span><span class="pl_cell">${esc(s.result.album || '')}</span>
       <span class="pl_dl"></span>
-      <span class="pl_time">${time(v.durationSec)}</span><span></span></li>`;
+      <span class="pl_time">${s.time}</span><span></span></li>`;
   const head = (title, t, href = t && tabLink(t)) => `<div class="dc_head"><h2>${title}</h2>${href ? `<a href="${esc(href)}">See all ${ic('chevron-right')}</a>` : ''}</div>`;
   const note = (text) => `<p class="pl_empty">${esc(text)}</p>`;
 
@@ -88,9 +88,13 @@
       </div>
     </div>`;
 
+  // Leaving the page stops what it's still asking for (nav.js: pageleave): the browser has only a few connections to
+  // the server, and the next page needs them.
+  const stop = new AbortController();
+  document.addEventListener('pageleave', () => stop.abort(), { once: true });
   // The API answers JSON; anything else (GitHub Pages, a plain file server) means the ACRUX server isn't behind the page.
   const api = async (path) => {
-    const res = await fetch(`${SITE}discover/${path}`);
+    const res = await fetch(`${SITE}discover/${path}`, { signal: stop.signal });
     if (!res.headers.get('content-type')?.includes('json')) throw new Error('no server');
     return res.json();
   };
@@ -104,6 +108,36 @@
   // Results render once the player exists (they need its globals), however fast the API answers.
   const ready = new Promise((done) => (document.readyState === 'loading' ? document.addEventListener('DOMContentLoaded', done) : done()));
   const load = (path) => Promise.all([api(path), ready]).then(([body]) => body);
+  // Searches asked for at the same moment go to the server as one request (POST /discover/batch), answered a line of
+  // JSON at a time as each source answers: one connection instead of a dozen, and every source asked at once.
+  let asks = null;
+  const ask = (one) => new Promise((resolve, reject) => {
+    if (!asks) { asks = []; setTimeout(flush); }
+    asks.push({ one, resolve, reject });
+  });
+  async function flush() {
+    const batch = asks;
+    asks = null;
+    try {
+      const res = await fetch(`${SITE}discover/batch`, { method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ q, asks: batch.map((b) => b.one) }), signal: stop.signal });
+      if (!res.headers.get('content-type')?.includes('ndjson')) throw new Error('no server');
+      const reader = res.body.pipeThrough(new TextDecoderStream()).getReader();
+      let text = '';
+      for (;;) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        text += value;
+        for (let n; (n = text.indexOf('\n')) >= 0; text = text.slice(n + 1)) {
+          const line = JSON.parse(text.slice(0, n));
+          ready.then(() => batch[line.i].resolve(line));
+        }
+      }
+      throw new Error('cut short'); // whichever didn't answer
+    } catch (err) {
+      batch.forEach((b) => ready.then(() => b.reject(err))); // those answered already stay answered
+    }
+  }
   const shownErrors = new Set();
   const problem = (text) => {
     if (!text || shownErrors.has(text)) return;
@@ -120,8 +154,7 @@
   // ---------- relevance ----------
 
   // Your songs (Discover songs you've played): they come first in a search, and "Recently Added" lists them.
-  const yours = fetch(`${SITE}api/songs`).then((res) => (res.headers.get('content-type')?.includes('json') ? res.json() : { songs: [] }))
-    .then((b) => b.songs || [], () => []);
+  const yours = CATALOG.get('songs').then((b) => b.songs || []);
   let yourIds = new Set();
   yours.then((mine) => { yourIds = new Set(mine.map((r) => `${r.source}:${r.id}`)); });
   const wordsOf = (s) => String(s || '').toLowerCase().normalize('NFKD').replace(/\(.*?\)|\[.*?\]/g, ' ').split(/[^a-z0-9]+/).filter(Boolean);
@@ -151,35 +184,35 @@
   // ---------- YouTube ----------
 
   // An artist's YouTube catalogue (their Topic channel: a few quota units, then free for a week) when the search is an
-  // artist MusicBrainz knows; else trending (no search) or, on a tap, a search (101 units, about 99 a day).
-  let videos = [];
-  let current = -1;
-  let yt = null; // the video card's player, once made (a promise)
+  // artist MusicBrainz knows; else trending (no search) or a search (101 units, about 99 a day; the server keeps each
+  // for a week, so searching the same thing again is free).
   let ytCatalog = Promise.resolve();
   const ytSection = (limit) => `
     <section class="dc_sec dc_yt" data-limit="${limit}">
       <div class="dc_head"><h2>${q ? 'YouTube' : 'Trending on YouTube'}</h2>${tab === 'all' ? `<a href="${esc(tabLink('youtube'))}">See all ${ic('chevron-right')}</a>` : ''}</div>
-      <div class="dc_card" hidden><div></div></div>
-      <ol class="pl_list dc_videos"><li>${note('Loading…')}</li></ol>
+      <ol class="pl_list dc_videos" data-list="${esc(`discover:youtube:${q}`)}"><li>${note('Loading…')}</li></ol>
       <p class="lib_muted dc_quota"></p>
     </section>`;
   function showVideos(body, title) {
     const sec = root.querySelector('.dc_yt');
-    if (!sec) return;
+    if (!sec) return 0;
     if (body.quota) sec.querySelector('.dc_quota').textContent = `≈ ${body.quota.searchesLeft} YouTube searches left today`;
     if (title) sec.querySelector('h2').textContent = title;
-    if (body.error) return (sec.querySelector('.dc_videos').innerHTML = `<li>${note(body.error)}</li>`);
-    videos = (body.results || []).slice(0, Number(sec.dataset.limit) || undefined);
+    if (body.error) {
+      sec.querySelector('.dc_videos').innerHTML = `<li>${note(body.error)}</li>`;
+      return 0;
+    }
+    const key = `discover:youtube:${q}`;
+    CATALOG.addList(key, (body.results || []).slice(0, Number(sec.dataset.limit) || undefined).map(song).filter(Boolean));
+    const videos = CATALOG.list(key);
     sec.querySelector('.dc_videos').innerHTML = videos.length ? videos.map(videoRow).join('') : `<li>${note(`Nothing on YouTube for “${q}”.`)}</li>`;
-  }
-  function searchButton() {
-    root.querySelector('.dc_videos').innerHTML = `<li class="dc_go"><button class="pl_playall" data-act="youtube">${ic('play')}Search YouTube for “${esc(q)}”</button><span class="lib_muted">Each search uses one of about 99 a day.</span></li>`;
+    mark();
+    return videos.length;
   }
   async function searchVideos() {
-    root.querySelector('.dc_videos').innerHTML = `<li>${note('Searching YouTube…')}</li>`;
     let body;
     try { body = await load(`youtube?q=${enc(q)}`); } catch { body = { error: 'YouTube needs the ACRUX server.' }; }
-    showVideos(body);
+    return showVideos(body);
   }
   function loadVideos() {
     if (!root.querySelector('.dc_yt')) return;
@@ -188,59 +221,11 @@
     ytCatalog = load(`youtube?artist=${enc(q)}`).then((body) => {
       if (body.results?.length) {
         body.results.forEach((r) => fullKeys.add(songKey(r)));
-        showVideos(body, `${body.artist} on YouTube · ${body.results.length} songs`);
-      } else if (tab === 'youtube') searchVideos(); // opening the YouTube tab is the tap
-      else searchButton();
+        return showVideos(body, `${body.artist} on YouTube · ${body.results.length} songs`);
+      }
+      return searchVideos();
     }, failed);
   }
-  const ytApi = () => (window.YT?.Player ? Promise.resolve(window.YT) : (window.ytReady ??= new Promise((resolve, reject) => {
-    window.onYouTubeIframeAPIReady = () => resolve(window.YT);
-    const script = document.createElement('script');
-    script.src = 'https://www.youtube.com/iframe_api';
-    script.onerror = () => { window.ytReady = null; reject(new Error('The YouTube player didn’t load.')); };
-    document.head.append(script);
-  })));
-  // Watching a video counts for your taste too: the seconds it played, reported when it stops or changes.
-  let since = 0;
-  let heard = 0;
-  function heardVideo(v) {
-    if (since) heard += (performance.now() - since) / 1000;
-    since = 0;
-    if (v && heard >= 1) navigator.sendBeacon?.(`${SITE}api/plays`, JSON.stringify({ song: v, listenedSec: Math.round(heard), durationSec: v.durationSec }));
-    heard = 0;
-  }
-  function onState(e) {
-    const S = window.YT.PlayerState;
-    if (e.data === S.PLAYING) {
-      since = performance.now();
-      if (!music.paused) document.getElementById('master_play').click(); // pause the record (and its icon)
-    } else if (since) {
-      heard += (performance.now() - since) / 1000;
-      since = 0;
-    }
-    if (e.data === S.ENDED) {
-      heardVideo(videos[current]);
-      if (videos[current + 1]) e.target.cueVideoById(videos[++current].playback.videoId); // cued, not played
-    }
-  }
-  async function playVideo(i) {
-    heardVideo(videos[current]);
-    current = i;
-    const box = root.querySelector('.dc_card');
-    box.hidden = false;
-    root.querySelectorAll('[data-video-row]').forEach((li) => li.classList.toggle('dc_on', Number(li.dataset.videoRow) === i));
-    const { videoId } = videos[i].playback;
-    try {
-      const YT = await ytApi();
-      if (yt) return (await yt).loadVideoById(videoId);
-      yt = new Promise((done) => new YT.Player(box.firstElementChild, {
-        videoId, playerVars: { autoplay: 1, playsinline: 1, rel: 0 }, events: { onReady: (e) => done(e.target), onStateChange: onState },
-      }));
-    } catch (err) {
-      root.querySelector('.dc_videos').insertAdjacentHTML('beforebegin', note(err.message));
-    }
-  }
-
   // ---------- one kind from every source ----------
 
   // Fills `holder` (a song list, or an album / artist grid or row) from every source as each answers. iTunes previews
@@ -274,6 +259,7 @@
       if (kind === 'songs') {
         // Each song goes in by relevance (score), after those that score the same: the list and the rows stay in step.
         const list = CATALOG.list(key);
+        const playing = listKey === key && started ? songs[index]?.id : undefined; // before the inserts shift the indexes
         for (const s of fresh.map(song).filter(Boolean)) {
           const at = list.findIndex((x) => score(x.result) < score(s.result));
           const i = at < 0 ? list.length : at;
@@ -282,7 +268,7 @@
           if (after) after.insertAdjacentHTML('beforebegin', row(s));
           else holder.insertAdjacentHTML('beforeend', row(s));
         }
-        if (listKey === key) setList(list, key); // playing this list: the queue follows (it keeps the song playing)
+        if (listKey === key) setList(list, key, playing ?? songs[index]?.id); // playing this list: the queue follows (it keeps the song playing)
         mark();
         if (holder.classList.contains('dc_songs')) artistsOf(fresh);
       } else if (holder.classList.contains('dc_artists')) {
@@ -298,7 +284,13 @@
       if (!st.more || st.busy || count >= cap) return Promise.resolve();
       st.busy = true;
       st.n++;
-      return load(`search?q=${enc(q)}&source=${source}&kind=${kind}&page=${st.n}${scroll ? '' : '&warm=0'}`).then((r) => {
+      const one = { source, kind, page: st.n, warm: scroll };
+      const again = (r) => { // a source that didn't answer is asked once more, rather than waiting for a refresh
+        if (!r.error || st.retried) return r;
+        st.retried = true;
+        return new Promise((done) => setTimeout(done, 2000)).then(() => ask(one));
+      };
+      return ask(one).then(again).then((r) => {
         problem(r.error);
         st.more = r.more;
         add(source, r.results);
@@ -312,7 +304,7 @@
     const round = () => {
       const full = Promise.allSettled(sources.filter((s) => s !== 'itunes').map(next));
       if (kind !== 'songs' || !state.itunes) return full;
-      const youtube = Promise.race([ytCatalog, new Promise((done) => setTimeout(done, 3000))]); // its songs aren't previewed either
+      const youtube = Promise.race([ytCatalog, new Promise((done) => setTimeout(done, 8000))]); // its songs aren't previewed either
       return full.then(() => youtube).then(() => next('itunes'));
     };
     const firstRound = first.then(round).then(() => count);
@@ -413,7 +405,7 @@
       ${body.rows.map((r, i) => {
         if (r.artists) return `<section class="dc_sec">${head(esc(r.title))}<ul class="row-1">${r.artists.map(artistCard).join('')}</ul></section>`;
         const key = `discover:foryou:${i}`;
-        CATALOG.addList(key, r.songs.map(song).filter(Boolean)); // a video you watched plays on YouTube, not here
+        CATALOG.addList(key, r.songs.map(song).filter(Boolean));
         if (!CATALOG.list(key).length) return '';
         return `<section class="dc_sec">${head(esc(r.title))}${r.note ? `<p class="lib_muted">${esc(r.note)}</p>` : ''}<ul class="row-1" data-list="${esc(key)}">${CATALOG.list(key).map(songCard).join('')}</ul></section>`;
       }).join('')}`;
@@ -458,8 +450,8 @@
         feed('artists', root.querySelector('.dc_artists'), { cap: 16 }),
         feed('albums', root.querySelector('.dc_albums'), { cap: 16 }),
         feed('songs', root.querySelector('.dc_songs'), { cap: 20 }),
-      ]).then((counts) => {
-        if (q && !counts.some(Boolean)) problem(`Nothing on Jamendo, Audius or the Internet Archive for “${q}”. Try YouTube below.`);
+      ]).then(async (counts) => {
+        if (q && !counts.some(Boolean) && !(await ytCatalog)) problem(`Nothing found for “${q}”.`); // YouTube's answer is enough
       });
     } else if (tab !== 'youtube') {
       feed(tab, root.querySelector('.dc_kind .pl_list, .dc_kind .al_grid'), { scroll: true });
@@ -493,7 +485,7 @@
         body: JSON.stringify({ title: a.title, from: `${source}:${id}`, cover: a.artworkUrl, songs: a.tracks }) });
       if (!res.ok) throw new Error(res.status);
       const { id: pid } = await res.json();
-      CATALOG.addSaved({ id: pid, title: a.title, cover: a.artworkUrl, from: `${source}:${id}`, songs: a.tracks });
+      await CATALOG.refresh();
       button.parentElement.innerHTML = savedLink(pid);
     } catch {
       button.removeAttribute('aria-disabled');
@@ -509,6 +501,8 @@
       const key = `discover:album:${source}:${id}`;
       const mins = Math.round(a.tracks.reduce((t, r) => t + r.durationSec, 0) / 60);
       const artistLink = at('artist', source, a.artistId);
+      const songsHtml = a.tracks.length ? songList(key, a.tracks, true) : ''; // first: the ↓ below looks at its songs
+      const mine = a.tracks.length ? `${keepButton(`list:${key}`, 'round red pl_keep')}${favButton('album', `${source}:${id}`, { title: a.title, sub: a.artist, cover: a.artworkUrl || '', href: location.href }, 'round red pl_heart')}` : '';
       root.querySelector('.pl_empty').outerHTML = `
         <section class="pl_hero">
           <div class="pl_cover" style="--lab: var(--accent)"><span class="cv">${img(a.artworkUrl)}</span></div>
@@ -517,13 +511,14 @@
             <h1>${esc(a.title)}</h1>
             <p class="pl_meta">${artistLink ? `<a href="${esc(artistLink)}">${esc(a.artist)}</a>` : esc(a.artist)}${a.year ? ` · ${esc(a.year)}` : ''} · ${onSource(source, a.sourceUrl)}</p>
             <span class="lib_muted">${a.tracks.length} song${a.tracks.length === 1 ? '' : 's'}${a.tracks.length ? ` · ${mins} min` : ''}</span>
-            ${playButtons(key, a.tracks.length ? '' : ' aria-disabled="true"', a.tracks.length ? albumButtons(source, id) : '')}
+            ${playButtons(key, a.tracks.length ? '' : ' aria-disabled="true"', a.tracks.length ? albumButtons(source, id) + mine : '')}
           </div>
         </section>
         ${a.tracks.length ? `<section class="dc_sec"><div class="pl_row pl_head" aria-hidden="true"><span class="pl_fav"></span><span>Song</span><span class="pl_cell">Artist</span><span class="pl_cell">Album</span><span class="pl_dl"></span><span class="pl_time">Time</span><span></span></div>
-        ${songList(key, a.tracks, true)}</section>` : note('No playable songs in this album (Discover skips songs over 15 minutes).')}`;
+        ${songsHtml}</section>` : note('No playable songs in this album (Discover skips songs over 15 minutes).')}`;
       document.title = `${a.title} – ACRUX`;
       shown = { a, source, id };
+      paintMarks(root);
       CATALOG.ready.then(() => { // saved before: the button says so and opens the playlist
         const slot = root.querySelector('.dc_save');
         if (slot && CATALOG.playlist(savedId(source, id))) slot.innerHTML = savedLink(savedId(source, id));
@@ -579,15 +574,18 @@
     const id = params.get('song');
     const button = id && [...root.querySelectorAll('[data-song]')].find((b) => b.dataset.song === id);
     if (!button) return;
+    const url = new URL(location.href); // followed once: a reload, or the app reopening here, doesn't play it again
+    url.searchParams.delete('song');
+    history.replaceState(history.state, '', url);
     button.closest('li').classList.add('found');
     button.scrollIntoView({ block: 'center' });
-    if (!(started && songs[index].id === id)) button.click();
+    if (!(started && loaded?.id === id)) button.click(); // not the song in the player already
   }
 
   // After a search, the song you play from it takes the search's place in Recent searches (search.js): next time it's
   // one tap to that song, on its album page or in your songs.
   function rememberSong(s) {
-    if (!q || !s.result || !(listKey || '').startsWith('discover:')) return;
+    if (!q || !s.result || s.video || !(listKey || '').startsWith('discover:')) return;
     try {
       const saved = JSON.parse(localStorage.getItem('searchHistory')) || [];
       const online = (e) => e?.href && new URL(e.href, location.href).searchParams.get('q')?.toLowerCase() === q.toLowerCase() && !e.mine;
@@ -603,6 +601,7 @@
   function mark() {
     const now = started && songs[index].id;
     root.querySelectorAll('[data-id]').forEach((li) => li.classList.toggle('now', li.dataset.id === now));
+    window.paintMarks?.(root); // new rows’ ♥ and ↓ (more.js)
   }
 
   // What the chosen quality means, and whether the song playing has other qualities at all (many don't).
@@ -612,17 +611,9 @@
     root.querySelector('.dc_q_note').textContent = TIERS[quality()] + (single ? ' · the song playing comes in one quality only' : '');
   }
   function setQuality(t) {
-    try { localStorage.setItem('quality', t); } catch {} // private mode: stays Medium
+    CATALOG.setQuality(t);
     root.querySelectorAll('[data-tier]').forEach((b) => b.setAttribute('aria-pressed', b.dataset.tier === t));
     caption();
-    const s = started && songs[index];
-    if (!s?.urls || s.src === music.src) return; // not a Discover song, or the same file in this quality
-    const pos = music.currentTime;
-    const playing = !music.paused;
-    music.src = s.src;
-    const url = music.src;
-    music.addEventListener('canplay', () => { if (music.src === url) music.currentTime = pos; }, { once: true });
-    if (playing) music.play();
   }
 
   // More like this: while a Discover list plays a Jamendo song, a row of songs in its genres sits at the top.
@@ -642,12 +633,10 @@
   }
 
   root.addEventListener('click', (e) => {
-    const b = e.target.closest('[data-more], [data-tier], [data-act], [data-video]');
+    const b = e.target.closest('[data-more], [data-tier], [data-act]');
     if (!b || b.getAttribute('aria-disabled') === 'true') return;
     if (b.dataset.more) return showTray(found.get(b.dataset.more), b); // more.js
-    if (b.dataset.video) return playVideo(Number(b.dataset.video));
     if (b.dataset.tier) return setQuality(b.dataset.tier);
-    if (b.dataset.act === 'youtube') return searchVideos();
     if (b.dataset.act === 'save') return saveAlbum(b);
     if (b.dataset.act === 'play' || b.dataset.act === 'shuffle') start(b.dataset.key, b.dataset.act === 'shuffle');
   });
@@ -658,20 +647,15 @@
   else searchPage();
 
   const onPlay = () => {
-    if (!root.isConnected) { // a page nav.js has swapped out: count the video heard there, then stop listening
-      heardVideo(videos[current]);
-      return music.removeEventListener('play', onPlay);
-    }
+    if (!root.isConnected) return music.removeEventListener('play', onPlay); // a page nav.js has swapped out
     mark();
     caption();
     similar(songs[index]);
     rememberSong(songs[index]);
-    yt?.then((p) => p.pauseVideo?.());
   };
   ready.then(() => {
     music.addEventListener('play', onPlay);
     mark();
     caption();
   });
-  document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'hidden' && root.isConnected) heardVideo(videos[current]); });
 })();

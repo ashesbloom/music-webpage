@@ -6,23 +6,26 @@ if (!songs.length) songs = CATALOG.list('album:nectar'); // an empty page list s
 let listKey = document.body.dataset.list;
 let index = 0;
 let started = false; // until the first play, Play starts songs[index] from its list
-const music = new DeckAudio(songs[0].src);
+let loaded = null;    // the song in `music` now: songs[index] can point elsewhere once the list is swapped
+const music = new DeckAudio(songs[0]?.src); // the app starts with no songs until you add some
 
 function playAt(i) {
+  if (!songs[i]) return; // an empty list: nothing to play yet
   index = i;
   started = true;
+  loaded = songs[i];
   music.src = songs[i].src;
   music.play();
   document.getElementById('play').className = 'icon icon-pause';
 }
 
 // Swap the list (keeping the current song's place if it's in the new one); queue.js rebuilds on 'listchange'.
-function setList(list, key) {
+// nowId: the song playing, when the caller changed `songs` itself before calling (discover.js inserts into it).
+function setList(list, key, nowId = songs[index]?.id) {
   if (!list.length) return;
-  const now = songs[index];
   songs = list;
   listKey = key;
-  index = Math.max(0, songs.findIndex((s) => s.id === now.id)); // by id: a list made again has new song objects
+  index = Math.max(0, songs.findIndex((s) => s.id === nowId)); // by id: a list made again has new song objects
   document.dispatchEvent(new Event('listchange'));
 }
 
@@ -36,6 +39,14 @@ function setList(list, key) {
   document.addEventListener('error', (e) => {
     const img = e.target;
     if (img.tagName !== 'IMG') return;
+    // Found by name, and not found yet: the server answers within a second rather than hold one of the page's few
+    // connections to it (api/discover.js), and keeps looking. Asked once more a little later, it's usually there.
+    if (img.src.includes('/discover/image?') && !img.src.includes('&again=1')) {
+      const again = `${img.src}&again=1`;
+      img.src = PLACEHOLDER;
+      setTimeout(() => { if (img.isConnected) img.src = again; }, 4000);
+      return;
+    }
     const alt = img.dataset.alt;
     delete img.dataset.alt;
     if (alt && alt !== img.src) img.src = alt;
@@ -52,6 +63,9 @@ function setList(list, key) {
       playicon.className = 'icon icon-play';
     }
   });
+  // Played or paused from elsewhere (inside a YouTube video, or one going out of sight): the icon follows.
+  music.addEventListener('play', () => { playicon.className = 'icon icon-pause'; });
+  music.addEventListener('pause', () => { playicon.className = 'icon icon-play'; });
   // Repeat: off → the queue (the list starts over when it ends) → this song (a "1" on the icon) → off. Remembered.
   const repeat = $('repeat');
   const MODES = { off: 'Repeat', all: 'Repeat: the queue', one: 'Repeat: this song' };
@@ -67,7 +81,11 @@ function setList(list, key) {
   setRepeat(MODES[saved] ? saved : 'off');
   repeat.addEventListener('click', () => setRepeat({ off: 'all', all: 'one', one: 'off' }[repeat.dataset.mode]));
 
-  $('prev').addEventListener('click', () => playAt((index - 1 + songs.length) % songs.length));
+  // Previous: back to the song's start, or to the song before once it's within its first 3 seconds (as Spotify, Android).
+  $('prev').addEventListener('click', () => {
+    if (started && music.currentTime > 3 && pref('prevRestart') !== 'off') music.currentTime = 0;
+    else playAt((index - 1 + songs.length) % songs.length);
+  });
   $('next').addEventListener('click', () => {
     const n = upNext(); // queue.js: Next plays the top of Continue Playing (shuffled order included)
     if (n >= 0) return playAt(n);
@@ -75,13 +93,17 @@ function setList(list, key) {
     playAt((index + skip) % songs.length);
   });
 
+  // Your music changed (a song or folder added or removed): the list playing is taken again, without the removed ones.
+  document.addEventListener('librarychange', () => { if (listKey) setList(CATALOG.list(listKey), listKey); });
+
   document.addEventListener('click', (e) => {
     const b = e.target.closest('[data-song]');
     if (!b) return;
     const key = b.closest('[data-list]')?.dataset.list;
-    if (key && key !== listKey) setList(CATALOG.list(key), key);
+    // Another list, or this one changed since (songs added or removed, the same name): take the page's list as it is now.
+    if (key && (key !== listKey || !songs.some((s) => s.id === b.dataset.song))) setList(CATALOG.list(key), key);
     const i = songs.findIndex((s) => s.id === b.dataset.song);
-    if (i >= 0 && i === index && started) $('master_play').click(); // the song already playing: pause or resume it
+    if (i >= 0 && started && songs[i].id === loaded?.id) $('master_play').click(); // the song in the player: pause or resume it
     else if (i >= 0) playAt(i);
   });
 
@@ -96,10 +118,8 @@ function setList(list, key) {
     playicon.className = 'icon icon-play'; // queue finished: stop
   }, 1000));
 
-  // Fill the header and record from the song now playing. Registered after queue.js's listener (DOMContentLoaded),
-  // so upNext() here is already the song after this one.
-  document.addEventListener('DOMContentLoaded', () => music.addEventListener('play', () => {
-    const s = songs[index];
+  // The header and the record show a song: its cover, title and artist.
+  function show(s) {
     for (const img of [$('main_cover'), $('playback_cover')]) {
       if (s.alt) img.dataset.alt = s.alt; // the album's cover, if the song's own picture fails
       else delete img.dataset.alt;
@@ -107,16 +127,69 @@ function setList(list, key) {
     }
     $('albumtext').textContent = s.title;
     $('albumdescription').textContent = s.artist;
+  }
+
+  // Fill the header and record from the song now playing. Registered after queue.js's listener (DOMContentLoaded),
+  // so upNext() here is already the song after this one.
+  document.addEventListener('DOMContentLoaded', () => music.addEventListener('play', () => {
+    const s = songs[index];
+    show(s);
+    const now = THEME.follows() && known(s.cover);
+    if (now) THEME.paint(now); // read before (this song ahead, or played already): with the cover, not after it
+    if (pref('ahead') === 'off') return; // Settings: nothing loads ahead, to save data
     const n = upNext();
-    if (n >= 0) music.preload(songs[n].src);
+    if (n >= 0 && songs[n].cover && THEME.follows()) coverColour(songs[n].cover);
+    // Only a Discover song is fetched ahead: your own are on this computer, or the server keeps their start ready
+    // (api/cache.js), so a 100 MB FLAC isn't pulled in while this one plays.
+    if (n >= 0 && !songs[n].lib) music.preload(songs[n].src);
+    // Songs from your Google Drive: the server fetches the start of the next few ahead (api/cache.js).
+    const drive = [s, ...(window.upcoming?.(10) || [])].filter((x) => x?.drive).map((x) => x.trackId);
+    if (drive.length) fetch(`${SITE}api/player/state`, { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ ids: drive }) }).catch(() => {});
   }));
 
+  // The song, remembered (localStorage 'nowPlaying'): which one, its second and length, and its list, so a reload or
+  // the next start of the app puts it back, paused there, with the same queue. Your songs are kept by id, Discover's
+  // as their result (which rebuilds them). Saved when a song starts or pauses, every 5 s while it plays, and when the
+  // window is hidden or closed.
+  // ponytail: up to 500 songs around the one playing (Infinite can run for hours); keep more if a longer queue is missed.
+  function remember() {
+    const s = songs[index];
+    if (!started || !s) return;
+    const from = Math.max(0, index - 100);
+    try {
+      localStorage.setItem('nowPlaying', JSON.stringify({ list: listKey, id: s.id, at: music.currentTime,
+        length: isFinite(music.duration) ? music.duration : 0, songs: songs.slice(from, from + 500).map((x) => x.result || x.id) }));
+    } catch {} // private mode: it plays, it just isn't remembered
+  }
+  let savedAt = 0;
+  music.addEventListener('play', remember);
+  music.addEventListener('pause', remember);
+  music.addEventListener('timeupdate', () => { if (Date.now() - savedAt > 5000) { savedAt = Date.now(); remember(); } });
+  window.addEventListener('pagehide', remember);
+  document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'hidden') remember(); });
+  CATALOG.ready.then(() => {
+    let saved = null;
+    try { saved = JSON.parse(localStorage.getItem('nowPlaying')); } catch {}
+    if (started || pref('resume') === 'off' || !Array.isArray(saved?.songs)) return; // something already playing, or nothing kept
+    const list = saved.songs.map((x) => (typeof x === 'string' ? CATALOG.find(x) : CATALOG.fromResult(x))).filter(Boolean);
+    if (!list.some((s) => s.id === saved.id)) return; // gone from your library since
+    if (saved.list && !CATALOG.list(saved.list).length) CATALOG.addList(saved.list, list); // a list made at runtime (Discover's, Home's)
+    setList(list, saved.list, saved.id);
+    started = true; // Play carries on with it (music.play), not the page's list
+    loaded = songs[index];
+    music.src = songs[index].src;
+    music.resume(saved.at, saved.length);
+    show(songs[index]);
+  });
+
   // Your taste (api/taste.js): how long you actually listened to each song (seeks and scratching don't count) goes to
-  // the server when the song changes, ends, or the page is hidden. A Discover song carries its API result; a library
+  // the server when the song changes, ends, or the page is hidden, with the list it played in (a playlist's plays
+  // rank it in the side panel). A Discover song carries its API result; a library
   // song is described the same way here. Without the server (GitHub Pages) the beacon just finds nothing to talk to.
   let heard = 0;
   let last = null;
   let current = null;
+  let currentList = null;
   const secs = (t = '') => t.split(':').reduce((m, x) => m * 60 + Number(x), 0);
   const described = (s) => s.result || {
     source: 'library', id: s.id, title: s.title, artist: s.artist, album: CATALOG.album(s.album)?.title, albumId: s.album,
@@ -125,9 +198,9 @@ function setList(list, key) {
     tags: { genres: [CATALOG.album(s.album)?.genre].filter(Boolean), kinds: [] },
   };
   function report() {
-    if (current && heard >= 1) {
+    if (current && heard >= 1 && pref('learn') !== 'off') { // Settings can keep your plays out of For you
       const song = described(current);
-      navigator.sendBeacon?.(`${SITE}api/plays`, JSON.stringify({ song, listenedSec: Math.round(heard), durationSec: Math.round(music.duration) || song.durationSec }));
+      navigator.sendBeacon?.(`${SITE}api/plays`, JSON.stringify({ song, listenedSec: Math.round(heard), durationSec: Math.round(music.duration) || song.durationSec, list: currentList }));
     }
     heard = 0;
     last = null;
@@ -142,35 +215,51 @@ function setList(list, key) {
     if (songs[index] === current) return; // a resume
     report();
     current = songs[index];
+    currentList = listKey;
   });
   music.addEventListener('ended', report);
   document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'hidden') report(); });
 
-  // Tint the record player (strobe dots, label ring, glow, deck lights, sleeve cards, search ring) with the cover's
-  // dominant vivid colour via --tint. The picture itself never waits on this: it shows whatever its site allows.
+  // The cover's dominant vivid colour, for the parts that follow it (colours.js: the record's lights via --tint, and any
+  // colour Settings sets to follow the cover). The picture itself never waits on this: it shows whatever its site allows.
   // Reading its colours needs a same-origin or CORS copy: a fresh CORS fetch (not the cached, header-less copy the
-  // <img> may have), else the server's same-origin copy (/discover/art); if neither works the tint stays as it is.
+  // <img> may have), else the server's same-origin copy (/discover/art); if neither works the colours stay as they are.
+  // Each cover's colour is read once, and the next song's while this one plays (the play listener above), so the
+  // colours change with the cover rather than after it.
   const label = $('playback_cover');
+  const colours = new Map(); // cover address → [r, g, b], null (unreadable), or the promise of one
+  const address = (src) => new URL(src, location.href).href;
+  const picture = (src) => new Promise((done) => {
+    const pic = new Image();
+    pic.onload = () => done(pic);
+    pic.onerror = () => done(null);
+    pic.src = src;
+  });
+  async function readable(src) {
+    if (new URL(src).origin === location.origin) return picture(src);
+    try {
+      const res = await fetch(src, { mode: 'cors', cache: 'no-store' });
+      if (!res.ok) throw new Error(res.status);
+      return await createImageBitmap(await res.blob());
+    } catch {
+      return picture(`${SITE}discover/art?u=${encodeURIComponent(src)}`);
+    }
+  }
+  function coverColour(cover) {
+    const src = address(cover);
+    if (!colours.has(src)) {
+      const reading = readable(src).then((pic) => pic && tint(pic)).catch(() => null);
+      colours.set(src, reading);
+      reading.then((c) => colours.set(src, c));
+    }
+    return colours.get(src);
+  }
+  const known = (cover) => { const c = cover && colours.get(address(cover)); return Array.isArray(c) ? c : null; };
   label.addEventListener('load', async () => {
     const src = label.src;
-    if (src.endsWith('placeholder.svg')) return;
-    let pic = label;
-    if (new URL(src).origin !== location.origin) {
-      try {
-        const res = await fetch(src, { mode: 'cors', cache: 'no-store' });
-        if (!res.ok) throw new Error(res.status);
-        pic = await createImageBitmap(await res.blob());
-      } catch {
-        pic = await new Promise((done) => {
-          const copy = new Image();
-          copy.onload = () => done(copy);
-          copy.onerror = () => done(null);
-          copy.src = `${SITE}discover/art?u=${encodeURIComponent(src)}`;
-        });
-      }
-      if (!pic || label.src !== src) return; // no readable copy, or the song changed meanwhile
-    }
-    tint(pic);
+    if (src.endsWith('placeholder.svg') || !THEME.follows()) return; // Settings: nothing follows the cover
+    const c = await coverColour(src);
+    if (c && label.src === src) THEME.paint(c); // not when the song changed meanwhile
   });
 
   function tint(pic) {
@@ -180,7 +269,7 @@ function setList(list, key) {
     try {
       ctx.drawImage(pic, 0, 0, 32, 32);
       px = ctx.getImageData(0, 0, 32, 32).data;
-    } catch { return; } // a tainted canvas (file://): keep the colour
+    } catch { return null; } // a tainted canvas (file://): keep the colour
     const bins = Array.from({ length: 12 }, () => [0, 0, 0, 0]); // r, g, b, weight per 30deg of hue
     for (let i = 0; i < px.length; i += 4) {
       const r = px[i], g = px[i + 1], b = px[i + 2];
@@ -193,6 +282,6 @@ function setList(list, key) {
     const [r, g, b, w] = bins.reduce((best, bin) => (bin[3] > best[3] ? bin : best));
     const k = 235 / Math.max(r / w, g / w, b / w, 1); // same hue, lifted so it reads on the dark record
     const ch = (v) => Math.min(255, Math.round(v / w * k));
-    document.documentElement.style.setProperty('--tint', `rgb(${ch(r)} ${ch(g)} ${ch(b)})`);
+    return [ch(r), ch(g), ch(b)];
   }
 })();

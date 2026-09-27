@@ -1,8 +1,11 @@
-// YouTube: the mainstream catalogue, searched only on a tap (Discover's YouTube tab). A search costs 101 of the 10,000
+// YouTube: the mainstream catalogue, searched with each Discover search that isn't an artist's name (an artist's
+// catalogue comes from their channel instead). A search costs 101 of the 10,000
 // daily quota units (search.list 100 + videos.list 1 for durations), about 99 a day, so the count is kept in SQLite;
-// the trending chart costs 1. Needs YOUTUBE_API_KEY in .env. Videos play in the page's video card, never on the record.
+// the trending chart costs 1. Searches are cached for a week (discover.js), so a repeat is free. Needs
+// YOUTUBE_API_KEY in .env. Videos play as a screen on the deck (javascript/deck-audio.js).
 const { fail, getJson } = require('./common');
 const { quota } = require('./db');
+const keys = require('./keys');
 
 const API = 'https://www.googleapis.com/youtube/v3';
 const LIMIT = 10000;
@@ -38,8 +41,8 @@ const USED_UP = 'Today’s YouTube quota is used up. It comes back at midnight P
 // One API call: `cost` units counted up front (Google charges for failed calls too); Google's refusals become
 // messages the page can show.
 async function call(path, params, cost = 1) {
-  const key = process.env.YOUTUBE_API_KEY;
-  if (!key) throw fail('YouTube isn’t set up yet: add YOUTUBE_API_KEY to .env and restart the server.', 503);
+  const key = keys.key('youtube');
+  if (!key) throw fail('YouTube isn’t set up yet: add a Google key in My Music → Set up ACRUX.', 503);
   if (LIMIT - quota.used() < cost) throw fail(USED_UP, 429);
   quota.spend(cost);
   try {
@@ -50,7 +53,7 @@ async function call(path, params, cost = 1) {
       quota.set(LIMIT);
       throw fail(USED_UP, 429);
     }
-    if (err.status === 400 || err.status === 403) throw fail(`YouTube refused the request (${reason || err.status}). Check YOUTUBE_API_KEY and that YouTube Data API v3 is enabled for it.`, 503);
+    if (err.status === 400 || err.status === 403) throw fail(`YouTube refused the request (${reason || err.status}). Check the Google key in My Music → Set up ACRUX, and that YouTube Data API v3 is enabled for it.`, 503);
     throw err;
   }
 }
@@ -68,7 +71,7 @@ async function details(ids) {
 const topics = (v) => (v?.topicDetails?.topicCategories || []).map((u) => decodeURIComponent(u.split('/').pop()).replace(/_/g, ' ')).filter((t) => t !== 'Music');
 const withDetails = (item, v) => ({ ...map(item, iso(v?.contentDetails?.duration)), tags: { genres: topics(v), kinds: [] } });
 
-// A search: 101 units (search.list 100 + videos.list 1), so only on a tap.
+// A search: 101 units (search.list 100 + videos.list 1).
 async function search(q) {
   const found = await call('search', { part: 'snippet', type: 'video', videoCategoryId: '10', videoEmbeddable: 'true', maxResults: '15', q }, 100);
   const items = (found.items || []).filter((i) => i.id?.videoId && i.snippet?.liveBroadcastContent !== 'upcoming');

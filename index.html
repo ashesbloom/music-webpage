@@ -8,14 +8,16 @@
   <title>ACRUX</title>
   <link rel="icon" href="playback_tree/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="style/insert.css" type="text/css">
+  <script src="javascript/edition.js"></script>
   <script>try{let w=+localStorage.panelWidth;if(w>0)document.documentElement.style.setProperty('--menu-pref',w+'px')}catch(e){}</script>
+  <script src="javascript/colours.js"></script>
 </head>
 <body data-list="album:nectar" data-page="home">
 <header class="header">
   <div class="logo"><a href="index.html" class="text-focus-in">ACRUX</a></div>
   <div class="playbackarea">
     <div class="albumname">
-      <div class="cover"><img id="main_cover" src="playback_tree/placeholder.svg" alt=""></div>
+      <div class="cover"><img id="main_cover" src="playback_tree/placeholder.svg" alt=""><a class="cover_home" href="index.html" aria-label="Home"><i class="icon icon-house" aria-hidden="true"></i></a></div>
       <div class="albumtext">
         <p id="albumtext">Nothing playing</p>
         <p id="albumdescription"></p>
@@ -78,8 +80,8 @@
         <div class="text_title2"><span class="kicker">New for you</span><h2><a href="library.html?view=discover">Discover</a></h2><p>Fresh picks to explore</p><span class="open" aria-hidden="true">Open <i class="icon icon-chevron-right"></i></span></div>
       </div>
     </div>
-    <h3 class="songname">Recently Played</h3>
-    <ul class="row-1" id="recent">
+    <h3 class="songname"><a href="library.html?view=playlist&amp;id=recently-played">Recently Played<i class="icon icon-chevron-right" aria-hidden="true"></i></a></h3>
+    <ul class="row-1 demo" id="recent">
       <li><button class="song_items card" data-song="nectar-18"><img alt="" src="playback_tree/covers/joji/joji_nector.jpg"><span class="card_label">Upgrade</span></button></li>
       <li><button class="song_items card" data-song="nectar-6"><img alt="" src="playback_tree/covers/joji/joji_run.jpg"><span class="card_label">Run</span></button></li>
       <li><button class="song_items card" data-song="nectar-5"><img alt="" src="playback_tree/covers/joji/joji_golden.jpg"><span class="card_label">Gimme Love</span></button></li>
@@ -91,8 +93,8 @@
       <li><button class="song_items card" data-song="nectar-11"><img alt="" loading="lazy" src="playback_tree/covers/joji/joji_nector.jpg"><span class="card_label">Normal People</span></button></li>
       <li><button class="song_items card" data-song="nectar-12"><img alt="" loading="lazy" src="playback_tree/covers/joji/joji_nector.jpg"><span class="card_label">Afterthought</span></button></li>
     </ul>
-    <h3 class="songname">Recently Added</h3>
-    <ul class="row-1" id="added">
+    <h3 class="songname"><a href="library.html?view=playlist&amp;id=recently-added">Recently Added<i class="icon icon-chevron-right" aria-hidden="true"></i></a></h3>
+    <ul class="row-1 demo" id="added">
       <li><button class="song_items card" data-song="nectar-7"><img alt="" src="playback_tree/covers/joji/joji%20santuary.jpg"><span class="card_label">Sanctuary</span></button></li>
       <li><button class="song_items card" data-song="nectar-2"><img alt="" src="playback_tree/covers/joji/joji_nector.jpg"><span class="card_label">Modus</span></button></li>
       <li><button class="song_items card" data-song="nectar-3"><img alt="" src="playback_tree/covers/joji/joji_nector.jpg"><span class="card_label">Tick Tock</span></button></li>
@@ -102,19 +104,19 @@
       <li><button class="song_items card" data-song="nectar-14"><img alt="" loading="lazy" src="playback_tree/covers/joji/joji_nector.jpg"><span class="card_label">777</span></button></li>
       <li><button class="song_items card" data-song="nectar-15"><img alt="" loading="lazy" src="playback_tree/covers/joji/joji_nector.jpg"><span class="card_label">Reanimator</span></button></li>
     </ul>
-    <h3 class="songname">My Favorites</h3>
+    <h3 class="songname"><a href="library.html?view=playlist&amp;id=favorites">My Favorites<i class="icon icon-chevron-right" aria-hidden="true"></i></a></h3>
     <ul class="row-1" id="favorites"></ul>
     <p class="fav_empty"><i class="icon icon-heart" aria-hidden="true"></i><span><strong>No favorites yet</strong>Songs you favorite will show up here.</span></p>
-    <h3 class="songname">By Artist</h3>
-    <ul class="row-3" id="artists">
+    <h3 class="songname"><a href="library.html?view=artist">By Artist<i class="icon icon-chevron-right" aria-hidden="true"></i></a></h3>
+    <ul class="row-3 demo" id="artists">
       <li class="side"><a href="library.html?view=artist&amp;id=joji"><img alt="Joji" loading="lazy" src="playback_tree/covers/artist_joji.jpg"></a></li>
       <li class="side"><a href="library.html?view=artist&amp;id=radiohead"><img alt="Radiohead" loading="lazy" src="playback_tree/covers/artist_radiohead.jpg"></a></li>
       <li class="side"><a href="library.html?view=artist&amp;id=weeknd"><img alt="The Weeknd" loading="lazy" src="playback_tree/covers/artist_weekend.jpg"></a></li>
       <li class="side"><a href="library.html?view=artist&amp;id=acdc"><img alt="AC/DC" loading="lazy" src="playback_tree/covers/artist_acdc.jpg"></a></li>
       <li class="side"><a href="library.html?view=artist&amp;id=nirvana"><img alt="Nirvana" loading="lazy" src="playback_tree/covers/artist_nirvana.jpg"></a></li>
     </ul>
-    <h3 class="songname">By Albums</h3>
-    <ul class="row-2" id="playlists">
+    <h3 class="songname"><a href="library.html?view=albums">By Albums<i class="icon icon-chevron-right" aria-hidden="true"></i></a></h3>
+    <ul class="row-2 demo" id="playlists">
       <li class="box"><a href="library.html?view=album&amp;id=nectar"><img alt="Nectar by Joji" loading="lazy" src="playback_tree/covers/joji/joji_nector.jpg"></a></li>
       <li class="box"><a href="library.html?view=album&amp;id=smithereens"><img alt="Smithereens by Joji" loading="lazy" src="playback_tree/covers/joji/joji_smithereens.jpg"></a></li>
       <li class="box"><a href="library.html?view=album&amp;id=nevermind"><img alt="Nevermind by Nirvana" loading="lazy" src="playback_tree/covers/nirvana.jpg"></a></li>
@@ -148,16 +150,17 @@
       <h5 id="playlists_h">Playlists</h5>
       <ul class="nav">
         <li><a href="library.html?view=playlist"><i class="icon icon-folder-closed" aria-hidden="true"></i>Playlists</a></li>
-        <li class="sub"><a href="library.html?view=playlist&amp;id=favorites"><i class="icon icon-folder-open" aria-hidden="true"></i>Favorites</a></li>
-        <li class="sub"><a href="library.html?view=playlist&amp;id=party"><i class="icon icon-folder-open" aria-hidden="true"></i>Party Playlists</a></li>
-        <li class="sub"><a href="library.html?view=playlist&amp;id=lo-fi"><i class="icon icon-folder-open" aria-hidden="true"></i>Lo-Fi</a></li>
       </ul>
       <p class="empty">No playlists</p>
+    </nav>
+    <nav class="playlists settings_nav" aria-label="Settings">
+      <ul class="nav"><li><a class="settings_link" href="library.html?view=settings"><i class="icon icon-gear" aria-hidden="true"></i>Settings<small>Update ready</small></a></li></ul>
     </nav>
   </div>
 </main>
 <script src="javascript/catalog.js"></script>
 <script src="javascript/deck-audio.js"></script>
+<script src="javascript/addmore.js"></script>
 <script src="javascript/player.js"></script>
 <script src="javascript/more.js"></script>
 <script src="javascript/queue.js"></script>
@@ -167,8 +170,11 @@
 <script src="javascript/volume.js"></script>
 <script src="javascript/divider.js"></script>
 <script src="javascript/turntable.js"></script>
+<script src="javascript/tour.js"></script>
+<script src="javascript/setup.js"></script>
 <script src="javascript/nav.js"></script>
 <script src="javascript/rows.js"></script>
 <script src="javascript/home.js"></script>
+<script src="javascript/keys.js"></script>
 </body>
 </html>

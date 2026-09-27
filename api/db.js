@@ -4,7 +4,7 @@ const fs = require('fs');
 const path = require('path');
 const { DatabaseSync } = require('node:sqlite');
 
-const DIR = path.join(__dirname, '..', 'data');
+const DIR = process.env.ACRUX_DATA || path.join(__dirname, '..', 'data'); // ACRUX_DATA: tests use a scratch folder
 fs.mkdirSync(DIR, { recursive: true });
 const db = new DatabaseSync(path.join(DIR, 'acrux.db'));
 db.exec(`

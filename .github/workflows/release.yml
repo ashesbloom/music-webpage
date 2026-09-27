@@ -1,0 +1,147 @@
+# Tests every push and pull request. Builds the desktop app for every platform when run by hand (Actions → Release →
+# Run workflow: the installers land in that run's artifacts, nothing is published) or when a version tag is pushed
+# (bump "version" in package.json, then: git tag v1.0.1 && git push --tags), which also publishes them as a GitHub
+# Release, all at once, with docs/releases/<tag>.md as its notes (GitHub writes them when there's no such file).
+#   Mac: one .dmg, universal (native on Apple Silicon and Intel) · Windows: x64 and ARM installers · Linux: .deb and
+#   AppImage, x64 and arm64.
+# The Linux build also makes ACRUX-files.zip (the app's own files, the same on every platform) and files.json: installed
+# apps update themselves from those (api/update.js), unless Electron or desktop/main.js changed, which needs the new
+# installer. A tag with a "-" (v1.1.0-beta.1) is a pre-release, which installed apps and Homebrew skip.
+# The builds are unsigned (README: Install the app); SHA256SUMS.txt and GitHub's build attestations say they came from
+# here. With the HOMEBREW_TAP_TOKEN secret (a token that can push to ashesbloom/homebrew-tap), each release also updates
+# the Homebrew cask (desktop/acrux.rb).
+name: Release
+on:
+  push:
+    branches: [main]
+    tags: ['v*']
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ !startsWith(github.ref, 'refs/tags/') }}
+env:
+  ELECTRON_SKIP_BINARY_DOWNLOAD: 1 # the tests don't need Electron, and electron-builder downloads its own per platform
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npm test
+      - name: The tag is package.json's version
+        if: startsWith(github.ref, 'refs/tags/')
+        run: test "$GITHUB_REF_NAME" = "v$(node -p "require('./package.json').version")"
+
+  build:
+    needs: test
+    if: github.event_name == 'workflow_dispatch' || startsWith(github.ref, 'refs/tags/')
+    strategy:
+      matrix:
+        include:
+          - { name: mac, os: macos-latest, args: --mac }
+          - { name: win-x64, os: windows-latest, args: --win --x64 }
+          - { name: win-arm64, os: windows-latest, args: --win --arm64 } # its own run: both in one makes one double-size installer
+          - { name: linux, os: ubuntu-latest, args: --linux }
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npx electron-builder ${{ matrix.args }} --publish never
+        env:
+          CSC_IDENTITY_AUTO_DISCOVERY: false
+      # The packaged app's server, run by its own Electron, serves the pages: nothing's missing from package.json's "files".
+      - name: The packaged app starts
+        if: matrix.name == 'linux'
+        run: |
+          APP=dist/linux-unpacked
+          ELECTRON_RUN_AS_NODE=1 PORT=4999 ACRUX_DATA="$RUNNER_TEMP/data" "$APP/acrux" "$APP/resources/app/server.js" &
+          curl -fsS --retry 30 --retry-delay 1 --retry-all-errors -o /dev/null http://127.0.0.1:4999/
+          curl -fsS -o /dev/null http://127.0.0.1:4999/javascript/settings.js
+          kill $!
+      - name: Files for installed apps to update themselves
+        if: matrix.name == 'linux'
+        run: |
+          (cd dist/linux-unpacked/resources/app && zip -qrX "$GITHUB_WORKSPACE/dist/ACRUX-files.zip" .)
+          node -e "
+            const fs = require('fs'), crypto = require('crypto');
+            const sha = (b) => crypto.createHash('sha256').update(b).digest('hex');
+            fs.writeFileSync('dist/files.json', JSON.stringify({
+              version: require('./package.json').version,
+              electron: require('electron/package.json').version,
+              shell: sha(fs.readFileSync('desktop/main.js', 'utf8').replace(/\r/g, '')),
+              sha256: sha(fs.readFileSync('dist/ACRUX-files.zip')),
+            }));"
+      - uses: actions/upload-artifact@v7
+        with:
+          name: ${{ matrix.name }}
+          path: |
+            dist/ACRUX-*
+            dist/files.json
+            !dist/*.blockmap
+          if-no-files-found: error
+          retention-days: 7
+
+  release:
+    needs: build
+    if: startsWith(github.ref, 'refs/tags/')
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: write
+      id-token: write
+      attestations: write
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/download-artifact@v8
+        with:
+          path: out
+          merge-multiple: true
+      - run: cd out && sha256sum * > SHA256SUMS.txt
+      - uses: actions/attest-build-provenance@v4
+        with:
+          subject-path: out/*
+      # gh uploads the files to a draft and publishes it once they're all there: installed apps never see half a release.
+      - name: Publish the release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          notes="docs/releases/$GITHUB_REF_NAME.md"
+          args=(--verify-tag --title "ACRUX ${GITHUB_REF_NAME#v}")
+          if [ -f "$notes" ]; then args+=(--notes-file "$notes"); else args+=(--generate-notes); fi
+          case "$GITHUB_REF_NAME" in *-*) args+=(--prerelease) ;; esac
+          gh release create "$GITHUB_REF_NAME" out/* "${args[@]}"
+      - name: Update the Homebrew cask
+        if: ${{ !contains(github.ref_name, '-') }}
+        env:
+          TOKEN: ${{ secrets.HOMEBREW_TAP_TOKEN }}
+        run: |
+          if [ -z "$TOKEN" ]; then echo "::notice::No HOMEBREW_TAP_TOKEN secret, so Homebrew wasn't updated"; exit 0; fi
+          V="${GITHUB_REF_NAME#v}"
+          SHA=$(cd out && sha256sum "ACRUX-$V-mac.dmg" | cut -d' ' -f1)
+          git clone --depth 1 "https://x-access-token:$TOKEN@github.com/ashesbloom/homebrew-tap.git" tap
+          mkdir -p tap/Casks
+          sed -e "s/^  version .*/  version \"$V\"/" -e "s/^  sha256 .*/  sha256 \"$SHA\"/" desktop/acrux.rb > tap/Casks/acrux.rb
+          cd tap
+          git add Casks/acrux.rb
+          git -c user.name="github-actions[bot]" -c user.email="41898282+github-actions[bot]@users.noreply.github.com" commit -m "acrux $V"
+          git push

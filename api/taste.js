@@ -4,6 +4,7 @@
 // dimensions: genre, kind (mood, tempo, voice, sound), category (library, independent, live, community…), artist and
 // album. Genres come from the song's source plus the artist's MusicBrainz genres (fetched once a month per artist).
 const { db, cached } = require('./db');
+require('./tracks'); // your added songs' table (Recently Added)
 const { fail, notGenre } = require('./common');
 const mbz = require('./musicbrainz');
 const jamendo = require('./jamendo');
@@ -20,6 +21,7 @@ db.exec(`
   CREATE INDEX IF NOT EXISTS plays_at ON plays (at);
   CREATE TABLE IF NOT EXISTS artist_genres (artist TEXT PRIMARY KEY, json TEXT NOT NULL, fetched INTEGER NOT NULL);
 `);
+try { db.exec('ALTER TABLE plays ADD COLUMN list TEXT'); } catch {} // the playlist it played from; there already after the first run
 
 // ---------- names ----------
 
@@ -54,10 +56,10 @@ function clean(song) {
 }
 
 const putSong = db.prepare('INSERT INTO songs (id, json, first_seen) VALUES (?, ?, ?) ON CONFLICT (id) DO UPDATE SET json = excluded.json');
-const putPlay = db.prepare('INSERT INTO plays (song_id, listened, duration, at) VALUES (?, ?, ?, ?)');
+const putPlay = db.prepare('INSERT INTO plays (song_id, listened, duration, at, list) VALUES (?, ?, ?, ?, ?)');
 const countPlays = db.prepare('SELECT COUNT(*) AS n FROM plays');
 
-// One listen: { song, listenedSec, durationSec }. Under 10 s it's kept as a skip (it counts against).
+// One listen: { song, listenedSec, durationSec, list? } (list: the playlist it played in, "playlist:<id>"). Under 10 s it's kept as a skip (it counts against).
 function record(body) {
   const song = clean(body?.song || {});
   const listened = Number(body?.listenedSec);
@@ -65,7 +67,8 @@ function record(body) {
   if (!song || !(listened >= 0 && listened < 86400) || !(duration >= 0 && duration < 86400)) throw fail('Not a play', 400);
   const id = `${song.source}:${song.id}`;
   putSong.run(id, JSON.stringify(song), Date.now());
-  putPlay.run(id, listened, duration, Date.now());
+  const list = typeof body.list === 'string' && /^playlist:[\w.-]{1,120}$/.test(body.list) ? body.list : null;
+  putPlay.run(id, listened, duration, Date.now(), list);
   const genres = song.artist !== 'Unknown artist' ? artistGenres(song.artist).catch(() => {}) : Promise.resolve(); // never holds up the page
   // For you is rebuilt every 5 plays; build it now, in the background, so Discover opens with it ready.
   if (countPlays.get().n % 5 === 1) genres.then(() => forYou()).catch(() => {});
@@ -134,11 +137,11 @@ function taste() {
 
 // ---------- Home ----------
 
-// The home page's rows: songs heard lately, songs new to you (the first time you heard them, until Add More Songs
-// exists), and your most-played artists and albums. Plays under 10 s (skips) don't put a song in either list.
+// The home page's rows: songs heard lately, Recently Added (songs you added on their own on the Add More panel, and
+// songs new to you from Discover, newest first), and your most-played artists and albums. Plays under 10 s (skips) don't count.
 const lastHeard = db.prepare(`SELECT s.json, MAX(p.at) AS last FROM plays p JOIN songs s ON s.id = p.song_id
   WHERE p.listened >= 10 GROUP BY s.id ORDER BY last DESC LIMIT 20`);
-const newToYou = db.prepare(`SELECT s.json FROM songs s WHERE EXISTS (SELECT 1 FROM plays p WHERE p.song_id = s.id AND p.listened >= 10)
+const newToYou = db.prepare(`SELECT s.json, s.first_seen FROM songs s WHERE EXISTS (SELECT 1 FROM plays p WHERE p.song_id = s.id AND p.listened >= 10)
   ORDER BY s.first_seen DESC LIMIT 20`);
 // Your songs: every song from outside your library (Discover) you've listened to (10 s or more), newest first, with how
 // often. The library's Recently Added and the side-panel search show them. Videos stay on YouTube, so they're left out.
@@ -146,10 +149,33 @@ const yourSongs = db.prepare(`SELECT s.json, COUNT(*) AS plays FROM songs s JOIN
   WHERE p.listened >= 10 AND s.id NOT LIKE 'library:%' GROUP BY s.id ORDER BY s.first_seen DESC`);
 const mine = () => ({ songs: yourSongs.all().map((r) => ({ ...JSON.parse(r.json), plays: r.plays })).filter((s) => s.playback.kind === 'audio') });
 
+// Songs you added on their own (a Drive link to one song, or loose song files you dropped); whole albums and folders
+// go to Albums instead.
+const addedByYou = db.prepare(`SELECT t.id, t.added FROM tracks t LEFT JOIN sources s ON s.id = t.source
+  WHERE s.is_file = 1 OR (t.source = 'local' AND instr(t.name, '/') = 0) ORDER BY t.added DESC LIMIT 20`);
 function home() {
   const t = taste();
   const songs = (rows) => rows.map((r) => JSON.parse(r.json));
-  return { plays: t.plays, recent: songs(lastHeard.all()), added: songs(newToYou.all()), artists: t.allTime.artists, albums: t.allTime.albums };
+  const seen = new Set();
+  const added = [
+    ...addedByYou.all().map((r) => ({ at: r.added, song: { source: 'library', id: `lib:${r.id}` } })), // the page knows these (catalog.js)
+    ...newToYou.all().filter((r) => !JSON.parse(r.json).id?.startsWith('lib:')) // an album you added: it's in Albums
+      .map((r) => ({ at: r.first_seen, song: JSON.parse(r.json) })),
+  ].sort((a, b) => b.at - a.at).map((x) => x.song)
+    .filter((s) => !seen.has(`${s.source}:${s.id}`) && seen.add(`${s.source}:${s.id}`)).slice(0, 20);
+  return { plays: t.plays, recent: songs(lastHeard.all()), added, artists: t.allTime.artists, albums: t.allTime.albums };
+}
+
+// Your playlists by how much you've listened to them lately (the side panel's Playlists): each play from one counts
+// as in the taste profile, halving every week, skips against; over 90 days old, not at all. -> [{ id, score }]
+const listPlays = db.prepare('SELECT list, listened, duration, at FROM plays WHERE list IS NOT NULL AND at > ?');
+function playedLists(now = Date.now()) {
+  const score = new Map();
+  for (const p of listPlays.all(now - 90 * DAY)) {
+    const id = p.list.slice('playlist:'.length);
+    score.set(id, (score.get(id) || 0) + weight(p.listened, p.duration) * decay(now - p.at, HALF_LIFE));
+  }
+  return [...score].filter(([, s]) => s > 0).sort((a, b) => b[1] - a[1]).map(([id, s]) => ({ id, score: +s.toFixed(3) }));
 }
 
 // ---------- For you ----------
@@ -183,6 +209,38 @@ async function moreFrom(a, played) {
   return songs.filter((s) => !played.has(`${s.source}:${s.id}`)).slice(0, 20);
 }
 
+// Songs like one song, for the queue's Infinite mode once a list has run out (javascript/queue.js): more by its
+// artist, by artists like them (ListenBrainz), and from its genres, taking turns. seed: { source, id, title, artist,
+// artistId?, genres? }. Kept a day per song; the page leaves out what it already has.
+const junk = /^(audio|track|untitled|new recording|voice|rec)?[\s_-]*[\d\s_:.-]{6,}$/i; // a file's name, not a song's ("audio_2022-02-18_06-46-09")
+async function radio(seed) {
+  const text = (v) => (typeof v === 'string' ? v.slice(0, 200) : '');
+  const artist = text(seed?.artist);
+  const known = artist && artist !== 'Unknown artist' ? await artistGenres(artist).catch(() => ({ genres: [], mbid: null })) : { genres: [], mbid: null };
+  const genres = [...new Set([...(Array.isArray(seed?.genres) ? seed.genres : []), ...known.genres].map(text).map(genre))].filter((g) => g && !notGenre(g));
+  return cached(`radio:${text(seed?.source)}:${text(seed?.id)}`, DAY, async () => {
+    const none = new Set();
+    const like = known.mbid ? await mbz.similar(known.mbid).catch(() => []) : [];
+    const lists = (await Promise.allSettled([
+      artist ? moreFrom({ name: artist, source: text(seed.source), id: text(seed.artistId) }, none) : [],
+      ...like.slice(0, 3).map((a) => moreFrom({ name: a.name }, none)),
+      ...genres.slice(0, 2).map((g) => genreMix(g, none)),
+    ])).map((r) => (r.status === 'fulfilled' ? r.value : []));
+    const out = [];
+    const seen = new Set([`${seed.source}:${seed.id}`, `${artist}|${text(seed.title)}`.toLowerCase()]);
+    for (let i = 0; out.length < 30 && lists.some((l) => l[i]); i++) {
+      for (const l of lists) {
+        const s = l[i];
+        const same = s && `${s.artist}|${s.title}`.toLowerCase();
+        if (!s || s.playback?.kind !== 'audio' || s.preview || seen.has(`${s.source}:${s.id}`) || seen.has(same) || junk.test(s.title)) continue;
+        seen.add(`${s.source}:${s.id}`).add(same);
+        out.push(s);
+      }
+    }
+    return out;
+  });
+}
+
 // Rows for Discover's landing page, rebuilt every 6 hours or after 5 more plays.
 async function forYou() {
   const t = taste();
@@ -209,4 +267,4 @@ async function forYou() {
   return { taste: t, rows }; // the taste itself is always fresh; only the searched rows are kept
 }
 
-module.exports = { record, taste, home, mine, forYou, profile, weight, genre, clean };
+module.exports = { record, taste, home, mine, forYou, radio, playedLists, profile, weight, genre, clean };

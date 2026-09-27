@@ -8,14 +8,16 @@
   <title>Library – ACRUX</title>
   <link rel="icon" href="playback_tree/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="style/insert.css" type="text/css">
+  <script src="javascript/edition.js"></script>
   <script>try{let w=+localStorage.panelWidth;if(w>0)document.documentElement.style.setProperty('--menu-pref',w+'px')}catch(e){}</script>
+  <script src="javascript/colours.js"></script>
 </head>
 <body>
 <header class="header">
   <div class="logo"><a href="index.html" class="text-focus-in">ACRUX</a></div>
   <div class="playbackarea">
     <div class="albumname">
-      <div class="cover"><img id="main_cover" src="playback_tree/placeholder.svg" alt=""></div>
+      <div class="cover"><img id="main_cover" src="playback_tree/placeholder.svg" alt=""><a class="cover_home" href="index.html" aria-label="Home"><i class="icon icon-house" aria-hidden="true"></i></a></div>
       <div class="albumtext">
         <p id="albumtext">Nothing playing</p>
         <p id="albumdescription"></p>
@@ -91,18 +93,20 @@
       <h5 id="playlists_h">Playlists</h5>
       <ul class="nav">
         <li><a href="library.html?view=playlist"><i class="icon icon-folder-closed" aria-hidden="true"></i>Playlists</a></li>
-        <li class="sub"><a href="library.html?view=playlist&amp;id=favorites"><i class="icon icon-folder-open" aria-hidden="true"></i>Favorites</a></li>
-        <li class="sub"><a href="library.html?view=playlist&amp;id=party"><i class="icon icon-folder-open" aria-hidden="true"></i>Party Playlists</a></li>
-        <li class="sub"><a href="library.html?view=playlist&amp;id=lo-fi"><i class="icon icon-folder-open" aria-hidden="true"></i>Lo-Fi</a></li>
       </ul>
       <p class="empty">No playlists</p>
+    </nav>
+    <nav class="playlists settings_nav" aria-label="Settings">
+      <ul class="nav"><li><a class="settings_link" href="library.html?view=settings"><i class="icon icon-gear" aria-hidden="true"></i>Settings<small>Update ready</small></a></li></ul>
     </nav>
   </div>
 </main>
 <script src="javascript/catalog.js"></script>
 <script src="javascript/deck-audio.js"></script>
+<script src="javascript/addmore.js"></script>
 <script src="javascript/library.js"></script>
 <script src="javascript/discover.js"></script>
+<script src="javascript/settings.js"></script>
 <script src="javascript/player.js"></script>
 <script src="javascript/more.js"></script>
 <script src="javascript/queue.js"></script>
@@ -112,6 +116,9 @@
 <script src="javascript/volume.js"></script>
 <script src="javascript/divider.js"></script>
 <script src="javascript/turntable.js"></script>
+<script src="javascript/tour.js"></script>
+<script src="javascript/setup.js"></script>
 <script src="javascript/nav.js"></script>
+<script src="javascript/keys.js"></script>
 </body>
 </html>

@@ -1,20 +1,31 @@
 // MusicBrainz: open music metadata, no key. It gives an artist's genres (for the taste profile) and their YouTube
 // channel, preferably the auto-generated "Artist - Topic" one that holds their studio catalogue, so YouTube can list it
 // for a few quota units instead of a 100-unit search. Its rule is at most one request a second, so requests queue.
+// Two lanes: what a page is waiting on (an artist's YouTube catalogue, For you) goes before pictures being looked up
+// (api/images.js, `later`), which can queue by the dozen on a Discover page.
 // ListenBrainz (same foundation, no key) gives similar artists.
 const { getJson } = require('./common');
 
 let nextAt = 0;
-async function mb(path, retry = true) {
-  const wait = Math.max(0, nextAt - Date.now());
-  nextAt = Date.now() + wait + 1100;
-  if (wait) await new Promise((done) => setTimeout(done, wait));
+let timer = null;
+const lanes = [[], []]; // now, later: the requests waiting their turn
+function pump() {
+  if (timer || !(lanes[0].length || lanes[1].length)) return;
+  timer = setTimeout(() => { // which one goes is picked when its turn comes, so one asked for now can pass a picture
+    timer = null;
+    nextAt = Date.now() + 1100;
+    (lanes[0].shift() || lanes[1].shift())();
+    pump();
+  }, Math.max(0, nextAt - Date.now()));
+}
+async function mb(path, retry = true, later = false) {
+  await new Promise((go) => { lanes[later ? 1 : 0].push(go); pump(); });
   try {
     return await getJson(`https://musicbrainz.org/ws/2/${path}${path.includes('?') ? '&' : '?'}fmt=json`);
   } catch (err) {
     if (err.status !== 503 || !retry) throw err; // 503: busy, or asked too fast; once more a little later
     nextAt = Math.max(nextAt, Date.now() + 1500);
-    return mb(path, false);
+    return mb(path, false, later);
   }
 }
 
@@ -23,11 +34,11 @@ const norm = (s) => String(s).toLowerCase().normalize('NFKD').replace(/[^a-z0-9]
 const channelOf = (url) => /youtube\.com\/channel\/(UC[\w-]{22})/.exec(url || '')?.[1];
 
 // The artist of this name, if MusicBrainz is sure of it: { mbid, name, genres, channel }, or null.
-async function artist(name) {
-  const found = (await mb(`artist?${new URLSearchParams({ query: `artist:"${name.replace(/"/g, '')}"`, limit: 3 })}`)).artists || [];
+async function artist(name, later = false) {
+  const found = (await mb(`artist?${new URLSearchParams({ query: `artist:"${name.replace(/"/g, '')}"`, limit: 3 })}`, true, later)).artists || [];
   const best = found.find((a) => a.score >= 90 && norm(a.name) === norm(name)); // the same name, not just a close one
   if (!best) return null;
-  const full = await mb(`artist/${best.id}?inc=url-rels+genres+tags`);
+  const full = await mb(`artist/${best.id}?inc=url-rels+genres+tags`, true, later);
   const links = (full.relations || []).map((r) => ({ type: r.type, url: r.url?.resource }));
   const topic = links.find((l) => l.type === 'youtube music' && channelOf(l.url)) || links.find((l) => channelOf(l.url));
   const genres = [...(full.genres || []), ...(full.tags || [])].sort((a, b) => b.count - a.count).map((g) => g.name);
@@ -36,9 +47,9 @@ async function artist(name) {
 }
 
 // The release group (album) of this title by this artist, if MusicBrainz is sure of it: its MBID, or null.
-async function releaseGroup(title, artist) {
+async function releaseGroup(title, artist, later = false) {
   const query = `releasegroup:"${title.replace(/"/g, '')}" AND artist:"${artist.replace(/"/g, '')}"`;
-  const found = (await mb(`release-group?${new URLSearchParams({ query, limit: 3 })}`))['release-groups'] || [];
+  const found = (await mb(`release-group?${new URLSearchParams({ query, limit: 3 })}`, true, later))['release-groups'] || [];
   return found.find((g) => g.score >= 90 && norm(g.title) === norm(title))?.id || null;
 }
 

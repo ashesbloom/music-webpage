@@ -1,29 +1,105 @@
-// Your playlists saved from Discover (an album's songs, kept as they are, so they play and download like your own), and
-// downloading a playlist or a Discover album as one ZIP of its songs in the best quality their source has.
+// Your playlists: the ones you make here and the ones saved from Discover albums, in data/acrux.db. A playlist holds
+// song refs in order: { source: 'library', id } for a song of your library ('lib:<track>'), or a built-in one with its
+// file ({ …, src: 'playback_tree/songs/…', title }); else a Discover song's result, checked like a play's (taste.clean).
+// Also: a ZIP of songs for "Save to computer", each read from wherever it is (a file, the Drive cache, the web).
 const zlib = require('zlib');
+const crypto = require('crypto');
 const { db } = require('./db');
 const { fail } = require('./common');
 const { clean } = require('./taste');
 
 db.exec('CREATE TABLE IF NOT EXISTS playlists (id TEXT PRIMARY KEY, title TEXT NOT NULL, json TEXT NOT NULL, created INTEGER NOT NULL)');
 const put = db.prepare('INSERT INTO playlists (id, title, json, created) VALUES (?, ?, ?, ?) ON CONFLICT (id) DO UPDATE SET title = excluded.title, json = excluded.json');
-const all = db.prepare('SELECT id, title, json FROM playlists ORDER BY created DESC');
-const one = db.prepare('SELECT id, title, json FROM playlists WHERE id = ?');
-const shape = (row) => ({ id: row.id, title: row.title, ...JSON.parse(row.json) });
+const all = db.prepare('SELECT id, title, json, created FROM playlists ORDER BY created DESC');
+const one = db.prepare('SELECT id, title, json, created FROM playlists WHERE id = ?');
+const del = db.prepare('DELETE FROM playlists WHERE id = ?');
+function shape(row) {
+  const j = JSON.parse(row.json);
+  return { id: row.id, title: row.title, desc: j.desc || '', photo: j.photo ?? j.cover ?? null, groove: j.groove || null,
+    searchable: j.searchable !== false, from: j.from || '', songs: j.songs || [], created: row.created, updated: j.updated || row.created };
+}
+const write = (p) => {
+  const { id, title, created, ...rest } = p;
+  put.run(id, title, JSON.stringify({ ...rest, updated: Date.now() }), created || Date.now());
+};
 
 const list = () => ({ playlists: all.all().map(shape) });
 const get = (id) => { const row = one.get(id); return row ? shape(row) : null; };
+const need = (id) => get(id) || (() => { throw fail('No such playlist', 404); })();
 
-// { title, from: "archive:<album>", cover, songs } -> saved; the same album saved again updates its playlist.
-function save(body) {
-  const title = typeof body?.title === 'string' ? body.title.trim().slice(0, 100) : '';
-  const songs = Array.isArray(body?.songs) ? body.songs.slice(0, 500).map(clean).filter(Boolean) : [];
-  if (!title || !songs.length) throw fail('A playlist needs a title and songs', 400);
-  const from = typeof body.from === 'string' ? body.from.slice(0, 200) : '';
-  const id = from ? `from-${from.replace(/[^\w-]+/g, '-')}`.slice(0, 120) : `pl-${Date.now().toString(36)}`;
-  const cover = typeof body.cover === 'string' && /^(https?:\/\/|\/discover\/)/.test(body.cover) ? body.cover.slice(0, 1000) : songs[0].artworkUrl;
-  put.run(id, title, JSON.stringify({ from, cover, songs }), Date.now());
+// ---------- songs ----------
+
+const LIB_ID = /^[\w:.-]{1,120}$/;
+const BUILT_IN = /^playback_tree\/songs\/[\w%./ -]+\.(mp3|flac|m4a|ogg|wav)$/;
+function ref(s) {
+  if (s?.source !== 'library') return clean(s || {});
+  if (typeof s.id !== 'string' || !LIB_ID.test(s.id)) return null;
+  const r = { source: 'library', id: s.id };
+  if (typeof s.src === 'string' && BUILT_IN.test(s.src) && !s.src.includes('..')) {
+    r.src = s.src;
+    r.title = typeof s.title === 'string' ? s.title.slice(0, 200) : s.id;
+  }
+  return r;
+}
+const keyOf = (r) => (r.source === 'library' ? r.id : `${r.source}:${r.id}`); // the page's song id
+const refs = (songs) => (Array.isArray(songs) ? songs.slice(0, 2000).map(ref).filter(Boolean) : []);
+
+// ---------- changes ----------
+
+const text = (v, max) => (typeof v === 'string' ? v.trim().slice(0, max) : '');
+const photoOk = (u) => (typeof u === 'string' && /^(https?:\/\/|\/discover\/|\/api\/covers\/[0-9a-f]{40}\.(jpg|png|webp)$)/.test(u) ? u.slice(0, 1000) : null);
+const grooveOk = (g) => (Array.isArray(g) && g.length === 2 && g.every((c) => /^#[0-9a-f]{6}$/i.test(c)) ? g : null);
+
+// { title, desc?, photo?, groove?, searchable?, songs? } -> a new playlist; with `from` ("archive:<album>", a Discover
+// album saved as a playlist) the same album saved again updates its playlist.
+function create(body) {
+  const title = text(body?.title, 100);
+  const from = text(body?.from, 200);
+  const songs = refs(body?.songs);
+  if (!title) throw fail('A playlist needs a name', 400);
+  if (from && !songs.length) throw fail('A playlist needs a title and songs', 400);
+  const id = from ? `from-${from.replace(/[^\w-]+/g, '-')}`.slice(0, 120) : `pl-${Date.now().toString(36)}${crypto.randomBytes(2).toString('hex')}`;
+  write({ id, title, created: get(id)?.created, from, desc: text(body.desc, 500), photo: photoOk(body.photo ?? body.cover) || (from ? songs[0].artworkUrl : null),
+    groove: grooveOk(body.groove), searchable: body.searchable !== false, songs });
   return { id };
+}
+
+// { title?, desc?, photo? (null: none), groove? (null: none), searchable? }
+function update(id, patch) {
+  const p = need(id);
+  if (patch?.title !== undefined) p.title = text(patch.title, 100) || p.title;
+  if (patch?.desc !== undefined) p.desc = text(patch.desc, 500);
+  if (patch?.photo !== undefined) p.photo = photoOk(patch.photo);
+  if (patch?.groove !== undefined) p.groove = grooveOk(patch.groove);
+  if (patch?.searchable !== undefined) p.searchable = patch.searchable !== false;
+  write(p);
+  return shape(one.get(id));
+}
+
+// Adds songs at the end, leaving out the ones already there: { added, skipped }.
+function addSongs(id, songs) {
+  const p = need(id);
+  const have = new Set(p.songs.map(keyOf));
+  const add = refs(songs).filter((r) => !have.has(keyOf(r)) && have.add(keyOf(r)));
+  p.songs.push(...add);
+  write(p);
+  return { added: add.length, skipped: refs(songs).length - add.length };
+}
+// The whole list again: reordered, or with songs removed.
+function setSongs(id, songs) {
+  const p = need(id);
+  const seen = new Set();
+  p.songs = refs(songs).filter((r) => !seen.has(keyOf(r)) && seen.add(keyOf(r)));
+  write(p);
+  return { songs: p.songs.length };
+}
+function duplicate(id) {
+  const p = need(id);
+  return create({ ...p, from: '', title: `${p.title} (Copy)`.slice(0, 100) });
+}
+function remove(id) {
+  need(id);
+  del.run(id);
 }
 
 // ---------- download ----------
@@ -35,14 +111,38 @@ const safe = (s) => String(s).replace(/[\\/:*?"<>|\u0000-\u001f]+/g, ' ').replac
 const ext = (url, type) => /\.(flac|mp3|ogg|m4a|wav)$/i.exec(new URL(url).pathname)?.[0].toLowerCase()
   || { 'audio/flac': '.flac', 'audio/x-flac': '.flac', 'audio/mpeg': '.mp3', 'audio/ogg': '.ogg', 'audio/mp4': '.m4a' }[String(type).split(';')[0]] || '.mp3';
 
-// Streams a ZIP of the songs (each at its "high" tier: FLAC where the source has it), written in order as each
-// arrives. Three download at once; each is fetched whole (tried twice, given up after a minute without data) before
-// it's written, so a server dropping out mid-song skips that song instead of breaking the file. Skipped songs are
-// listed in "Not downloaded.txt". Files are stored as they are (audio doesn't compress). Previews and videos are
-// left out.
+// A song from the web, fetched whole (tried twice, given up after a minute without data) -> { body, ext } or null.
+const fromUrl = (url) => async (isGone) => {
+  for (let tries = 0; tries < 2 && !isGone(); tries++) {
+    const stop = new AbortController();
+    let timer;
+    const alive = () => { clearTimeout(timer); timer = setTimeout(() => stop.abort(new Error('no data for a minute')), 60e3); };
+    try {
+      alive();
+      const r = await fetch(url, { headers: { 'User-Agent': 'ACRUX/1.0' }, signal: stop.signal });
+      if (!r.ok) throw new Error(`HTTP ${r.status}`);
+      const parts = [];
+      for await (const chunk of r.body) {
+        if (isGone()) throw new Error('cancelled');
+        parts.push(chunk);
+        alive();
+      }
+      return { body: Buffer.concat(parts), ext: ext(r.url, r.headers.get('content-type')) };
+    } catch (err) {
+      if (tries) console.error('Download: skipped', url, err.message);
+    } finally {
+      clearTimeout(timer);
+    }
+  }
+  return null;
+};
+
+// Streams a ZIP of songs ({ title, load(isGone) -> { body, ext } | null }), written in order as each arrives. Three
+// load at once; each is loaded whole before it's written, so a server dropping out mid-song skips that song instead of
+// breaking the file. Skipped songs are listed in "Not downloaded.txt". Files are stored as they are (audio doesn't
+// compress).
 // ponytail: no ZIP64, so a download stops adding songs before 4 GB; add ZIP64 if an album ever gets that big.
-async function download(req, res, name, songs) {
-  const files = songs.filter((s) => s.playback?.kind === 'audio' && !s.preview && allowed(s.playback.urls.high));
+async function download(req, res, name, files) {
   if (!files.length) throw fail('Nothing here can be downloaded (previews and videos can’t).', 404);
   const now = new Date();
   const time = (now.getHours() << 11) | (now.getMinutes() << 5) | (now.getSeconds() >> 1);
@@ -57,30 +157,6 @@ async function download(req, res, name, songs) {
   });
   const central = [];
   const width = String(files.length).length < 2 ? 2 : String(files.length).length;
-  const fetchSong = async (url) => {
-    for (let tries = 0; tries < 2 && !gone; tries++) {
-      const stop = new AbortController();
-      let timer;
-      const alive = () => { clearTimeout(timer); timer = setTimeout(() => stop.abort(new Error('no data for a minute')), 60e3); };
-      try {
-        alive();
-        const r = await fetch(url, { headers: { 'User-Agent': 'ACRUX/1.0' }, signal: stop.signal });
-        if (!r.ok) throw new Error(`HTTP ${r.status}`);
-        const parts = [];
-        for await (const chunk of r.body) {
-          if (gone) throw new Error('cancelled');
-          parts.push(chunk);
-          alive();
-        }
-        return { body: Buffer.concat(parts), url: r.url, type: r.headers.get('content-type') };
-      } catch (err) {
-        if (tries) console.error('Download: skipped', url, err.message);
-      } finally {
-        clearTimeout(timer);
-      }
-    }
-    return null;
-  };
   const file = async (name, body) => {
     const nameBuf = Buffer.from(name);
     const crc = zlib.crc32(body) >>> 0;
@@ -94,7 +170,7 @@ async function download(req, res, name, songs) {
     await write(body);
   };
   const jobs = [];
-  const start = (i) => { if (i < files.length) jobs[i] ??= fetchSong(files[i].playback.urls.high); };
+  const start = (i) => { if (i < files.length) jobs[i] ??= files[i].load(() => gone).catch(() => null); };
   const missed = [];
   for (const [i, s] of files.entries()) {
     [i, i + 1, i + 2].forEach(start); // three at a time
@@ -103,7 +179,7 @@ async function download(req, res, name, songs) {
     if (gone) return;
     const name = `${String(i + 1).padStart(width, '0')} ${safe(s.title)}`;
     if (!song || offset + song.body.length > 0xfffff000) { missed.push(name); continue; }
-    await file(`${name}${ext(song.url, song.type)}`, song.body);
+    await file(`${name}${song.ext}`, song.body);
   }
   if (missed.length) await file('Not downloaded.txt', Buffer.from(`These songs couldn't be downloaded (their server didn't answer). Try again later:\n\n${missed.join('\n')}\n`));
   const dir = offset;
@@ -122,4 +198,4 @@ async function download(req, res, name, songs) {
   res.end();
 }
 
-module.exports = { list, get, save, download, allowed };
+module.exports = { list, get, create, save: create, update, addSongs, setSongs, duplicate, remove, ref, refs, keyOf, download, fromUrl, allowed, ext };
