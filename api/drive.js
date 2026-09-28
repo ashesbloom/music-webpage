@@ -62,7 +62,8 @@ let refresh; // the refresh token (undefined until read, null when there is none
 let access = null; // { token, expires }
 let refreshing = null;
 let expired = false; // Google refused the saved sign-in: the panel asks to reconnect
-const connected = async () => !!(refresh === undefined ? (refresh = await saved.get()) : refresh);
+// A sign-in this ACRUX can use: the desktop app and a dev server share the Keychain slot, not the client that goes with it.
+const connected = async () => !!client() && !!(refresh === undefined ? (refresh = await saved.get()) : refresh);
 
 // A current access token, renewed from the refresh token a minute before it runs out.
 async function bearer() {
@@ -131,7 +132,7 @@ async function disconnect() {
 // queries" page); signed-in downloads are held back far less. While it lasts, nothing is fetched ahead.
 let heldUntil = 0;
 const HELD = 'Google Drive is holding back downloads from this computer for now (too many in a row with the API key). It passes on its own, usually within the hour. Connecting Google Drive avoids it: signed-in downloads aren’t held back like this.';
-const held = () => heldUntil > Date.now() && !refresh;
+const held = () => heldUntil > Date.now() && !(refresh && client()); // as downloadAs(): signed in only with the client
 // PUT /api/drive/client { id, secret }: the client made in Google Cloud (Desktop app). A new one signs you out of the
 // old one's access first.
 async function setClient(body) {
@@ -465,9 +466,13 @@ function removeAlbum(id, albumId) {
   tracks.changed();
 }
 
-// A scan cut short by the server stopping picks up again when it starts.
+// A scan cut short by the server stopping picks up again when it starts, and so does one whose songs weren't read
+// (Google held downloads back): their tags, length and cover.
+// ponytail: a song whose tags never parse is read again (64 KB) at every start; mark it tried if that adds up.
 setImmediate(() => {
-  for (const s of tracks.sources.list()) if (s.kind === 'drive' && s.status === 'scanning') scan(s.id);
+  for (const s of tracks.sources.list()) {
+    if (s.kind === 'drive' && (s.status === 'scanning' || tracks.bySource(s.id).some((t) => !t.md5))) scan(s.id);
+  }
 });
 
 module.exports = { parseLink, add, scan, remove, removeAlbum, media, connectUrl, callback, disconnect, setClient, status, held, audioStart };

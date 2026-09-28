@@ -28,6 +28,26 @@ test('Drive: every kind of folder and song link gives its id; a Docs link is tur
   assert.throws(() => parseLink('https://example.com/folders/abcdefghijk'), /isn’t a Google Drive link/);
 });
 
+// The desktop app and a dev server share the Keychain's sign-in but not its client: the app downloads with the key, so
+// Google holding the key back must show (held), not hide behind a sign-in it can't use.
+test('Drive: a sign-in without its client doesn’t hide Google holding back the key', async () => {
+  const drive = require('../api/drive');
+  process.env.GOOGLE_API_KEY = 'test-key';
+  delete process.env.GOOGLE_CLIENT_ID;
+  delete process.env.GOOGLE_CLIENT_SECRET;
+  // Off the Mac the sign-in is a file; on it, a real Keychain sign-in (if any) plays this part, only read.
+  if (process.platform !== 'darwin') fs.writeFileSync(path.join(process.env.ACRUX_DATA, 'google-drive-token'), 'a-token');
+  const real = globalThis.fetch;
+  globalThis.fetch = async () => new Response('<html>Our systems have detected unusual traffic… automated queries', { status: 403 });
+  try {
+    await assert.rejects(drive.add(`https://drive.google.com/drive/folders/${ID}`), /holding back/);
+    assert.equal(drive.held(), true);
+    assert.equal((await drive.status()).connected, false);
+  } finally {
+    globalThis.fetch = real;
+  }
+});
+
 // A zip by hand: one stored entry, one deflated; the reader must give both back byte for byte.
 function zip(files) {
   const locals = [];
