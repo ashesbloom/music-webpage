@@ -1,7 +1,7 @@
 {
   "name": "acrux",
   "productName": "ACRUX",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "private": true,
   "description": "ACRUX: a local-first music player. Run: npm install, then npm start (npm run app for the desktop app).",
   "author": "ashesbloom",
@@ -24,18 +24,61 @@
   },
   "build": {
     "appId": "com.ashesbloom.acrux",
-    "directories": { "buildResources": "desktop", "output": "dist" },
+    "directories": {
+      "buildResources": "desktop",
+      "output": "dist"
+    },
     "asar": false,
     "files": [
-      "server.js", "api/**", "javascript/**", "style/**", "index.html", "library.html", "privacy.html",
-      "playback_tree/**", "!playback_tree/songs/**", "!playback_tree/*.mp4", "!playback_tree/logo*.jpg",
+      "server.js",
+      "api/**",
+      "javascript/**",
+      "style/**",
+      "index.html",
+      "library.html",
+      "privacy.html",
+      "playback_tree/**",
+      "!playback_tree/songs/**",
+      "!playback_tree/*.mp4",
+      "!playback_tree/logo*.jpg",
       "desktop/main.js"
     ],
-    "mac": { "target": { "target": "dmg", "arch": ["universal"] }, "artifactName": "${productName}-${version}-mac.${ext}", "identity": "-", "hardenedRuntime": false, "category": "public.app-category.music" },
-    "win": { "target": "nsis", "artifactName": "${productName}-${version}-win-${arch}.${ext}" },
+    "mac": {
+      "target": {
+        "target": "dmg",
+        "arch": [
+          "universal"
+        ]
+      },
+      "artifactName": "${productName}-${version}-mac.${ext}",
+      "identity": "-",
+      "hardenedRuntime": false,
+      "category": "public.app-category.music"
+    },
+    "win": {
+      "target": "nsis",
+      "artifactName": "${productName}-${version}-win-${arch}.${ext}"
+    },
     "linux": {
-      "target": [{ "target": "AppImage", "arch": ["x64", "arm64"] }, { "target": "deb", "arch": ["x64", "arm64"] }],
-      "category": "Audio", "syncDesktopName": true, "maintainer": "ashesbloom <ashesbloom@users.noreply.github.com>",
+      "target": [
+        {
+          "target": "AppImage",
+          "arch": [
+            "x64",
+            "arm64"
+          ]
+        },
+        {
+          "target": "deb",
+          "arch": [
+            "x64",
+            "arm64"
+          ]
+        }
+      ],
+      "category": "Audio",
+      "syncDesktopName": true,
+      "maintainer": "ashesbloom <ashesbloom@users.noreply.github.com>",
       "artifactName": "${productName}-${version}-linux-${arch}.${ext}"
     }
   }

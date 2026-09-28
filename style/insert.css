@@ -983,8 +983,8 @@ body:has(#play.icon-pause) .label_btn .icon-pause { display: inline-block; }
 }
 .q_mode:hover { color: white; }
 .q_mode[aria-pressed="true"] { background: var(--accent); color: white; }
-.am { width: 1em; height: 1em; overflow: visible; } /* the Auto Mix crossfader curves (queue.js moves them) */
-.am path { fill: none; stroke: currentColor; stroke-width: 2.6; stroke-linecap: round; transition: opacity 0.4s; }
+.q_mix { width: 1em; height: 1em; overflow: visible; } /* the Auto Mix crossfader curves (queue.js moves them) */
+.q_mix path { fill: none; stroke: currentColor; stroke-width: 2.6; stroke-linecap: round; transition: opacity 0.4s; }
 .q_note { display: none; margin: 0 16px 8px; font-size: 12px; color: var(--muted); }
 .q_radio { margin: 14px 16px 6px; font-size: 12px; font-weight: 700; color: var(--muted); } /* where the list ends, and songs like it begin */
 body:has(#shuffle.clicked) .q_shuffle, body:has(#repeat[data-mode="one"]) .q_repeat, body:has(#repeat[data-mode="all"]) .q_loop,

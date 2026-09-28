@@ -16,7 +16,7 @@
       <div class="q_up">
         <div class="q_modes">
           <button class="q_mode" id="infinite" aria-label="Infinite Queue" aria-pressed="true"><i class="icon icon-infinity" aria-hidden="true"></i></button>
-          <button class="q_mode" id="automix" aria-label="Auto Mix" aria-pressed="false"><svg class="am" viewBox="0 0 24 24" aria-hidden="true"><path class="am_out" d="M2.5 5.5C9 5.5 15 18.5 21.5 18.5"/><path d="M2.5 18.5C9 18.5 15 5.5 21.5 5.5"/></svg></button>
+          <button class="q_mode" id="automix" aria-label="Auto Mix" aria-pressed="false"><svg class="q_mix" viewBox="0 0 24 24" aria-hidden="true"><path class="am_out" d="M2.5 5.5C9 5.5 15 18.5 21.5 18.5"/><path d="M2.5 18.5C9 18.5 15 5.5 21.5 5.5"/></svg></button>
         </div>
         <h5>Continue Playing</h5>
         <p class="q_note q_shuffle">Shuffle is on: songs play in random order</p>

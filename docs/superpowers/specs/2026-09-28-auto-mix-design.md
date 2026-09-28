@@ -169,7 +169,7 @@ With Auto Mix on, the added songs are fetched with `POST /api/mix/summaries`.
 - Your list itself is never reordered.
 
 ## 6. The icon (`queue.js`, `style/insert.css`)
-- The `<i class="icon icon-automix">` mask becomes an inline `<svg class="am">` with two paths, a fade-in curve and a fade-out curve. Both pass through a crossing point M(x); `amPath(x)` writes their `d`, and x = 0.5 draws today's shape.
+- The `<i class="icon icon-automix">` mask becomes an inline `<svg class="q_mix">` (not `.am`: Add More Songs owns that class) with two paths, a fade-in curve and a fade-out curve. Both pass through a crossing point M(x); `amPath(x)` writes their `d`, and x = 0.5 draws today's shape.
 - **Motion:**
   - On hover, x glides between 0.3 and 0.7 on a spring, like a crossfader being worked, and settles back on leave.
   - Clicking it on springs x 0.5 → 0.8 → 0.5 with overshoot, the curves swap and the pill turns red. Clicking it off relaxes it.
