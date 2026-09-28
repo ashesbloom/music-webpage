@@ -12,7 +12,7 @@
     "start": "node server.js",
     "app": "electron .",
     "dist": "electron-builder",
-    "test": "node --test tests/"
+    "test": "node --test tests/*.test.js"
   },
   "dependencies": {
     "music-metadata": "^11.16.1",
