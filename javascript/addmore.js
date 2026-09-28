@@ -195,6 +195,7 @@
       if (scan.status === 'ready' || scan.status === 'error') refresh();
       else update();
     });
+    CATALOG.events.addEventListener('drive', () => refresh()); // signed in or out, maybe in the browser
   }
 
   // ---------- adding from this computer ----------

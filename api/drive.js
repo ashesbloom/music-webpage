@@ -120,6 +120,7 @@ async function callback(params) {
   refresh = body.refresh_token;
   access = { token: body.access_token, expires: Date.now() + body.expires_in * 1000 };
   expired = false;
+  tracks.emit('drive', {}); // open pages (setup, Add More) show the sign-in now: the app's window may not reload
 }
 async function disconnect() {
   const token = refresh ?? (await saved.get());
@@ -127,6 +128,7 @@ async function disconnect() {
   await saved.clear();
   refresh = null;
   access = null;
+  tracks.emit('drive', {});
 }
 // Google holds back downloads made with an API key when too many come from one computer (it answers with its "automated
 // queries" page); signed-in downloads are held back far less. While it lasts, nothing is fetched ahead.

@@ -93,6 +93,7 @@
   };
   let dialog = null;
   let onScan = null; // its listener for scan progress, while it's open
+  let onDrive = null; // and for the Google sign-in finishing in the browser (the app's window stays as it is)
 
   const route = () => ['music', st.picks.drive && 'drive', st.picks.local && 'computer', st.picks.online && 'online',
     (st.picks.drive || st.picks.online) && 'keys', st.picks.online && 'jamendo', 'done'].filter(Boolean);
@@ -401,6 +402,8 @@
     dialog = null;
     CATALOG.events?.removeEventListener('scan', onScan);
     onScan = null;
+    CATALOG.events?.removeEventListener('drive', onDrive);
+    onDrive = null;
     store('setupResume', null);
     await sendJson('setup', 'PUT', { done: true }).catch(() => {});
     CATALOG.reload().then(() => window.navReload?.()).catch(() => {});
@@ -491,6 +494,8 @@
     dialog.showModal();
     fit();
     draw();
+    onDrive = async () => { await loadSources(); if (dialog) draw(); };
+    CATALOG.events?.addEventListener('drive', onDrive);
   }
   window.openSetup = (step, guide, who) => open(step, guide, who);
 
