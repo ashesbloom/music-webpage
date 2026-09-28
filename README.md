@@ -287,7 +287,8 @@ tests/                           node --test (audio DSP, Discover mapping, Add M
 - [x] The desktop app for Mac, Windows and Linux, and Homebrew, with updates that install themselves
 - [x] Settings: themes and your own colours, keyboard shortcuts and media keys
 - [ ] Accounts, for collaborators outside your network
-- [ ] Auto Mix crossfades
+- [x] Auto Mix: DJ mixes between songs (beat-matched EQ blends on the phrase, echo outs, filter sweeps and fades), with
+      gapless albums
 - [ ] FLAC streaming
 
 ## Credits

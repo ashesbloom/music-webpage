@@ -14,8 +14,11 @@ function playAt(i) {
   index = i;
   started = true;
   loaded = songs[i];
-  music.src = songs[i].src;
-  music.play();
+  if (!music.take(songs[i].src)) { // Auto Mix had this song ready: it starts at once (deck-audio.js take())
+    music.id = songs[i].id;
+    music.src = songs[i].src;
+    music.play();
+  }
   document.getElementById('play').className = 'icon icon-pause';
 }
 
@@ -118,6 +121,22 @@ function setList(list, key, nowId = songs[index]?.id) {
     playicon.className = 'icon icon-play'; // queue finished: stop
   }, 1000));
 
+  // Auto Mix: the deck is told which song comes next so it can mix into it (deck-audio.js cue()); the queue says which,
+  // and says again whenever it changes ('queuechange'). Not into or out of a YouTube video (it plays in YouTube's own
+  // player), nor while this song repeats. An album played in order stays gapless.
+  function cueNext() {
+    const n = upNext(), s = songs[index], next = songs[n];
+    const ok = music.automix && started && next && !next.video && !s?.video && repeat.dataset.mode !== 'one';
+    const album = /^(album|discover:album):/.test(listKey || '') && n === index + 1 && !$('shuffle').classList.contains('clicked');
+    music.cue(ok ? { src: next.src, id: next.id, gapless: album } : null);
+  }
+  document.addEventListener('queuechange', cueNext);
+  // The song Auto Mix mixed into has taken over: it's the one playing now ('play' follows, which shows it).
+  music.addEventListener('mixed', () => {
+    const i = songs.findIndex((s) => s.id === music.id);
+    if (i >= 0) { index = i; loaded = songs[i]; }
+  });
+
   // The header and the record show a song: its cover, title and artist.
   function show(s) {
     for (const img of [$('main_cover'), $('playback_cover')]) {
@@ -141,7 +160,7 @@ function setList(list, key, nowId = songs[index]?.id) {
     if (n >= 0 && songs[n].cover && THEME.follows()) coverColour(songs[n].cover);
     // Only a Discover song is fetched ahead: your own are on this computer, or the server keeps their start ready
     // (api/cache.js), so a 100 MB FLAC isn't pulled in while this one plays.
-    if (n >= 0 && !songs[n].lib) music.preload(songs[n].src);
+    if (n >= 0 && !songs[n].lib && !music.automix) music.preload(songs[n].src); // Auto Mix fetches it itself (cue())
     // Songs from your Google Drive: the server fetches the start of the next few ahead (api/cache.js).
     const drive = [s, ...(window.upcoming?.(10) || [])].filter((x) => x?.drive).map((x) => x.trackId);
     if (drive.length) fetch(`${SITE}api/player/state`, { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ ids: drive }) }).catch(() => {});
@@ -177,6 +196,7 @@ function setList(list, key, nowId = songs[index]?.id) {
     setList(list, saved.list, saved.id);
     started = true; // Play carries on with it (music.play), not the page's list
     loaded = songs[index];
+    music.id = songs[index].id;
     music.src = songs[index].src;
     music.resume(saved.at, saved.length);
     show(songs[index]);

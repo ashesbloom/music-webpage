@@ -12,6 +12,7 @@ const library = require('./api/library');
 const collection = require('./api/collection');
 const setup = require('./api/setup');
 const update = require('./api/update');
+const mix = require('./api/mix');
 const { sendFile, loopback } = require('./api/common');
 
 const ROOT = __dirname;
@@ -40,6 +41,7 @@ async function handler(req, res) {
   if (collection.ROUTES.test(url.pathname)) return collection(req, res, url); // playlists, favorites, downloads, guests
   if (setup.ROUTES.test(url.pathname)) return setup(req, res, url); // first run and the API keys pasted in it
   if (update.ROUTES.test(url.pathname)) return update(req, res, url); // the desktop app's updates (Settings)
+  if (mix.ROUTES.test(url.pathname)) return mix(req, res, url); // Auto Mix: each song's analysis
   if (url.pathname.startsWith('/discover/') || url.pathname.startsWith('/api/')) return discover(req, res, url); // it checks its own methods
   if (req.method !== 'GET' && req.method !== 'HEAD') return send(res, 405, 'Method Not Allowed');
   if (APP && url.pathname === '/javascript/edition.js') { // the app edition: catalog.js and Home hide the demo

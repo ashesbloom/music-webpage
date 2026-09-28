@@ -16,7 +16,7 @@
       <div class="q_up">
         <div class="q_modes">
           <button class="q_mode" id="infinite" aria-label="Infinite Queue" aria-pressed="true"><i class="icon icon-infinity" aria-hidden="true"></i></button>
-          <button class="q_mode" id="automix" aria-label="Auto Mix · coming soon" aria-pressed="false"><i class="icon icon-automix" aria-hidden="true"></i></button>
+          <button class="q_mode" id="automix" aria-label="Auto Mix" aria-pressed="false"><svg class="am" viewBox="0 0 24 24" aria-hidden="true"><path class="am_out" d="M2.5 5.5C9 5.5 15 18.5 21.5 18.5"/><path d="M2.5 18.5C9 18.5 15 5.5 21.5 5.5"/></svg></button>
         </div>
         <h5>Continue Playing</h5>
         <p class="q_note q_shuffle">Shuffle is on: songs play in random order</p>
@@ -32,6 +32,7 @@
   const hist = queue.querySelector('.q_hist ol');
   const next = queue.querySelector('.q_next');
   const infinite = document.getElementById('infinite');
+  const mixer = document.getElementById('automix');
   const on = (b) => b.getAttribute('aria-pressed') === 'true';
 
   // Continue Playing, as indexes into songs. Infinite off empties it (playback stops after this song). On, it's the
@@ -84,7 +85,7 @@
             artistId: seed.result?.artistId, genres: [genreOf(seed), ...(seed.result?.tags?.genres || [])].filter(Boolean) } }) });
         if (res.ok) online = (await res.json()).results.map(CATALOG.fromResult).filter(fresh);
       } catch {} // no server: your own songs only
-      const add = [...mine, ...online];
+      const add = on(mixer) ? await ranked(seed, [...mine, ...online]) : [...mine, ...online];
       if (!add.length || !on(infinite) || looping()) return;
       if (radioFrom < 0) {
         radioFrom = songs.length;
@@ -96,6 +97,17 @@
     } finally {
       asking = false;
     }
+  }
+  // With Auto Mix on, the songs Infinite adds are put in the order that mixes best, each into the next (automix.js
+  // chain(): tempo, key, energy), using the songs analysed already (api/mix.js); the rest follow in their own order.
+  async function ranked(seed, list) {
+    try {
+      const res = await fetch(`${SITE}api/mix/summaries`, { method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ids: [seed.id, ...list.map((s) => s.id)] }) });
+      if (!res.ok) return list;
+      const known = await res.json();
+      return AUTOMIX.chain(known[seed.id], list, (s) => known[s.id]);
+    } catch { return list; } // no server: as found
   }
   window.upNext = () => order[0] ?? -1;
   window.upcoming = (k) => order.slice(0, k).map((i) => songs[i]); // the next k songs (player.js tells the Drive cache)
@@ -116,7 +128,7 @@
   };
 
   // Infinite (on by default: the album loops, as it always has) and Auto Mix remember their state.
-  for (const [b, fallback] of [[infinite, 'true'], [document.getElementById('automix'), 'false']]) {
+  for (const [b, fallback] of [[infinite, 'true'], [mixer, 'false']]) {
     let saved = null;
     try { saved = localStorage.getItem(b.id); } catch {}
     b.setAttribute('aria-pressed', (saved ?? fallback) === 'true');
@@ -125,9 +137,42 @@
       b.setAttribute('aria-pressed', on);
       store(b.id, on);
       if (b === infinite) build();
+      if (b === mixer) { music.automix = on; if (on) kick(); }
       render();
     });
   }
+  music.automix = on(mixer);
+
+  // The Auto Mix icon: two crossfade curves meeting at a point that moves like a crossfader (x: 0 left, 1 right).
+  // Under the pointer it's worked back and forth; turned on, it springs across and back; during a mix it follows the
+  // mix as it happens, the song going out fading. With reduced motion it only changes state.
+  const [fadeOut, fadeIn] = mixer.querySelectorAll('path');
+  const still = matchMedia('(prefers-reduced-motion: reduce)');
+  let x = 0.5, speed = 0, hovered = 0, frame = 0;
+  function draw() {
+    const k = (4 + 10 * x) / 0.75; // control points at k ± 3 put the crossing at 7 + 10x (12 in the middle)
+    fadeOut.setAttribute('d', `M2.5 5.5C${(k - 3).toFixed(2)} 5.5 ${(k + 3).toFixed(2)} 18.5 21.5 18.5`);
+    fadeIn.setAttribute('d', `M2.5 18.5C${(k - 3).toFixed(2)} 18.5 ${(k + 3).toFixed(2)} 5.5 21.5 5.5`);
+  }
+  function tick(now) {
+    frame = 0;
+    const mixing = music.mixing;
+    const goal = still.matches ? 0.5 : mixing ? 0.15 + 0.7 * mixing.p
+      : hovered ? 0.5 + 0.2 * Math.sin((now - hovered) / 1200 * 2 * Math.PI) : 0.5;
+    if (still.matches) { x = goal; speed = 0; } else { speed += (goal - x) * 0.12 - speed * 0.18; x += speed; } // a spring
+    draw();
+    fadeOut.style.opacity = mixing ? 1 - 0.7 * mixing.p : '';
+    if (mixing || hovered || Math.abs(speed) > 1e-4 || Math.abs(goal - x) > 1e-3) frame = requestAnimationFrame(tick);
+  }
+  const wake = () => { if (!frame) frame = requestAnimationFrame(tick); };
+  const kick = () => { if (!still.matches) { speed += 0.12; wake(); } }; // turned on: across and back
+  mixer.addEventListener('pointerenter', () => { hovered = performance.now() || 1; wake(); });
+  mixer.addEventListener('pointerleave', () => { hovered = 0; wake(); });
+  music.addEventListener('mixstart', () => {
+    mixer.setAttribute('aria-label', `Auto Mix · mixing into “${songs[upNext()]?.title || 'the next song'}”`);
+    wake();
+  });
+  music.addEventListener('mixend', () => { mixer.setAttribute('aria-label', 'Auto Mix'); wake(); });
 
   // A song in the list playing now plays in place; any other links to its album.
   function row(e) {
@@ -165,6 +210,7 @@
     const played = read().filter((e) => e && typeof e.name === 'string' && sameSite(e.href));
     if (played[0]?.id === songs[index]?.id) played.shift(); // playing now, not history yet
     hist.replaceChildren(...played.reverse().map(row)); // oldest first, the newest just above Continue Playing
+    document.dispatchEvent(new Event('queuechange')); // player.js cues the next song for Auto Mix
   }
 
   const align = () => { queue.scrollTop = up.offsetTop - bar.offsetHeight; }; // History sits above the fold
