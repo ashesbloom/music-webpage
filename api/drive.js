@@ -176,7 +176,12 @@ async function request(p, { auth, keys = [], range, signal, paced = false } = {}
     else throw fail('Add a Google key in My Music → Set up ACRUX (with the Google Drive API turned on), or connect Google Drive.', 400);
     if (keys.length) headers['X-Goog-Drive-Resource-Keys'] = keys.join(',');
     if (range) headers.Range = range;
-    const res = await fetch(url, { headers, signal });
+    let res;
+    try { res = await fetch(url, { headers, signal }); } catch (err) { // the connection dropped (a weak network): like a busy answer
+      if (signal?.aborted || tries >= 4) throw err;
+      await sleep(2 ** tries * 1000 + Math.random() * 1000, undefined, { signal });
+      continue;
+    }
     if (res.ok) return res;
     const text = await res.text().catch(() => '');
     if (res.status === 403 && /automated queries|<html/i.test(text)) { // not the API answering: Google's traffic block

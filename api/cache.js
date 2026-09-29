@@ -15,6 +15,7 @@
 const fs = require('fs');
 const path = require('path');
 const { EventEmitter } = require('events');
+const { setTimeout: sleep } = require('timers/promises');
 const { sendFile, typeOf } = require('./common');
 const tracks = require('./tracks');
 const drive = require('./drive');
@@ -48,28 +49,38 @@ async function run(j) {
   let fh;
   try {
     fh = await fs.promises.open(fileOf(j.track.id), 'a');
+    let tries = 0; // in a row without new bytes
     while (j.have < Math.min(j.upto, j.track.size)) {
       const end = j.upto >= j.track.size ? '' : j.upto - 1;
       j.ctrl = new AbortController();
-      const res = await drive.media(j.track, `bytes=${j.have}-${end}`, j.ctrl.signal, !j.readers); // no listener yet: it takes its turn
-      if (res.status === 200 && j.have > 0) { // the range was ignored: the whole file is coming
-        await fh.truncate(0);
-        j.have = 0;
-      }
       let got = 0;
-      for await (const chunk of res.body) {
-        await fh.write(chunk);
-        got += chunk.length;
-        j.have += chunk.length;
-        j.events.emit('data');
+      try {
+        const res = await drive.media(j.track, `bytes=${j.have}-${end}`, j.ctrl.signal, !j.readers); // no listener yet: it takes its turn
+        if (res.status === 200 && j.have > 0) { // the range was ignored: the whole file is coming
+          await fh.truncate(0);
+          j.have = 0;
+        }
+        for await (const chunk of res.body) {
+          await fh.write(chunk);
+          got += chunk.length;
+          j.have += chunk.length;
+          j.events.emit('data');
+        }
+        if (!got) throw new Error('Drive sent nothing');
+      } catch (err) {
+        // Dropped midway (a weak network) while someone's listening: carry on from the bytes on disk, not from scratch.
+        if (got) tries = 0;
+        if (j.ctrl.signal.aborted || err.expose || !j.readers || ++tries > 5) throw err;
+        await sleep(2 ** (tries - 1) * 1000, undefined, { signal: j.ctrl.signal });
+        continue;
       }
-      if (!got) throw new Error('Drive sent nothing');
+      tries = 0;
     }
   } catch (err) {
     if (!j.ctrl?.signal.aborted) {
       j.error = err;
       cooling.set(j.track.id, Date.now() + 5 * 60e3);
-      console.error('Drive cache:', j.track.name, '-', err.message);
+      console.error('Drive cache:', j.track.name, '-', err.message, err.cause?.code || err.cause?.message || '');
     }
   } finally {
     await fh?.close().catch(() => {});
@@ -130,7 +141,7 @@ async function stream(req, res, track) {
     }
     if (!gone) res.end();
   } catch (err) {
-    console.error('Drive stream:', track.name, '-', err.message);
+    console.error('Drive stream:', track.name, '-', err.message, err.cause?.code || err.cause?.message || '');
     res.destroy(); // the player sees the song fail and says so
   } finally {
     await fh?.close().catch(() => {});

@@ -48,6 +48,24 @@ test('Drive: a sign-in without its client doesn’t hide Google holding back the
   }
 });
 
+// A weak network drops connections: Drive calls try again (like a busy answer) instead of failing the song at once.
+test('Drive: a dropped connection is tried again', async () => {
+  const drive = require('../api/drive');
+  process.env.GOOGLE_API_KEY = 'test-key';
+  const real = globalThis.fetch;
+  let calls = 0;
+  globalThis.fetch = async () => {
+    if (++calls === 1) throw new TypeError('fetch failed');
+    return new Response(JSON.stringify({ error: { message: 'File not found', errors: [{ reason: 'notFound' }] } }), { status: 404 });
+  };
+  try {
+    await assert.rejects(drive.add(`https://drive.google.com/drive/folders/${ID}`), /isn’t shared by link/);
+    assert.equal(calls, 2);
+  } finally {
+    globalThis.fetch = real;
+  }
+});
+
 // A zip by hand: one stored entry, one deflated; the reader must give both back byte for byte.
 function zip(files) {
   const locals = [];
