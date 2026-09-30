@@ -1233,7 +1233,7 @@ body:has(#shuffle.clicked) .q_shuffle, body:has(#repeat[data-mode="one"]) .q_rep
 .lib_head { display: flex; flex-direction: column; gap: 6px; padding-bottom: 18px; border-bottom: 2px solid #3f3f3f; }
 .lib_head a { color: white; text-decoration: underline; }
 .lib_sec { display: flex; flex-direction: column; gap: 14px; }
-.lib_row { display: flex; align-items: baseline; justify-content: space-between; }
+.lib_row { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 4px 12px; } /* a long note drops under its heading */
 .lib_muted { margin: 0; font-size: 13px; color: var(--muted); }
 .addmore {
   display: flex;
@@ -1397,12 +1397,14 @@ body:has(#shuffle.clicked) .q_shuffle, body:has(#repeat[data-mode="one"]) .q_rep
 .dial_pivot { position: absolute; left: 327px; top: 307px; width: 26px; height: 26px; border-radius: 50%; background: radial-gradient(circle at 35% 30%, #e0e0e0, #6a6a6a); }
 .di {
   position: absolute;
-  left: calc(340px + 270px * cos(var(--a) * 1deg) - 82px);
-  top: calc(320px - 270px * sin(var(--a) * 1deg) - 22px);
+  left: calc(340px + 270px * cos(var(--a) * 1deg));
+  top: calc(320px - 270px * sin(var(--a) * 1deg));
+  translate: -50% -50%; /* centred on its spot, so a longer name (Your Downloaded Songs) grows both ways */
   display: flex;
   align-items: center;
   gap: 10px;
-  width: 164px;
+  width: max-content;
+  min-width: 164px;
   height: 44px;
   padding: 0 14px 0 6px;
   border: 1px solid rgb(255 255 255 / 0.1);
@@ -1421,10 +1423,10 @@ body:has(#shuffle.clicked) .q_shuffle, body:has(#repeat[data-mode="one"]) .q_rep
   box-shadow: 0 0 24px color-mix(in srgb, var(--tint, var(--glow)) 35%, transparent);
 }
 .di.on .di_ic { background: var(--tint, var(--glow)); color: #111; }
-@container (max-width: 659px) {
+@container (max-width: 679px) {
   .dial { display: flex; gap: 10px; width: auto; height: auto; margin: 0 calc(-1 * var(--gutter)); padding: 0 var(--gutter) 4px; overflow-x: auto; scrollbar-width: none; }
   .dial > span { display: none; }
-  .di { position: static; flex: none; width: auto; }
+  .di { position: static; flex: none; width: auto; min-width: 0; translate: none; }
 }
 
 /* Covers: a heart (Favorites), a photo, a groove cover (rings and a sheen in the playlist's colours) or a mosaic. */
@@ -1533,6 +1535,12 @@ body:has(#shuffle.clicked) .q_shuffle, body:has(#repeat[data-mode="one"]) .q_rep
 .pl_song { display: flex; align-items: center; gap: 12px; min-width: 0; }
 .pl_thumb { position: relative; flex: none; width: 40px; height: 40px; overflow: hidden; border-radius: 4px; background: var(--header); }
 .pl_thumb img { width: 100%; height: 100%; object-fit: cover; }
+/* Your Downloaded Songs: a cached song's time left before it leaves the cache; red in its last day. */
+.pl_left { position: relative; z-index: 1; display: inline-flex; flex: none; align-items: center; gap: 4px; font-size: 12px; font-variant-numeric: tabular-nums; color: var(--muted); }
+.pl_left .icon { font-size: 11px; }
+.pl_left.soon { color: var(--glow); }
+.dl_top { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 28px; }
+.dl_top .pl_btns { margin: 0; }
 /* The song playing now: its cover turns into a little record, spinning while the music plays. */
 .now .pl_thumb { border-radius: 50%; box-shadow: 0 0 0 2px var(--tint, var(--glow)); }
 .now .pl_thumb img { border-radius: 50%; animation: spin 3.6s linear infinite paused; }
@@ -1669,7 +1677,7 @@ body:has(#play.icon-pause) .now .pl_thumb img { animation-play-state: running; }
 .al:is(:hover, :focus-visible) .al_rec { translate: 20% 0; }
 .al_art img { position: relative; width: 100%; height: 100%; object-fit: cover; border-radius: 8px; box-shadow: 0 12px 28px rgb(0 0 0 / 0.55); }
 .al_t { display: block; margin-top: 10px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; font-size: 14px; font-weight: 700; color: white; }
-.al_a { display: block; margin-top: 3px; font-size: 13px; color: var(--muted); }
+.al_a { display: block; margin-top: 3px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; font-size: 13px; color: var(--muted); }
 
 /* Artist: the artist list beside the chosen artist's albums and songs */
 .explore.lib_flush { padding: 0; }
@@ -1832,6 +1840,9 @@ body:has(#play.icon-pause) .ar_trk.now .ar_n::before { animation-play-state: run
   .crate { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 22px 16px; padding: 0; }
   .cr_sl, .crate_item:is(:hover, :focus-visible) .cr_sl { transform: none; }
   .cr_disc, .crate_item:is(:hover, :focus-visible) .cr_disc { translate: 12% 0; } /* touch: the record just peeks out */
+  .al_grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 22px 16px; } /* two covers a row, like the crate */
+  .al:is(:hover, :focus-visible) .al_rec { translate: 12% 0; }
+  .dl_top { margin-bottom: 20px; }
   .ar_split { grid-template-columns: minmax(0, 1fr); }
   .ar_list { flex-direction: row; gap: 6px; padding: 12px var(--gutter); overflow-x: auto; border-right: 0; border-bottom: 1px solid #2a2a2a; scrollbar-width: none; }
   .library .ar_list h2 { display: none; }
@@ -2615,6 +2626,7 @@ body:has(#play.icon-pause) .ar_trk.now .ar_n::before { animation-play-state: run
 .icon-copy{--i:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='9' y='9' width='12' height='12' rx='2'/%3E%3Cpath d='M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1'/%3E%3C/svg%3E")}
 .icon-disc{--i:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='9'/%3E%3Ccircle cx='12' cy='12' r='2.5'/%3E%3C/svg%3E")}
 .icon-download{--i:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 4v12M6 11l6 6 6-6M5 21h14'/%3E%3C/svg%3E")}
+.icon-hourglass{--i:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 3h12M6 21h12M7 3c0 5 10 5 10 9s-10 4-10 9M17 3c0 5-10 5-10 9s10 4 10 9'/%3E%3C/svg%3E")}
 .icon-ellipsis{--i:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Ccircle cx='4' cy='12' r='2.5'/%3E%3Ccircle cx='12' cy='12' r='2.5'/%3E%3Ccircle cx='20' cy='12' r='2.5'/%3E%3C/svg%3E")}
 .icon-folder-closed{--i:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cpath d='M448 480H64c-35.3 0-64-28.7-64-64V192H512V416c0 35.3-28.7 64-64 64zm64-320H0V96C0 60.7 28.7 32 64 32H192c20.1 0 39.1 9.5 51.2 25.6l19.2 25.6c6 8.1 15.5 12.8 25.6 12.8H448c35.3 0 64 28.7 64 64z'/%3E%3C/svg%3E")}
 .icon-folder-open{--i:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 576 512'%3E%3Cpath d='M88.7 223.8L0 375.8V96C0 60.7 28.7 32 64 32H181.5c17 0 33.3 6.7 45.3 18.7l26.5 26.5c12 12 28.3 18.7 45.3 18.7H416c35.3 0 64 28.7 64 64v32H144c-22.8 0-43.8 12.1-55.3 31.8zm27.6 16.1C122.1 230 132.6 224 144 224H544c11.5 0 22 6.1 27.7 16.1s5.7 22.2-.1 32.1l-112 192C453.9 474 443.4 480 432 480H32c-11.5 0-22-6.1-27.7-16.1s-5.7-22.2 .1-32.1l112-192z'/%3E%3C/svg%3E")}

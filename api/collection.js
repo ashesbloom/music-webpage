@@ -1,5 +1,6 @@
 // ACRUX collection API, mounted by server.js: what you do with your music.
-//   GET  /api/collection                  { playlists, marks, offline, me, sharing }: everything below, in one go
+//   GET  /api/collection                  { playlists, marks, offline, cached, me, sharing }: everything below, in one go
+//                                         (cached: Drive songs whole in the cache, api/cache.js cachedSongs)
 //   GET  /api/playlists/played            your playlists, most listened to lately first (the side panel)
 //   POST /api/playlists                   make one { title, desc?, photo?, groove?, songs? } (or save a Discover album:
 //                                         { title, from, cover, songs })
@@ -147,7 +148,7 @@ async function fetchWaiting() {
   }
 }
 setTimeout(fetchWaiting, 5e3).unref();
-const offline = () => allOffline.all().map((o) => ({ key: o.key, kind: o.kind,
+const offline = () => allOffline.all().map((o) => ({ key: o.key, kind: o.kind, ref: JSON.parse(o.ref),
   status: o.kind === 'drive' ? (cache.complete(o.key.slice(4)) ? 'done' : 'waiting') : o.status }));
 
 // ---------- reading songs (Save to computer) ----------
@@ -299,10 +300,10 @@ function collection(req) {
   if (!loopback(req) && !device && (g || !openHost())) { // a guest: their playlists only
     const mine = g ? q.playlistsOf.all(g.gid) : [];
     const lists = mine.map((m) => playlists.get(m.id)).filter(Boolean);
-    return { playlists: lists, marks: [], offline: [], me: { guest: g && { name: g.name, playlists: mine } }, sharing: sharing() };
+    return { playlists: lists, marks: [], offline: [], cached: [], me: { guest: g && { name: g.name, playlists: mine } }, sharing: sharing() };
   }
   const lists = playlists.list().playlists.map((p) => ({ ...p, people: q.membersOf.all(p.id), invited: !!q.inviteOf.get(p.id) }));
-  return { playlists: lists, marks: marks(), offline: offline(), me: loopback(req) ? { owner: true } : device ? { device: true } : {}, sharing: sharing() }; // a device, or a phone with HOST=0.0.0.0, can look but not change
+  return { playlists: lists, marks: marks(), offline: offline(), cached: cache.cachedSongs(), me: loopback(req) ? { owner: true } : device ? { device: true } : {}, sharing: sharing() }; // a device, or a phone with HOST=0.0.0.0, can look but not change
 }
 
 // ---------- routes ----------

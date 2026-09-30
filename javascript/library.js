@@ -1,6 +1,6 @@
 // ACRUX library (library.html): My Music, a playlist or an album, Albums, and an Artist, chosen by the URL:
 // none = My Music, ?view=playlist&id=lo-fi, ?view=album&id=nectar, ?view=albums (&source=local|drive:<id>: the albums
-// you added from there), ?view=artist&id=joji.
+// you added from there), ?view=artist&id=joji, ?view=downloads (Your Downloaded Songs).
 // It renders from CATALOG before player.js loads, so the page's song list (body data-list) is set by then; its
 // buttons use player.js (playAt, setList), queue.js (upNext) and more.js (showTray, shareLink) once clicked.
 // Your playlists (catalog.js, from the server: api/collection.js) can be made, edited, reordered, duplicated, pinned,
@@ -55,6 +55,19 @@ Promise.all([CATALOG.ready, new Promise((done) => (document.readyState === 'load
     <span class="pp_stack">${crew(p).slice(0, 3).map(face).join('')}</span>
     <span>${crew(p).length > 1 ? esc(and(crew(p))) : 'Add collaborators'}</span><span class="pp_add">${ic('plus')}</span></button>`;
 
+  // A song's row in a song table: ♥, the song, artist, album, ↓, time, ⋯. `extra` goes beside its title (Cached's ⏳).
+  const row = (s, extra = '') => `<li class="pl_row" data-id="${esc(s.id)}">
+      ${favButton('song', s.id)}
+      <span class="pl_song"><span class="pl_thumb"><img alt="" loading="lazy" src="${s.cover}"></span><button class="pl_play" data-song="${esc(s.id)}">${esc(s.title)}</button>${extra}</span>
+      <span class="pl_cell">${esc(s.artist)}</span><span class="pl_cell">${esc(albumOf(s).title)}</span>
+      ${keepButton(`song:${s.id}`)}
+      <span class="pl_time">${s.time}</span>
+      <button class="pl_more" data-more="${esc(s.id)}" aria-label="More">${ic('ellipsis')}</button></li>`;
+  const tableHead = '<div class="pl_row pl_head" aria-hidden="true"><span class="pl_fav"></span><span>Song</span><span class="pl_cell">Artist</span><span class="pl_cell">Album</span><span class="pl_dl"></span><span class="pl_time">Time</span><span></span></div>';
+  // An album's (or playlist's) card in a grid.
+  const tile = (href, img, title, sub) => `<li><a class="al" href="${href}"><span class="al_art"><span class="al_rec"></span><img alt="" loading="lazy" src="${img}"></span>
+      <span class="al_t">${esc(title)}</span><span class="al_a">${esc(sub)}</span></a></li>`;
+
   let list = [];      // the songs this view plays, in the order shown
   let key = '';       // its player.js list key
   let resort = null;  // re-sorts the view after a sort menu pick
@@ -77,7 +90,7 @@ Promise.all([CATALOG.ready, new Promise((done) => (document.readyState === 'load
     const dial = [
       ['Playlists', 'grid', CATALOG.page('view=playlist'), 162],
       ['Albums', 'disc', CATALOG.page('view=albums'), 126],
-      ['Your Favorites', 'heart', CATALOG.page('view=playlist&id=favorites'), 90],
+      ['Your Downloaded Songs', 'download', CATALOG.page('view=downloads'), 90], // Favorites: in the Playlists list
       // The songs you added (Add More Songs); before you've added any, the Discover songs you've played.
       ['Recently Added', 'clock', CATALOG.playlist('recently-added').yours ? CATALOG.page('view=playlist&id=recently-added') : CATALOG.page('view=discover&mine=1'), 54],
       ['Artists', 'mic', CATALOG.page('view=artist'), 18],
@@ -135,17 +148,10 @@ Promise.all([CATALOG.ready, new Promise((done) => (document.readyState === 'load
     const artist = isAlbum && CATALOG.artist(item.artist);
     const mins = Math.round(all.reduce((t, s) => t + secs(s.time), 0) / 60);
     const none = all.length ? '' : ' aria-disabled="true"';
-    const row = (s) => `<li class="pl_row" data-id="${esc(s.id)}">
-      ${favButton('song', s.id)}
-      <span class="pl_song"><span class="pl_thumb"><img alt="" loading="lazy" src="${s.cover}"></span><button class="pl_play" data-song="${esc(s.id)}">${esc(s.title)}</button></span>
-      <span class="pl_cell">${esc(s.artist)}</span><span class="pl_cell">${esc(albumOf(s).title)}</span>
-      ${keepButton(`song:${s.id}`)}
-      <span class="pl_time">${s.time}</span>
-      <button class="pl_more" data-more="${esc(s.id)}" aria-label="More">${ic('ellipsis')}</button></li>`;
     const fields = { title: (s) => s.title, artist: (s) => s.artist, album: (s) => albumOf(s).title, time: (s) => secs(s.time) };
     resort = (by, asc) => {
       list = sorted(all, fields[by], asc);
-      root.querySelector('.pl_list').innerHTML = list.map(row).join('');
+      root.querySelector('.pl_list').innerHTML = list.map((s) => row(s)).join('');
       filter();
       mark();
       paintMarks(root);
@@ -202,8 +208,8 @@ Promise.all([CATALOG.ready, new Promise((done) => (document.readyState === 'load
         </div>
       </section>
       ${all.length ? `<div class="pl_order_bar" hidden><span>Drag songs into place, or use the arrows.</span><button data-act="order-cancel">Cancel</button><button class="pl_playall" data-act="order-done">Done</button></div>
-      <div class="pl_row pl_head" aria-hidden="true"><span class="pl_fav"></span><span>Song</span><span class="pl_cell">Artist</span><span class="pl_cell">Album</span><span class="pl_dl"></span><span class="pl_time">Time</span><span></span></div>
-      <ol class="pl_list" data-find>${all.map(row).join('')}</ol>`
+      ${tableHead}
+      <ol class="pl_list" data-find>${all.map((s) => row(s)).join('')}</ol>`
       : `<p class="pl_empty">${item.favorites ? 'Songs you ♥ show up here.' : isAlbum ? 'No songs from this album in your library yet.'
         : editable ? 'No songs yet. Add some from any song’s ⋯ menu: Add to Playlist.' : 'No songs here yet.'}</p>`}`;
   }
@@ -212,8 +218,7 @@ Promise.all([CATALOG.ready, new Promise((done) => (document.readyState === 'load
     const from = q.get('source'); // the albums of one thing you added (addmore.js)
     const all = from ? CATALOG.albums.filter((al) => al.source === from) : CATALOG.albums;
     const title = from ? CATALOG.sourceTitle(from) : 'Albums';
-    const card = (al) => `<li><a class="al" href="${CATALOG.page(`view=album&id=${al.id}`)}"><span class="al_art"><span class="al_rec"></span><img alt="" loading="lazy" src="${al.cover}"></span>
-      <span class="al_t">${esc(al.title)}</span><span class="al_a">${esc(CATALOG.artist(al.artist).name)}</span></a></li>`;
+    const card = (al) => tile(CATALOG.page(`view=album&id=${al.id}`), al.cover, al.title, CATALOG.artist(al.artist).name);
     const fields = { title: (a) => a.title, artist: (a) => CATALOG.artist(a.artist).name, genre: (a) => a.genre, year: (a) => a.year };
     resort = (by, asc, show) => {
       const shown = show === 'fav' ? all.filter((al) => CATALOG.marked('album', al.id)) : all;
@@ -229,6 +234,51 @@ Promise.all([CATALOG.ready, new Promise((done) => (document.readyState === 'load
       ${sortMenu('al_sort', [['title', 'Title'], ['artist', 'Artist'], ['genre', 'Genre'], ['year', 'Year']],
         `${radio('show', 'all', 'All Albums', true)}${owner ? radio('show', 'fav', 'Only Favorites', false) : ''}<hr>`)}
       <ul class="al_grid" data-find>${sorted(all, fields.title, true).map(card).join('')}</ul>`;
+  }
+
+  // Your Downloaded Songs: what plays without the internet. Whole albums and playlists of yours as cards (not their
+  // songs), single songs (downloaded, or added from this computer on their own) as rows, and at the bottom the Drive
+  // songs cached from playing, each with how long until it leaves the cache (api/cache.js cachedSongs).
+  function downloadsView() {
+    const offline = (target) => ['here', 'done'].includes(keepOf(target)?.state);
+    const albums = CATALOG.albums.filter((al) => al.lib && offline(`list:album:${al.id}`));
+    const lists = CATALOG.playlists.filter((p) => p.server && p.songs.length && offline(`list:playlist:${p.id}`));
+    const inCards = [...albums.map((al) => CATALOG.list(`album:${al.id}`)), ...lists.map((p) => CATALOG.list(`playlist:${p.id}`))].flat();
+    const carded = new Set(inCards.map((s) => s.id));
+    const singles = [...new Map([...CATALOG.downloaded(), ...CATALOG.songs.filter((s) => s.single && !s.drive)]
+      .filter((s) => !carded.has(s.id)).map((s) => [s.id, s])).values()];
+    const cached = [...CATALOG.cached()].sort((a, b) => (a.until ?? Infinity) - (b.until ?? Infinity)); // leaving soonest first
+    key = 'playlist:downloads';
+    list = [...new Map([...inCards, ...singles].map((s) => [s.id, s])).values()];
+    CATALOG.addList(key, list);
+    CATALOG.addList('playlist:cached', cached.map((x) => x.song));
+    document.body.dataset.list = key;
+    const none = list.length ? '' : ' aria-disabled="true"';
+    const day = 864e5;
+    const leaves = ({ until }) => {
+      if (until == null) return `<span class="pl_left" title="Stays until the Drive cache fills">${ic('hourglass')}</span>`;
+      const left = until - Date.now();
+      const date = new Date(until).toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
+      return `<span class="pl_left${left < day ? ' soon' : ''}" title="Leaves the cache on ${date} if you don’t play it">${ic('hourglass')}${left >= day ? `${Math.floor(left / day)}d` : `${Math.max(1, Math.ceil(left / 36e5))}h`}</span>`;
+    };
+    const cards = [
+      ...albums.map((al) => tile(CATALOG.page(`view=album&id=${al.id}`), al.cover, al.title, `Album · ${CATALOG.artist(al.artist).name}`)),
+      ...lists.map((p) => tile(CATALOG.page(`view=playlist&id=${p.id}`), p.photo || CATALOG.list(`playlist:${p.id}`)[0]?.cover || '', p.title, `Playlist · ${count(p.songs.length, 'song')}`)),
+    ];
+    return `
+      <div class="pl_bar">
+        <div class="lib_titlebar"><a class="round" href="${CATALOG.page()}" data-back aria-label="Back">${ic('chevron-left')}</a><h1>Downloaded Songs</h1></div>
+        <div class="pl_tools">${find('Find in Downloads')}</div>
+      </div>
+      <div class="dl_top"><span class="lib_muted">These play without the internet.</span>
+        <div class="pl_btns"><button class="round red" data-act="shuffle" aria-label="Shuffle"${none}>${ic('shuffle')}</button>
+          <button class="pl_playall" data-act="play"${none}>${ic('play')}Play</button></div></div>
+      ${cards.length ? `<section class="lib_sec"><h2>Albums &amp; Playlists</h2><ul class="al_grid" data-find>${cards.join('')}</ul></section>` : ''}
+      ${singles.length ? `<section class="lib_sec"><h2>Songs</h2>${tableHead}<ol class="pl_list" data-find>${singles.map((s) => row(s)).join('')}</ol></section>` : ''}
+      ${cached.length ? `<section class="lib_sec" data-list="playlist:cached"><div class="lib_row"><h2>Cached</h2>
+        <span class="lib_muted">Played lately from Drive. They leave the cache unless you ↓ download them.</span></div>
+        ${tableHead}<ol class="pl_list" data-find>${cached.map((x) => row(x.song, leaves(x))).join('')}</ol></section>` : ''}
+      ${cards.length || singles.length || cached.length ? '' : '<p class="pl_empty">Nothing here yet. ↓ a song, album or playlist to keep it for playing offline.</p>'}`;
   }
 
   function artistView() {
@@ -590,7 +640,10 @@ Promise.all([CATALOG.ready, new Promise((done) => (document.readyState === 'load
     row.scrollIntoView({ block: 'center' });
   }
 
-  const render = { mymusic: myMusic, playlist: playlistsView, album: songsView, albums: albumsView, artist: artistView }[view];
+  // What Your Downloaded Songs shows, so it's drawn again only when that changes (not each time a song's ↓ state does).
+  const downloadsNow = () => JSON.stringify([CATALOG.downloaded().map((s) => s.id), CATALOG.cached().map((x) => [x.song.id, x.until])]);
+  if (view === 'downloads') root.dataset.downloads = downloadsNow();
+  const render = { mymusic: myMusic, playlist: playlistsView, album: songsView, albums: albumsView, artist: artistView, downloads: downloadsView }[view];
   root.innerHTML = render ? render() : notFound('page');
   paintMarks(root);
   if (view === 'mymusic') window.mountAddMore?.(root.querySelector('#addmore .addmore'));
@@ -607,10 +660,12 @@ Promise.all([CATALOG.ready, new Promise((done) => (document.readyState === 'load
     const k = menu.querySelector('[data-keep]') && keepOf(menu.querySelector('[data-keep]').dataset.keep);
     label('keep', { done: 'Remove Download', waiting: 'Stop Downloading', can: 'Download' }[k?.state] || 'Download');
   });
-  // Your Favorites, when a ♥ goes: the song leaves the list.
+  // Your Favorites, when a ♥ goes: the song leaves the list. Your Downloaded Songs, when a download or cached song
+  // comes or goes.
   const onCollection = () => {
     if (!root.isConnected) return document.removeEventListener('collectionchange', onCollection);
     if (view === 'playlist' && id === 'favorites' && !root.querySelector('.ordering')) window.navReload?.();
+    if (view === 'downloads' && root.dataset.downloads !== downloadsNow()) window.navReload?.();
   };
   document.addEventListener('collectionchange', onCollection);
   document.title = `${root.querySelector('h1')?.textContent || 'Library'} – ACRUX`;

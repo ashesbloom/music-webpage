@@ -204,6 +204,8 @@ const CATALOG = (() => {
   // guest invited to a playlist from the Wi-Fi. Without the server: the demo playlists, and nothing can be changed.
   let marks = new Map();   // "kind:id" -> { kind, id, title, sub, cover, href, ref?, at }
   let offline = new Map(); // song id -> 'done' | 'waiting'
+  let downloaded = [];     // the songs kept offline and here now, as songs (Your Downloaded Songs)
+  let cached = [];         // Drive songs whole in the cache you didn't download: { song, until } (until: null = until it fills)
   let me = {};
   let sharing = null;
   const abs = (u) => (u?.startsWith('/') ? `${SITE}${u.slice(1)}` : u);
@@ -211,6 +213,8 @@ const CATALOG = (() => {
   function applyCollection(c) {
     marks = new Map((c.marks || []).map((m) => [`${m.kind}:${m.id}`, m]));
     offline = new Map((c.offline || []).map((o) => [o.key, o.status]));
+    downloaded = (c.offline || []).filter((o) => o.status === 'done' && o.ref).map((o) => fromResult(o.ref)).filter(Boolean);
+    cached = (c.cached || []).map((x) => ({ song: song(x.id), until: x.until })).filter((x) => x.song);
     me = c.me || {};
     sharing = c.sharing || null;
     document.documentElement.classList.toggle('viewer', !me.owner);
@@ -336,7 +340,7 @@ const CATALOG = (() => {
   const songPage = (s) => `${s.albumHref || page('view=discover&mine=1')}&song=${encodeURIComponent(s.id)}`;
   const catalog = { artists, albums, songs, playlists, song, album, artist, playlist, list, addList, page, quality, tiers, setQuality, discover, fromResult, songPage, ready,
     sources, sourceTitle, find, ref, marked, keepState, pinnedFirst, call, change, refresh, toggleMark, get, events,
-    me: () => me, sharing: () => sharing, mark: (kind, id) => marks.get(`${kind}:${id}`),
+    me: () => me, sharing: () => sharing, downloaded: () => downloaded, cached: () => cached, mark: (kind, id) => marks.get(`${kind}:${id}`),
     // Fetches your music again (after adding or removing some); `ready` waits for it.
     reload() {
       catalog.ready = loadAll().then(() => document.dispatchEvent(new Event('librarychange'))); // player.js drops removed songs

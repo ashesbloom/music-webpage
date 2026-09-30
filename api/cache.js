@@ -87,7 +87,7 @@ async function run(j) {
     j.running = false;
     j.ctrl = null;
     j.events.emit('data'); // wakes readers: done, stopped or failed
-    if (kept.has(j.track.id) && j.have >= j.track.size) tracks.emit('collection', {}); // a download finished
+    if (j.have >= j.track.size) tracks.emit('collection', {}); // a song is whole: downloaded, or cached (Your Downloaded Songs)
     pump();
     evict();
   }
@@ -246,6 +246,20 @@ async function files() {
     return { id, size: stat.size, last: Math.max(tracks.get(id)?.used || 0, stat.mtimeMs) };
   }));
 }
+// Whole songs in the cache you didn't download (Your Downloaded Songs, api/collection.js): { id: 'lib:<id>', until },
+// until = when it leaves if not played again (evict's rule), null with no keep time (it stays until the cache fills).
+function cachedSongs() {
+  const { keepDays } = tracks.settings.get();
+  return fs.readdirSync(DIR).flatMap((id) => {
+    const t = tracks.get(id);
+    if (!t || kept.has(id)) return [];
+    let stat;
+    try { stat = fs.statSync(fileOf(id)); } catch { return []; }
+    if (stat.size < t.size) return [];
+    const last = Math.max(t.used || 0, stat.mtimeMs);
+    return [{ id: `lib:${id}`, until: keepDays ? last + keepDays * 864e5 : null }];
+  });
+}
 const usage = async () => (await files()).reduce((sum, f) => sum + f.size, 0);
 
 // Removes songs not played for the keep time (the Add More panel's "Keep songs for"), then, over the size cap, the
@@ -255,6 +269,7 @@ let evicting = false;
 async function evict() {
   if (evicting) return;
   evicting = true;
+  let removed = false; // songs Your Downloaded Songs shows: it's told they left
   try {
     const { cacheGB, keepDays } = tracks.settings.get();
     const cap = cacheGB * 1e9;
@@ -262,6 +277,7 @@ async function evict() {
     const gone = async (f) => {
       await fs.promises.rm(fileOf(f.id), { force: true });
       jobs.delete(f.id);
+      if (f.size) removed = true;
     };
     let all = await files();
     for (const f of all) if (!f.size && !keep.has(f.id)) await gone(f); // a play cut off before any sound came
@@ -283,6 +299,7 @@ async function evict() {
     console.error('Drive cache: trimming -', err.message);
   } finally {
     evicting = false;
+    if (removed) tracks.emit('collection', {});
   }
 }
 
@@ -296,4 +313,4 @@ function drop(id) {
 setTimeout(evict, 5e3).unref(); // at start, once the server is up
 setInterval(evict, 36e5).unref();
 
-module.exports = { stream, setUpcoming, hint, usage, evict, drop, setKept, complete, whole };
+module.exports = { stream, setUpcoming, hint, usage, evict, drop, setKept, complete, whole, cachedSongs };
