@@ -31,7 +31,7 @@ album that's playing. You can move through the library, the queue and the search
 | 🎨 **Colour follows the cover** | The dominant colour of each cover tints the record, the label ring, the glow and the sleeves. In Settings, the accent, the highlight and any panel can follow it too, each on or off. |
 | 🔁 **Music never stops** | Links swap only the middle column and side panel, so audio, the record and the queue keep going. Back and Forward still work. |
 | 📜 **A real queue** | *Continue Playing* sits below and *History* is a scroll up. Turn on *Infinite* to keep the music going. With shuffle on, the queue shows the actual shuffled order. On a desktop it opens by itself 3 s into a song and closes again 5 s into a pause, unless you opened or used it. The side panel's *Playlists* shows the five you've listened to most lately. |
-| 🎛️ **The Library dial** | *My Music* opens on a half-record dial of Playlists, Albums, Favorites, Recently Added and Artists, with a tonearm pointer. |
+| 🎛️ **The Library dial** | *My Music* opens on a half-record dial of Playlists, Albums, Your Downloaded Songs, Recently Added and Artists, with a tonearm pointer. |
 | 📦 **A crate of playlists** | Playlists lean in a crate like sleeves. Hover one and its record slides out. Covers are photos, mosaics or generated groove art. |
 | 🔴 **Now playing is a record too** | The playing row's thumbnail turns into a tiny spinning record. Click it again to pause. |
 | 🗂️ **Split views that fold** | The Playlists and Artist pages have a side list that folds to icons by itself when the column gets narrow. It can also be folded by hand. |
@@ -215,7 +215,9 @@ change it.
   - The demo playlists (Late Night Joji and the rest) play, pin, ♥, download and duplicate, but can't be changed.
 - **♥:** songs, albums (the *Only Favorites* filter in Albums), artists and playlists. The songs you ♥ are *Your
   Favorites*.
-- **Download:** keeps songs playable without the internet.
+- **Download:** keeps songs playable without the internet. *Your Downloaded Songs*, in the middle of the Library dial,
+  lists everything that plays offline. Your files and local playlists get cards of their own, and the Drive songs whole
+  in the cache are at the bottom, with an hourglass and the days before they leave.
   - Drive songs are kept whole in the cache and never trimmed, and Discover songs are saved to `data/offline`.
   - Songs you dropped in, and the built-in ones, are on this computer already. Videos and 30-second previews can't be
     kept.
@@ -289,11 +291,17 @@ tests/                           node --test (audio DSP, Discover mapping, Add M
 - [ ] Accounts, for collaborators outside your network
 - [x] Auto Mix: DJ mixes between songs (beat-matched EQ blends on the phrase, echo outs, filter sweeps and fades), with
       gapless albums
+- [x] Song Features: beats, downbeats and time signature (Beat This!), sections, key, loudness and per-frame measures
+      of every song, worked out once and shared
+- [ ] A visualizer
 - [ ] FLAC streaming
 
 ## Credits
 
 The demo tracks and artwork belong to their artists and labels, including Joji, Radiohead, Nirvana and AC/DC. They
 are here only to show the interface.
+
+Song Features finds beats with [Beat This!](https://github.com/CPJKU/beat_this) (Foscarin, Schlüter and Widmer, ISMIR
+2024; MIT), run by [ONNX Runtime Web](https://github.com/microsoft/onnxruntime) (MIT).
 
 <p align="center"><sub>ACRUX™</sub></p>
