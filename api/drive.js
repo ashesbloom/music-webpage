@@ -316,7 +316,10 @@ async function folderCover(source, f) {
   try {
     const res = await request(`/files/${f.id}?alt=media`, { auth: await downloadAs(source), keys: keysOf(f.id, f.resourceKey), signal: AbortSignal.timeout(120e3), paced: true });
     return tracks.saveCover(Buffer.from(await res.arrayBuffer()), typeOf(f.name));
-  } catch { return null; }
+  } catch (err) {
+    if (err.reason !== 'held') console.error('Drive: cover of', f.name, '-', err.message);
+    return null;
+  }
 }
 
 // Lists a folder and every folder in it (or looks up the one song a song link is), then reads the tags of songs that
@@ -328,7 +331,8 @@ async function folderCover(source, f) {
 const scanning = new Map(); // source id -> AbortController
 async function scan(id) {
   const source = tracks.sources.get(id);
-  if (!source || source.kind !== 'drive' || scanning.has(id)) return;
+  // Already being read, unless that was stopped (the folder removed): added again, it's read afresh.
+  if (!source || source.kind !== 'drive' || (scanning.has(id) && !scanning.get(id).signal.aborted)) return;
   const stop = new AbortController();
   scanning.set(id, stop);
   const cache = require('./cache'); // loaded here: cache.js reads songs through media() above
@@ -391,7 +395,16 @@ async function scan(id) {
       retry.add(t.album_id);
       return true;
     });
-    const pictures = new Map(); // folder id -> its picture: the folder's own, else the first song's embedded one
+    // folder id -> its picture: { file (the folder's own picture file), name (once kept), ready }. A folder's picture
+    // downloads beside its songs (it can be many MB on a slow line); songs read before it came get it when it does.
+    const pictures = new Map();
+    const bare = new Map(); // folder id -> songs put without a cover
+    const cover = (parent, name) => {
+      if (stop.signal.aborted || !tracks.sources.get(id)) return;
+      for (const row of bare.get(parent) || []) tracks.put({ ...row, cover: name });
+      bare.delete(parent);
+      tracks.changed();
+    };
     let read = 0;
     progress({ status: 'reading', read, total: todo.length });
     // Two at a time, and none while Google is holding back downloads (those songs keep their names; a rescan reads them).
@@ -399,13 +412,17 @@ async function scan(id) {
       if (stop.signal.aborted) return;
       // An album's picture: its folder's, else the folder above's (a disc folder), else the one inside its first song.
       const first = !pictures.has(f.parent);
-      const pictureFile = covers.get(f.parent) || covers.get(parentOf.get(f.parent));
-      if (first) pictures.set(f.parent, pictureFile ? folderCover(source, pictureFile) : null);
-      const folderPic = await pictures.get(f.parent);
-      const { meta, start, picture: pic } = held() ? { meta: null, start: 0, picture: null } : await readTags(source, f, first && !folderPic);
+      if (first) {
+        const file = covers.get(f.parent) || covers.get(parentOf.get(f.parent));
+        const p = { file, name: null, ready: null };
+        if (file) p.ready = folderCover(source, file).then((name) => { if (name) cover(f.parent, p.name = name); });
+        pictures.set(f.parent, p);
+      }
+      const folderPic = pictures.get(f.parent);
+      const { meta, start, picture: pic } = held() ? { meta: null, start: 0, picture: null } : await readTags(source, f, first && !folderPic.file);
       if (stop.signal.aborted || !tracks.sources.get(id)) return; // removed meanwhile: write nothing
       const saved = pic && tracks.saveCover(pic.data, pic.format);
-      if (saved && !folderPic) pictures.set(f.parent, saved); // the album's other songs share it
+      if (saved && !folderPic.file) folderPic.name = saved; // the album's other songs share it
       const size = Number(f.size) || 0;
       const duration = meta?.format.duration;
       const was = old.get(f.id);
@@ -416,18 +433,21 @@ async function scan(id) {
       const described = tracks.describe(meta, f.rel, id, source.is_file ? null : source.title); // untagged songs at a folder's top: named from it
       if (tracks.removedAlbums.has(id, described.album_id)) return; // an album you removed from this folder
       if (was && (was.md5 !== (f.md5Checksum ?? null) || was.modified !== f.modifiedTime)) cache.drop(f.id); // its bytes changed
-      tracks.put({
+      const row = {
         ...described, id: f.id, source: id, path: f.rel, name: f.name, size,
         md5: meta ? f.md5Checksum ?? null : null, // unread: a rescan tries it again
         modified: f.modifiedTime, resource_key: f.resourceKey ?? null,
-        cover: saved || folderPic || null,
+        cover: saved || folderPic.name || null,
         // The start that makes a song begin at once: its tags (and picture) plus about 10 s of sound.
         head: Math.min(size, duration ? start + Math.round((10 * (size - start)) / duration) : start + 2e6),
         added: old.get(f.id)?.added ?? Date.now(),
-      });
+      };
+      tracks.put(row);
+      if (!row.cover && folderPic.file) bare.set(f.parent, [...(bare.get(f.parent) || []), row]); // its folder's picture is on its way
       tracks.changed();
       progress({ status: 'reading', read: ++read, total: todo.length });
     });
+    await Promise.all([...pictures.values()].map((p) => p.ready)); // the album covers still coming
     if (stop.signal.aborted) return;
     for (const s of tracks.sources.list()) if (s.isFile && !s.songs && s.id !== id && s.status === 'ready') tracks.sources.remove(s.id);
     tracks.shareCovers(id); // a cover found for one song of an album is every song's
@@ -440,7 +460,7 @@ async function scan(id) {
     tracks.sources.status(id, `error: ${message}`);
     progress({ status: 'error', error: message });
   } finally {
-    scanning.delete(id);
+    if (scanning.get(id) === stop) scanning.delete(id); // not a newer scan's (the folder added again)
   }
 }
 

@@ -66,6 +66,71 @@ test('Drive: a dropped connection is tried again', async () => {
   }
 });
 
+// A fake Drive folder for scans: `folder` holds cover.jpg (its download never answers: a big picture on a slow line)
+// and one song (a small file, unreadable as tags: it's named from its path). Counts the folder listings.
+function fakeDrive(folder) {
+  const seen = { listings: 0 };
+  const json = (body) => new Response(JSON.stringify(body), { headers: { 'Content-Type': 'application/json' } });
+  const hang = (signal) => new Promise((_, failed) => signal?.addEventListener('abort', () => failed(signal.reason)));
+  const fetch = async (url, { signal } = {}) => {
+    const u = new URL(url);
+    if (u.pathname.endsWith(`/files/${folder}`)) return json({ id: folder, name: 'Album', mimeType: 'application/vnd.google-apps.folder' });
+    if (u.pathname.endsWith('/files')) {
+      seen.listings++;
+      return json({ files: [
+        { id: `${folder}-cover`, name: 'cover.jpg', mimeType: 'image/jpeg', size: '11500000' },
+        { id: `${folder}-song`, name: '01 Song.mp3', mimeType: 'audio/mpeg', size: '4096' },
+      ] });
+    }
+    if (u.pathname.endsWith('-cover')) return hang(signal);
+    return new Response(Buffer.alloc(4096));
+  };
+  return { seen, fetch };
+}
+const until = async (ok, ms = 10e3) => {
+  for (const end = Date.now() + ms; !ok(); await new Promise((done) => setTimeout(done, 50))) if (Date.now() > end) return false;
+  return true;
+};
+
+// A folder's picture downloads beside its songs: a big one on a slow line doesn't hold up reading them.
+test('Drive: an album’s big cover doesn’t hold up reading its songs', async () => {
+  const drive = require('../api/drive');
+  const tracks = require('../api/tracks');
+  process.env.GOOGLE_API_KEY = 'test-key';
+  const folder = '1CoverFolderAAAAAAAAAAAAAAAAAAAAA';
+  const real = globalThis.fetch;
+  globalThis.fetch = fakeDrive(folder).fetch;
+  try {
+    const { id } = await drive.add(`https://drive.google.com/drive/folders/${folder}`);
+    assert.ok(await until(() => tracks.bySource(id).length === 1), 'the song is read while its cover is still coming');
+    drive.remove(id);
+  } finally {
+    globalThis.fetch = real;
+  }
+});
+
+// Removing a folder while it's being read, then adding it again: it's read again, not left "Looking through it…".
+test('Drive: a folder removed while it’s read and added again is read again', async () => {
+  const drive = require('../api/drive');
+  process.env.GOOGLE_API_KEY = 'test-key';
+  const folder = '1ReaddFolderAAAAAAAAAAAAAAAAAAAAA';
+  const link = `https://drive.google.com/drive/folders/${folder}`;
+  const fake = fakeDrive(folder);
+  const real = globalThis.fetch;
+  globalThis.fetch = fake.fetch;
+  try {
+    const { id } = await drive.add(link);
+    assert.ok(await until(() => fake.seen.listings === 1));
+    await new Promise((done) => setTimeout(done, 100)); // reading its songs (its cover never comes)
+    drive.remove(id);
+    await drive.add(link);
+    assert.ok(await until(() => fake.seen.listings === 2, 3000), 'the folder is listed again');
+    drive.remove(id);
+  } finally {
+    globalThis.fetch = real;
+  }
+});
+
 // A zip by hand: one stored entry, one deflated; the reader must give both back byte for byte.
 function zip(files) {
   const locals = [];
