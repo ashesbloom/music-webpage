@@ -92,3 +92,53 @@ test('plan: half time (B at half A\'s tempo): A has the bars for the whole blend
   assert.equal(p.k, 2);
   assert.ok(p.aOut + p.len * p.ratio <= a.end + 0.5, `A runs out: the blend needs A until ${(p.aOut + p.len * p.ratio).toFixed(1)} s, its music ends at ${a.end} s`);
 });
+
+// Real songs, not made-up dance tracks: the analyses of four In Rainbows songs (live drums that drift, vocals in most
+// bars, a natural fade), as ACRUX made them. Auto Mix has to respect how each song ends.
+const RAINBOWS = require('./automix-inrainbows.json');
+const barLen = (a) => 4 * 60 / a.bpm;
+
+test('plan, real songs: a song that fades out is mixed inside its own fade', () => {
+  const a = RAINBOWS['Down Is The New Up'], b = RAINBOWS.Videotape;
+  const p = AUTOMIX.plan(a, b);
+  assert.equal(p.type, 'fade', p.summary);
+  assert.ok(p.aOut >= a.fade.start && a.end - p.aOut >= 4, `out at ${p.aOut}: inside the fade (${a.fade.start}–${a.end}) with room to overlap`);
+});
+
+test('plan, real songs: no blend fits, and the song isn’t cut short', () => {
+  const a = RAINBOWS['Jigsaw Falling Into Place'], b = RAINBOWS.Videotape;
+  const p = AUTOMIX.plan(a, b);
+  assert.ok(p.type !== 'cut' || a.end - p.aOut <= barLen(a), `${p.summary}: ${(a.end - p.aOut).toFixed(1)} s of music cut`);
+});
+
+test('plan, real songs: a live-played song isn’t sped up past 4% (its pitch would show)', () => {
+  const p = AUTOMIX.plan(RAINBOWS.Videotape, RAINBOWS['Jigsaw Falling Into Place']);
+  assert.ok(Math.abs(p.ratio - 1) <= 0.04, p.summary);
+});
+
+// Real songs across genres (tests/automix-genres.json: the analyses of Internet Archive songs, their sources listed):
+// what a check over 17 genres found wrong.
+const GENRES = require('./automix-genres.json');
+
+test('plan, genres: a DJ outro with a synth lead isn’t a last verse: techno is swept out over house’s quiet intro', () => {
+  const p = AUTOMIX.plan(GENRES.techno, GENRES.house);
+  assert.equal(p.type, 'filter', p.summary);
+});
+
+test('plan, genres: a cut waits for the song’s last hit (disco, hip-hop)', () => {
+  for (const [x, y] of [['disco', 'reggae'], ['hiphop', 'folk']]) {
+    const a = GENRES[x], p = AUTOMIX.plan(a, GENRES[y]);
+    assert.ok(p.type !== 'cut' || p.aOut >= a.end - 0.05, `${x} → ${y}: ${p.summary}, music ends ${a.end}`);
+  }
+});
+
+test('plan, genres: no mix skips a last verse that’s still sung (folk), and none leaves a gap after it', () => {
+  const a = GENRES.folk;
+  for (const y of ['disco', 'reggae', 'hiphop', 'ballad']) {
+    const p = AUTOMIX.plan(a, GENRES[y]);
+    const aGone = p.aOut + (p.type === 'blend' ? p.len * p.ratio : 0); // where A's sound ends (a blend: its last bar)
+    assert.ok(a.end - aGone <= 2 * barLen(a), `folk → ${y}: ${p.summary}, music ends ${a.end}`); // its last bar may ring under B
+    assert.ok(Math.abs(p.ratio - 1) <= 0.04, `folk → ${y}: ${p.summary}: its singing shouldn’t be pitched`);
+    assert.ok(!(p.type === 'filter' && p.aOut >= a.end - barLen(a)), `folk → ${y}: a filter after A's music has ended brings B up from silence`);
+  }
+});

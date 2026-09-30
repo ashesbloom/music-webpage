@@ -82,7 +82,10 @@
     const A = a.beat ? beatList(a) : [], B = b.beat ? beatList(b) : [];
     const barA = (j) => timeAt(A, a.downbeat + 4 * j), barB = (j) => timeAt(B, b.downbeat + 4 * j);
     const { k, s } = a.beat && b.beat ? match(a.bpm, b.bpm) : { k: 1, s: 1 };
-    const near = a.beat && b.beat && Math.abs(s - 1) <= 0.08;
+    // Varispeed moves pitch with tempo: past 4% it shows, so only two programmed (steady) beats go that far.
+    const near = a.beat && b.beat && Math.abs(s - 1) <= (a.steady && b.steady ? 0.08 : 0.04);
+    // A song that fades out on its own: B comes in inside that fade, unless a blend of 8 bars or more fits.
+    const natural = () => fade(Math.min(8, a.end - (a.fade.start + 0.3 * (a.end - a.fade.start))));
     const semis = 12 * Math.log2(s);
     const h = harmony(Math.abs(semis) >= 0.5 ? shift(a.key?.camelot, Math.round(semis)) : a.key?.camelot, b.key?.camelot);
     let b0 = 0; // B's first bar with music in it
@@ -90,6 +93,9 @@
     const line = (j, every, offset) => ((j - offset) % every + every) % every === 0;
     const aBusy = (j) => a.bars.busy[j] === 1, bBusy = (j) => b.bars.busy[j] === 1;
     const loose = (x, j) => x.bars.loose?.[j] === 1;
+    // A still sung from bar j on: more than one busy bar (a voice or lead) near its full level. A quieter outro with a
+    // lead in it is a DJ's outro, not a last verse.
+    const sungFrom = (j) => a.bars.busy.filter((x, i) => i >= j && x === 1 && a.bars.energy[i] >= -6).length > 1;
 
     if (near) {
       const barLenB = 4 * 60 / b.bpm, beatB = barLenB / 4;
@@ -98,7 +104,7 @@
         : h >= 0.9 && Math.abs(s - 1) <= 0.02 && conf >= 0.5 ? 32
         : Math.abs(s - 1) <= 0.04 && conf >= 0.5 ? 16 : 8;
       const ramp = Math.abs(s - 1) > 0.002;
-      for (const L of BARS.filter((x) => x <= cap)) {
+      for (const L of BARS.filter((x) => x <= cap && !(a.fade && x < 8))) {
         let bj = b0; // B's cue: its first bar, or later in a long, quiet intro so its main part comes in as A leaves
         const intro = [];
         for (let j = b0; j < b.intro; j++) intro.push(j);
@@ -114,6 +120,9 @@
           break;
         }
         if (aj < 0) continue;
+        if (sungFrom(aj + Math.ceil(L * k))) continue; // A still sung after it
+        // Past 4%, varispeed shifts pitch by a semitone or so: fine on a beat, not on a voice or lead.
+        if (Math.abs(s - 1) > 0.04 && a.bars.busy.slice(Math.max(0, aj - preBars), aj + Math.ceil(L * k)).some((x) => x === 1)) continue;
         // No two voices at once: busy bars in both while both are up (B past 10% of the blend, A before 95%).
         let clash = 0;
         for (let m = Math.ceil(0.1 * L); m < Math.floor(0.95 * L); m++) if (aBusy(aj + aBar(m)) && bBusy(bj + m)) clash++;
@@ -134,26 +143,30 @@
               high: [[0, 0.25], [half, 1]] },
           } });
       }
-      // No blend fits: B drops in on a downbeat. A cold ending plays out and B comes in where A's next bar would be;
-      // otherwise on the last 4-bar line of A's music.
+      if (a.fade) return natural();
+      // No blend fits: B drops in on the first downbeat after A's music ends, so A's last hit rings out (a song isn't
+      // cut short), when that's within a bar; else A is faded out at its end, below.
       let aj = a.nbars;
-      if (!(a.cold && barA(a.nbars) - a.end <= barLenB)) while (aj > 0 && !line(aj, 4, a.phraseOffset)) aj--;
-      if (barA(aj) >= after) {
+      while (aj < a.nbars + 4 && barA(aj) < a.end - 0.05) aj++;
+      if (barA(aj) >= after && barA(aj) >= a.end - 0.05 && barA(aj) - a.end <= 4 * 60 / a.bpm) {
         return done({ type: 'cut', aOut: barA(aj), bIn: barB(b0), len: 0.02, h,
           lanes: { a: { gain: [[0, 1], [0.015, 0]] }, b: { gain: [[0, 0], [0.003, 1]] } } });
       }
     }
 
-    if (a.beat && b.beat && !a.cold) {
+    if (a.fade) return natural();
+    if (a.beat && b.beat && !a.cold && !near) {
       // Tempos too far apart to match: throw A out with an echo on a phrase line in its outro (8 bars in, or the
       // end of its music), or sweep it away with a filter when B opens quietly.
       let aj = Math.min(a.outro + 8, a.nbars);
       while (aj > 0 && !line(aj, 4, a.phraseOffset)) aj--;
+      const sung = sungFrom(aj);
+      if (sung) aj = a.nbars; // still sung there: A is heard to its end, and echoes out (nothing is left to filter)
       const beatA = 60 / a.bpm;
       const aOut = barA(aj), bIn = barB(b0);
       const quiet = b.bars.energy.slice(b0, b0 + 4);
       if (aOut - beatA >= after) {
-        if (quiet.length && quiet.reduce((x, y) => x + y, 0) / quiet.length <= -6) {
+        if (!sung && quiet.length && quiet.reduce((x, y) => x + y, 0) / quiet.length <= -6) {
           const T = 8 * 4 * 60 / b.bpm;
           return done({ type: 'filter', aOut, bIn, len: T, handover: T / 2, h,
             lanes: { a: { hp: sweep(0, T, 20, 1500), gain: [[T / 2, 1], ...fall(T / 2, T)] },
@@ -166,7 +179,6 @@
       }
     }
     if (a.cold) return segue();
-    if (a.fade) return fade(Math.min(8, a.end - (a.fade.start + 0.3 * (a.end - a.fade.start))));
     return fade(4);
   }
 
