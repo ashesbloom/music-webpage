@@ -8,33 +8,6 @@
 // fetched ahead, analysed and mixed into, down to the sample; 'mixstart', 'mixed' (it has taken over: src, id,
 // currentTime and duration are now its own) then 'play', and 'mixend' say how it goes.
 const DECK_WORKLET = new URL('deck-audio-worklet.js', document.currentScript.src).href;
-const MIX_WORKER = new URL('automix-analyze.js', document.currentScript.src).href;
-const MIX_API = new URL('../api/mix/', document.currentScript.src).href;
-const ANALYSES = new Map(); // song id → the promise of its analysis, for this session
-let analyser = null;        // the Worker, made on first use
-let jobs = 0;
-const analysing = new Map(); // job → its resolve
-
-// A decoded song described for mixing (automix-analyze.js): resampled natively to 22 050 Hz, analysed in the Worker.
-async function analyse(buffer) {
-  const sr = 22050;
-  const offline = new OfflineAudioContext(2, Math.ceil(buffer.duration * sr), sr);
-  const source = offline.createBufferSource();
-  source.buffer = buffer;
-  source.connect(offline.destination);
-  source.start();
-  const song = await offline.startRendering();
-  if (!analyser) {
-    analyser = new Worker(MIX_WORKER);
-    analyser.onmessage = ({ data }) => { analysing.get(data.id)?.(data.analysis); analysing.delete(data.id); };
-    analyser.onerror = () => { for (const done of analysing.values()) done(null); analysing.clear(); analyser = null; };
-  }
-  const id = ++jobs;
-  return new Promise((done) => {
-    analysing.set(id, done);
-    analyser.postMessage({ id, left: song.getChannelData(0), right: song.getChannelData(1), sr });
-  });
-}
 
 class DeckAudio extends EventTarget {
   constructor(src) {
@@ -122,7 +95,7 @@ class DeckAudio extends EventTarget {
     this._abort?.abort(); // the last song's download stops now, not at its next chunk: a stalled one held a connection
     this._loading = null; // the new song loads on play(), like <audio preload="none">
     this._apply();
-    if (this._automix && !vid) this._level();
+    if (!vid) this._level(); // its analysis and features (javascript/features.js), with Auto Mix on or off
     this.node?.port.postMessage({ trim: 1 });
   }
 
@@ -565,11 +538,12 @@ class DeckAudio extends EventTarget {
     this.dispatchEvent(new Event('timeupdate'));
   }
 
-  // This song's analysis (from the server, or worked out once it's decoded in full) and its level from it. Turned on
-  // when the song is all in already, it's fetched and decoded again for that (usually from the browser's cache).
+  // This song's analysis and features (from the server, or worked out once it's decoded in full: FEATURES.song), and
+  // with Auto Mix on its level from them. Turned on when the song is all in already, it's fetched and decoded again for
+  // that (usually from the browser's cache).
   _level() {
     const id = this.id, track = this._track;
-    if (!ANALYSES.has(id) && !this._whole && (this._partial || !this._frames)) {
+    if (!FEATURES.has(id) && !this._whole && (this._partial || !this._frames)) {
       let resolve;
       this._whole = { promise: new Promise((r) => { resolve = r; }), resolve };
     }
@@ -582,22 +556,18 @@ class DeckAudio extends EventTarget {
       this.node?.port.postMessage({ trim: this._trim, glide: this.currentTime > 1 ? 3 : 0.05 });
     });
   }
-  // A song's analysis: kept for the session, and on the server (api/mix.js) so each song is analysed once; else worked
-  // out from whole() (its decoded buffer, or null, asked for only then) and sent there.
-  _analysis(id, whole = () => Promise.resolve(null)) {
-    if (id && ANALYSES.has(id)) return ANALYSES.get(id);
-    const url = MIX_API + encodeURIComponent(id || '');
-    const job = (id ? fetch(url).then((r) => (r.ok ? r.json() : null)) : Promise.resolve(null)).catch(() => null)
-      .then((saved) => (saved?.v === AUTOMIX.VERSION ? saved : whole().then((buffer) => buffer && analyse(buffer)).then((a) => {
-        if (a && id) fetch(url, { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(a) }).catch(() => {});
-        return a;
-      })))
-      .catch(() => null);
-    if (id) {
-      ANALYSES.set(id, job);
-      job.then((a) => { if (!a && ANALYSES.get(id) === job) ANALYSES.delete(id); }); // not kept: tried again next time
+  // A song's Auto Mix analysis (FEATURES.song: kept for the session and on the server; else worked out from whole(),
+  // its decoded buffer or null, asked for only then, with the rest of its features).
+  _analysis(id, whole) { return FEATURES.song(id, whole).mix; }
+
+  // A live tap on what's playing (after the mix and the volume) for a visualizer: an AnalyserNode, made when first
+  // asked for, or null before the first play.
+  get analyser() {
+    if (!this._tap && this.gain) {
+      this._tap = this.ctx.createAnalyser();
+      this.gain.connect(this._tap);
     }
-    return job;
+    return this._tap || null;
   }
 
   // Fetches a song's bytes ahead of time (one at a time), so switching to it skips the download.

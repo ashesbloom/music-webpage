@@ -54,6 +54,8 @@ const TYPES = {
   '.html': 'text/html; charset=utf-8',
   '.css': 'text/css; charset=utf-8',
   '.js': 'text/javascript; charset=utf-8',
+  '.mjs': 'text/javascript; charset=utf-8', // module scripts are refused under any other type
+  '.wasm': 'application/wasm',              // compiled while it downloads (onnxruntime-web)
   '.json': 'application/json; charset=utf-8',
   '.svg': 'image/svg+xml',
   '.png': 'image/png',

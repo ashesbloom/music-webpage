@@ -63,11 +63,18 @@ module.exports = async function library(req, res, url) {
     if (hit && read) {
       const track = tracks.get(hit[1]);
       if (!track) return send(res, 404, { error: 'No such song' });
-      if (track.source.startsWith('drive:')) return cache.stream(req, res, track);
+      // ?local=1: Song Features' backlog (javascript/features.js) reading it. Only from this computer, never Drive, and
+      // it isn't a play (the song's "last played" stays as it was).
+      const quiet = url.searchParams.get('local') === '1';
+      if (track.source.startsWith('drive:')) {
+        if (!quiet) return cache.stream(req, res, track);
+        if (!cache.complete(track.id)) return send(res, 409, { error: 'Not on this computer' });
+        return sendFile(req, res, cache.fileOf(track.id), fs.statSync(cache.fileOf(track.id)), typeOf(track.name));
+      }
       const file = await local.fileOf(track); // only the path kept for this id, never one from the request
       const stat = file && (await fs.promises.stat(file).catch(() => null));
       if (!stat?.isFile()) return send(res, 404, { error: 'That song’s file is gone' });
-      tracks.touch(track.id);
+      if (!quiet) tracks.touch(track.id);
       return sendFile(req, res, file, stat, typeOf(track.name));
     }
 

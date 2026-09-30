@@ -395,7 +395,8 @@ function camelot(pc, minor) {
   return `${((major * 7) % 12 + 7) % 12 + 1}${minor ? 'A' : 'B'}`;
 }
 
-function analyze(left, right, sr) {
+// keep: an object that gets the spectrum (keep.sp), for Song Features' key per section (features-worker.js).
+function analyze(left, right, sr, keep) {
   const len = left.length;
   const mono = new Float32Array(len);
   let peak = 0;
@@ -409,6 +410,7 @@ function analyze(left, right, sr) {
   for (let i = Math.floor(start * sr); i < Math.floor(end * sr); i++) { power += mono[i] * mono[i]; heard++; }
   const gain = 0.1 / (Math.sqrt(power / (heard || 1)) || 1);
   const sp = spectra(mono.map((v) => v * gain), sr);
+  if (keep) keep.sp = sp;
   const rough = tempo(sp.flux, sp.fps);
   const result = {
     v: VERSION, dur: len / sr, start: +start.toFixed(3), end: +end.toFixed(3), lufs: +lufs.toFixed(2),
@@ -550,4 +552,4 @@ if (typeof WorkerGlobalScope !== 'undefined' && self instanceof WorkerGlobalScop
     self.postMessage({ id, analysis });
   };
 }
-if (typeof module === 'object') module.exports = { analyze, loudness, levels, spectra, tempo, track, fit, downbeat, key, camelot, makeFft, groove, smooth, VERSION };
+if (typeof module === 'object') module.exports = { analyze, loudness, levels, spectra, tempo, track, fit, downbeat, key, camelot, makeFft, kWeighting, groove, smooth, VERSION };

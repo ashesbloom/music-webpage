@@ -313,4 +313,4 @@ function drop(id) {
 setTimeout(evict, 5e3).unref(); // at start, once the server is up
 setInterval(evict, 36e5).unref();
 
-module.exports = { stream, setUpcoming, hint, usage, evict, drop, setKept, complete, whole, cachedSongs };
+module.exports = { stream, setUpcoming, hint, usage, evict, drop, setKept, complete, whole, cachedSongs, fileOf };
